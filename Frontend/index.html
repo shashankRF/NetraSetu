@@ -842,31 +842,33 @@
       font-size: 13px
     }
 
+
+
     .stack {
       margin-top: 40px;
       display: grid;
       gap: 0;
-      max-width: 640px
+      max-width: 640px;
     }
 
     .stack div {
       border: 1px solid var(--line);
       padding: 22px 26px;
-      font-size: clamp(18px, 1.8vw, 26px)
+      font-size: clamp(18px, 1.8vw, 26px);
     }
 
     .stack div span {
       display: block;
       font-size: 14px;
       color: var(--strip);
-      margin-top: 6px
+      margin-top: 6px;
     }
 
     .stack em {
       font-style: normal;
       color: var(--strip);
       text-align: center;
-      padding: 8px
+      padding: 8px;
     }
 
     .quote {
@@ -5334,16 +5336,69 @@
   </div>
 </section>
 
-    <section class="sec rv" id="problem" data-page="about">
-      <div class="k"><span>Why is it difficult?</span></div>
-      <h2>The hard part is not finding the document. It is proving how rules interact.</h2>
-      <p class="lead">Technical standards, national regulation, cybersecurity, privacy, AI governance, conformity and operating conditions all apply simultaneously. Each is authored in its own specialized vocabulary and legal framework.</p>
-      <div class="stack">
-        <div>Global Standards<span>3GPP, ITU-T, ETSI, IEEE technical specifications</span></div><em>↕</em>
-        <div>National Legal Mandates<span>Telecom Acts, Gazettes, Security Directives, Privacy Laws</span></div><em>↕</em>
-        <div>Operational Deployment<span>Network telemetry, slice configs, vendor signatures, incident logs</span></div>
+    <section class="sec rv" id="platform-focus" data-page="about">
+      <div class="k"><span>Platform Focus &bull; Strategic Roadmap</span></div>
+      <h2>Core Focus: From Traceable Evidence to System Resilience</h2>
+      <p class="lead">NetraSetu combines rigorous evidence-grounded analysis with deterministic failure-combination exploration to support transparent decision-making and reliable communication infrastructure.</p>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:22px; margin-top:32px;">
+        <!-- Capability 1: Evidence Intelligence -->
+        <div class="hg-dash-card" style="margin:0; background:rgba(15,23,42,0.65); border:1px solid rgba(0,229,255,0.25);">
+          <div class="hg-card-header">
+            <div class="hg-card-badge-row">
+              <span class="hg-tag-live">OPERATIONAL FOCUS</span>
+              <span class="hg-tag-tech">Traceable Verification</span>
+            </div>
+            <h4 class="hg-card-title" style="color:var(--netra-cyan-light); font-size:18px;">Evidence Intelligence</h4>
+          </div>
+          <p class="hg-card-desc">
+            Anchor technical assessments, statutory obligations, and standards compliance to traceable evidence. Rather than relying on ungrounded generation, every finding is tied to verified source passages with clause-level citations and transparent reasoning.
+          </p>
+          <div class="hg-card-features">
+            <span>&bull; Authoritative primary document indexing</span>
+            <span>&bull; Transparent verification against source text</span>
+            <span>&bull; Human authority and governance invariants</span>
+          </div>
+        </div>
+
+        <!-- Capability 2: Failure-Combination Discovery -->
+        <div class="hg-dash-card" style="margin:0; background:rgba(15,23,42,0.65); border:1px solid rgba(139,92,246,0.3);">
+          <div class="hg-card-header">
+            <div class="hg-card-badge-row">
+              <span class="hg-tag-live">OPERATIONAL FOCUS</span>
+              <span class="hg-tag-tech">Deterministic 5G SLOs</span>
+            </div>
+            <h4 class="hg-card-title" style="color:var(--netra-violet-light); font-size:18px;">Failure-Combination Discovery</h4>
+          </div>
+          <p class="hg-card-desc">
+            Investigate how compound edge conditions—simultaneous latency spikes, packet loss, congestion, and handover disruptions—impact communication reliability and discover viable recovery strategies.
+          </p>
+          <div class="hg-card-features">
+            <span>&bull; Deterministic multi-impairment stress testing</span>
+            <span>&bull; URLLC, Maritime, and Rail SLO stress scoring</span>
+            <span>&bull; Reproducible scenario vector export</span>
+          </div>
+        </div>
+
+        <!-- Capability 3: Inter-Agency Connectivity and QoS Coordination (PLANNED) -->
+        <div class="hg-dash-card" style="margin:0; background:rgba(15,23,42,0.5); border:1px dashed rgba(245,158,11,0.45);">
+          <div class="hg-card-header">
+            <div class="hg-card-badge-row">
+              <span class="hg-footer-tag proto" style="background:rgba(245,158,11,0.15); color:#fbbf24; border:1px solid rgba(245,158,11,0.35); font-weight:700;">PLANNED CAPABILITY &bull; ROADMAP</span>
+              <span class="hg-tag-tech">Future Coordination</span>
+            </div>
+            <h4 class="hg-card-title" style="color:#fbbf24; font-size:18px;">Inter-Agency Connectivity &amp; QoS Coordination</h4>
+          </div>
+          <p class="hg-card-desc">
+            A future capability planned for monitoring network conditions across emergency response agencies and coordinating communication priorities during disaster conditions and degraded infrastructure scenarios.
+          </p>
+          <div class="hg-card-features">
+            <span>&bull; Planned multi-network status monitoring</span>
+            <span>&bull; Proposed priority preemption coordination</span>
+            <span>&bull; Clearly designated as planned until implemented</span>
+          </div>
+        </div>
       </div>
-      <p class="quote">The real question: how does this requirement apply here, and what does the evidence actually prove?</p>
     </section>
 
 <section class="sec rv" id="agents" data-page="agents">
