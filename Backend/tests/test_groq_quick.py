@@ -12,12 +12,12 @@ t0 = time.perf_counter()
 try:
     resp = client.chat.completions.create(
         model='openai/gpt-oss-120b',
-        messages=[{'role': 'user', 'content': 'Say " test\ only.'}],
- max_tokens=10,
- timeout=15.0,
- )
- t1 = time.perf_counter()
- print(f'Success in {t1-t0:.2f}s: {resp.choices[0].message.content}')
+        messages=[{'role': 'user', 'content': 'Say "test" only.'}],
+        max_tokens=10,
+        timeout=15.0,
+    )
+    t1 = time.perf_counter()
+    print(f'Success in {t1-t0:.2f}s: {resp.choices[0].message.content}')
 except Exception as e:
- t1 = time.perf_counter()
- print(f'Failed in {t1-t0:.2f}s: {type(e).__name__}: {e}')
+    t1 = time.perf_counter()
+    print(f'Failed in {t1-t0:.2f}s: {type(e).__name__}: {e}')

@@ -85,6 +85,8 @@ def extract_requirement_from_evidence(
     lower_text = text.lower()
     if source_type in {SourceType.INTERNATIONAL_RECOMMENDATION, SourceType.INTERNATIONAL_TECHNICAL_STANDARD}:
         status = RequirementType.TECHNICAL
+    elif source_type == SourceType.OTHER:
+        status = RequirementType.UNKNOWN
     elif any(term in lower_text for term in ["shall", "must", "is required to", "mandatory", "statutory duty"]):
         status = RequirementType.MANDATORY
     elif any(term in lower_text for term in ["should", "recommended", "advisory", "guidelines"]):

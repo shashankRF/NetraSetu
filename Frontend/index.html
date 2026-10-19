@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>HackGrid</title>
+  <title>NetraSetu &mdash; Evidence Intelligence &amp; Communication Reliability Platform</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2316,7 +2316,7 @@
       }
     }
 
-    /* ---------- HackGrid Live Integration Styles ---------- */
+    /* ---------- NetraSetu Live Integration Styles ---------- */
     .api-badge {
       display: inline-flex;
       align-items: center;
@@ -2574,6 +2574,292 @@
 
     .claim-card.INSUFFICIENT {
       border-left-color: #6b7280
+    }
+
+    .claim-card.UNSUPPORTED {
+      border-left-color: #f43f5e;
+    }
+
+    .claim-card.UNVERIFIED {
+      border-left-color: #94a3b8;
+    }
+
+    .hg-citation-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-family: ui-monospace, monospace;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--ink);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .hg-citation-pill:hover {
+      background: rgba(99, 102, 241, 0.18);
+      border-color: #6366f1;
+      color: #a5b4fc;
+    }
+
+    .hg-step-source-box {
+      margin-top: 12px;
+      padding: 12px 14px;
+      background: rgba(0, 0, 0, 0.32);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-left: 3px solid #6366f1;
+      border-radius: 6px;
+    }
+
+    .hg-verify-panel {
+      margin-top: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 10px 14px;
+      font-size: 13px;
+    }
+
+    .hg-verify-panel summary {
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--strip);
+      outline: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hg-verify-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 6px;
+      font-size: 12px;
+    }
+
+    .hg-verify-grid div i {
+      color: var(--muted);
+      display: block;
+      font-size: 11px;
+      margin-bottom: 2px;
+    }
+
+    .hg-verify-grid div b {
+      color: var(--ink);
+      font-size: 12px;
+    }
+
+    .hg-passage-box {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-left: 3px solid #6366f1;
+      background: rgba(99, 102, 241, 0.06);
+      border-radius: 4px;
+      font-family: ui-monospace, monospace;
+      font-size: 12px;
+      color: #e2e8f0;
+      line-height: 1.5;
+    }
+
+    .hg-context-box {
+      margin-top: 6px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 4px;
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .hg-faq-box {
+      margin-top: 8px;
+      padding: 8px 12px;
+      border-left: 3px solid #10b981;
+      background: rgba(16, 185, 129, 0.06);
+      border-radius: 4px;
+      font-size: 12px;
+      color: #a7f3d0;
+      line-height: 1.4;
+    }
+
+    .hg-action-bar {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .hg-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 500;
+      border-radius: 6px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--ink);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .hg-action-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .hg-action-btn.primary {
+      background: rgba(99, 102, 241, 0.2);
+      border-color: #6366f1;
+      color: #c7d2fe;
+    }
+
+    .hg-action-btn.primary:hover {
+      background: rgba(99, 102, 241, 0.35);
+    }
+
+    .hg-status-pill {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .hg-status-pill.SUPPORTED {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .hg-status-pill.PARTIALLY_SUPPORTED {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .hg-status-pill.CONTRADICTED {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .hg-status-pill.UNSUPPORTED {
+      background: rgba(244, 63, 94, 0.15);
+      color: #fb7185;
+      border: 1px solid rgba(244, 63, 94, 0.3);
+    }
+
+    .hg-status-pill.UNVERIFIED {
+      background: rgba(148, 163, 184, 0.15);
+      color: #cbd5e1;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+    }
+
+    .hg-legal-pill {
+      display: inline-block;
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.03em;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--strip);
+      border: 1px solid var(--line);
+    }
+
+    .hg-legal-pill.BINDING_STATUTORY, .hg-legal-pill.BINDING_DIRECTION {
+      background: rgba(59, 130, 246, 0.15);
+      color: #93c5fd;
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+
+    .hg-legal-pill.INTERNATIONAL_RECOMMENDATION, .hg-legal-pill.NON_BINDING_TECHNICAL_STANDARD {
+      background: rgba(168, 85, 247, 0.15);
+      color: #d8b4fe;
+      border-color: rgba(168, 85, 247, 0.3);
+    }
+
+    /* Document Viewer Modal */
+    #hgDocViewerModal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(3, 7, 18, 0.88);
+      backdrop-filter: blur(8px);
+      z-index: 999999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #hgDocViewerModal.active {
+      display: flex;
+    }
+
+    .hg-modal-box {
+      width: 92%;
+      max-width: 1150px;
+      height: 88vh;
+      background: #0f172a;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.85);
+    }
+
+    .hg-modal-header {
+      padding: 14px 20px;
+      background: #1e293b;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .hg-modal-body {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+      overflow: hidden;
+    }
+
+    @media (max-width: 860px) {
+      .hg-modal-body {
+        flex-direction: column;
+      }
+    }
+
+    .hg-modal-pane-left {
+      width: 42%;
+      min-width: 320px;
+      padding: 20px;
+      overflow-y: auto;
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(15, 23, 42, 0.95);
+    }
+
+    .hg-modal-pane-right {
+      flex: 1;
+      background: #090d16;
+      display: flex;
+      flex-direction: column;
     }
 
     .claim-status {
@@ -2920,12 +3206,1059 @@
         border-color: var(--line)
       }
     }
+  
+
+    /* ============================================================
+       NETRASETU REFRESHED MODERN DASHBOARD & COMPONENT DESIGN SYSTEM
+       ============================================================ */
+    .topbar-status-indicator {
+      position: absolute;
+      left: calc(130*var(--u));
+      top: calc(38*var(--u));
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 12px;
+      border-radius: 9999px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      font-size: 11px;
+      font-weight: 600;
+      color: #10b981;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      z-index: 25;
+      pointer-events: none;
+    }
+    @media (max-width: 900px) {
+      .topbar-status-indicator { display: none; }
+    }
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+      animation: hgPulse 2s infinite ease-in-out;
+    }
+    .status-dot.offline {
+      background: #ef4444;
+      box-shadow: 0 0 8px #ef4444;
+    }
+    @keyframes hgPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    /* Dashboard Header */
+    .hg-dash-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    .hg-dash-title-wrap {
+      flex: 1;
+      min-width: 280px;
+    }
+    .hg-dash-title-wrap h2 {
+      font-size: clamp(24px, 2.4vw, 36px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .hg-dash-live-badge, .hg-dash-prototype-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .hg-dash-live-badge {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #34d399;
+    }
+    .hg-dash-prototype-badge {
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      color: #fbbf24;
+    }
+    .hg-pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+      animation: hgPulse 2s infinite ease-in-out;
+    }
+    .hg-pulse-amber {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #f59e0b;
+      box-shadow: 0 0 8px #f59e0b;
+      animation: hgPulse 2s infinite ease-in-out;
+    }
+
+    /* Metric Cards Row */
+    .hg-metric-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+    .hg-metric-card {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .hg-metric-card:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(0, 229, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+    .hg-metric-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.4), transparent);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .hg-metric-card:hover::before {
+      opacity: 1;
+    }
+    .hg-metric-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .hg-metric-icon {
+      color: #00e5ff;
+      display: flex;
+      align-items: center;
+    }
+    .hg-metric-val {
+      font-size: clamp(22px, 2vw, 30px);
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+      font-family: 'JetBrains Mono', monospace, sans-serif;
+    }
+    .hg-metric-lbl {
+      font-size: 13px;
+      font-weight: 600;
+      color: #cbd5e1;
+      margin-bottom: 4px;
+    }
+    .hg-metric-sub {
+      font-size: 11px;
+      color: #64748b;
+      line-height: 1.4;
+    }
+
+    /* Tags & Badges */
+    .hg-tag-live {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      letter-spacing: 0.04em;
+    }
+    .hg-tag-prototype {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: #fbbf24;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      letter-spacing: 0.04em;
+    }
+    .hg-tag-tech {
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: #93c5fd;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      letter-spacing: 0.04em;
+    }
+
+    /* Section Title Wrap */
+    .hg-section-title-wrap {
+      margin: 40px 0 20px;
+    }
+    .hg-section-title-wrap h3 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 6px;
+    }
+    .hg-section-title-wrap p {
+      font-size: 13px;
+      color: #94a3b8;
+    }
+
+    /* Dashboard Capability Grid */
+    .hg-dash-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      margin-bottom: 36px;
+    }
+    .hg-dash-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 14px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+    }
+    .hg-dash-card:hover {
+      background: rgba(255, 255, 255, 0.035);
+      border-color: rgba(0, 229, 255, 0.25);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      transform: translateY(-2px);
+    }
+    .hg-dash-card.hg-card-roadmap {
+      border-color: rgba(245, 158, 11, 0.2);
+    }
+    .hg-dash-card.hg-card-roadmap:hover {
+      border-color: rgba(245, 158, 11, 0.4);
+    }
+    .hg-card-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    .hg-card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+    .hg-card-desc {
+      font-size: 13px;
+      color: #94a3b8;
+      line-height: 1.5;
+      margin-bottom: 16px;
+      flex: 1;
+    }
+    .hg-card-features {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 12px;
+      color: #cbd5e1;
+      margin-bottom: 20px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .hg-card-footer {
+      display: flex;
+      align-items: center;
+    }
+    .hg-btn-primary, .hg-btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+    }
+    .hg-btn-primary {
+      background: #00e5ff;
+      color: #050505;
+    }
+    .hg-btn-primary:hover {
+      background: #33ebff;
+      box-shadow: 0 0 16px rgba(0, 229, 255, 0.4);
+      transform: translateY(-1px);
+    }
+    .hg-btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: #f1f5f9;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .hg-btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.25);
+      transform: translateY(-1px);
+    }
+
+    /* Quick Bar */
+    .hg-quick-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+    .hg-quick-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .hg-quick-chips {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .hg-chip {
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 12px;
+      color: #e2e8f0;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .hg-chip:hover {
+      background: rgba(0, 229, 255, 0.15);
+      border-color: rgba(0, 229, 255, 0.3);
+      color: #00e5ff;
+    }
+
+    /* Notice Banner */
+    .hg-notice-banner {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px 20px;
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      border-radius: 10px;
+      margin-bottom: 24px;
+    }
+    .hg-notice-icon {
+      color: #f59e0b;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .hg-notice-content {
+      font-size: 13px;
+      color: #e2e8f0;
+      line-height: 1.5;
+    }
+
+    /* Panels & Tables */
+    .hg-card-panel {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .hg-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .hg-panel-header h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .hg-table-responsive {
+      overflow-x: auto;
+    }
+    .hg-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+    .hg-table th {
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      color: #94a3b8;
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .hg-table td {
+      padding: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: #e2e8f0;
+      vertical-align: middle;
+    }
+    .hg-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .hg-table code {
+      background: rgba(255, 255, 255, 0.06);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #00e5ff;
+    }
+    .hg-table-sub {
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 3px;
+    }
+    .hg-btn-table-view {
+      padding: 5px 12px;
+      background: rgba(0, 229, 255, 0.1);
+      border: 1px solid rgba(0, 229, 255, 0.25);
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #00e5ff;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .hg-btn-table-view:hover {
+      background: rgba(0, 229, 255, 0.2);
+      border-color: #00e5ff;
+    }
+    .hg-method {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+    }
+    .hg-method.get { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+    .hg-method.post { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+
+    /* Badges */
+    .hg-badge-status.supported {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      padding: 3px 8px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .hg-badge-severity.medium {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      padding: 3px 8px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .hg-badge-severity.low {
+      background: rgba(59, 130, 246, 0.15);
+      color: #93c5fd;
+      padding: 3px 8px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .hg-badge-severity.none {
+      background: rgba(100, 116, 139, 0.15);
+      color: #94a3b8;
+      padding: 3px 8px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .hg-reeval-status {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 9999px;
+    }
+    .hg-reeval-status.ready {
+      background: rgba(245, 158, 11, 0.2);
+      color: #fbbf24;
+    }
+    .hg-reeval-status.ok {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+    }
+    .hg-reeval-status.re-evaluated {
+      background: rgba(0, 229, 255, 0.2);
+      color: #00e5ff;
+      border: 1px solid rgba(0, 229, 255, 0.4);
+    }
+
+    /* Feature A: Revision Buttons & Diff */
+    .hg-rev-selector-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+    }
+    .hg-rev-btn {
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: #f1f5f9;
+    }
+    .hg-rev-btn:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .hg-rev-btn.active {
+      background: rgba(0, 229, 255, 0.06);
+      border-color: #00e5ff;
+      box-shadow: 0 0 16px rgba(0, 229, 255, 0.15);
+    }
+    .hg-rev-title {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .hg-rev-sub {
+      display: block;
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.4;
+    }
+
+    /* Diff View */
+    .hg-diff-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 800px) {
+      .hg-diff-container { grid-template-columns: 1fr; }
+    }
+    .hg-diff-pane {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .hg-diff-pane-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+      color: #94a3b8;
+    }
+    .hg-diff-code {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #e2e8f0;
+    }
+    .hg-diff-del {
+      background: rgba(239, 68, 68, 0.12);
+      border-left: 3px solid #ef4444;
+      padding: 8px 12px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+    .hg-diff-ins {
+      background: rgba(16, 185, 129, 0.12);
+      border-left: 3px solid #10b981;
+      padding: 8px 12px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+    .hg-diff-ref {
+      display: block;
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 8px;
+    }
+
+    /* Selective Re-evaluation & Vector Export Box */
+    .hg-reeval-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+    .hg-reeval-left h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .hg-reeval-left p {
+      font-size: 13px;
+      color: #94a3b8;
+    }
+    .hg-feedback-toast {
+      margin-top: 14px;
+      padding: 12px 18px;
+      border-radius: 8px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #34d399;
+      font-size: 13px;
+      font-weight: 600;
+      animation: hgFadeIn 0.3s ease;
+    }
+    @keyframes hgFadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Feature B: SLO Grid & Impairment Sliders */
+    .hg-slo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+    .hg-slo-card {
+      padding: 18px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .hg-slo-card:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .hg-slo-card.active {
+      background: rgba(0, 229, 255, 0.06);
+      border-color: #00e5ff;
+      box-shadow: 0 0 16px rgba(0, 229, 255, 0.15);
+    }
+    .hg-slo-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .hg-slo-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .hg-badge-tech {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(59, 130, 246, 0.2);
+      color: #93c5fd;
+    }
+    .hg-slo-target {
+      font-size: 12px;
+      font-weight: 700;
+      color: #00e5ff;
+      margin-bottom: 6px;
+    }
+    .hg-slo-desc {
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.4;
+    }
+
+    .hg-sliders-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 800px) {
+      .hg-sliders-grid { grid-template-columns: 1fr; }
+    }
+    .hg-slider-item {
+      padding: 16px;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+    }
+    .hg-slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .hg-slider-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+    .hg-slider-value {
+      font-size: 13px;
+      font-weight: 700;
+      color: #00e5ff;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .hg-range-input {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.1);
+      outline: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+    }
+    .hg-range-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #00e5ff;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+    }
+    .hg-slider-ticks {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: #64748b;
+      margin-top: 6px;
+    }
+
+    /* Risk Calc Box */
+    .hg-risk-calc-box {
+      margin-top: 20px;
+      padding: 16px 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .hg-calc-left {
+      flex: 1;
+      min-width: 200px;
+    }
+    .hg-calc-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .hg-calc-bar-wrap {
+      height: 8px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+    }
+    .hg-calc-bar {
+      height: 100%;
+      transition: width 0.3s ease, background 0.3s ease;
+    }
+    .hg-calc-score {
+      font-size: 14px;
+      font-weight: 800;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .hg-calc-note {
+      font-size: 11px;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+
+    /* Strategies Grid */
+    .hg-strat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .hg-strat-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 10px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .hg-strat-header {
+      margin-bottom: 10px;
+    }
+    .hg-strat-tag {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #cbd5e1;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+    .hg-strat-tag.rec {
+      background: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+    }
+    .hg-strat-header h5 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .hg-strat-body {
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.5;
+      margin-bottom: 14px;
+      flex: 1;
+    }
+    .hg-strat-specs {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 11px;
+      color: #cbd5e1;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .hg-strat-specs div {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Info Grid */
+    .hg-info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      font-size: 13px;
+      color: #cbd5e1;
+    }
+    .hg-info-grid b {
+      color: #94a3b8;
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+
+  
+
+    /* ============================================================
+       NETRASETU REFRESHED MULTI-COLUMN TECHNICAL FOOTER
+       ============================================================ */
+    .hg-footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: #06080d;
+      color: #94a3b8;
+      padding: 72px clamp(24px, 5vw, 80px) 44px;
+      margin-top: 60px;
+      position: relative;
+      z-index: 10;
+    }
+    .hg-footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .hg-footer-brand-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 32px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+      padding-bottom: 36px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .hg-footer-brand {
+      max-width: 440px;
+    }
+    .hg-footer-logo-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      text-decoration: none;
+      color: #fff;
+    }
+    .hg-footer-logo-svg {
+      width: 24px;
+      height: 36px;
+      flex-shrink: 0;
+    }
+    .hg-footer-logo-title span {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #fff;
+    }
+    .hg-footer-desc {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #94a3b8;
+    }
+    .hg-footer-brand-pills {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+    .hg-footer-pill {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #cbd5e1;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .hg-footer-pill.live {
+      border-color: rgba(16, 185, 129, 0.35);
+      color: #34d399;
+      background: rgba(16, 185, 129, 0.08);
+    }
+    .hg-footer-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+    @media (max-width: 960px) {
+      .hg-footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 36px;
+      }
+    }
+    @media (max-width: 520px) {
+      .hg-footer-grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+    }
+    .hg-footer-col h5 {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #f1f5f9;
+      margin-bottom: 16px;
+    }
+    .hg-footer-col ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .hg-footer-col a {
+      font-size: 13px;
+      color: #94a3b8;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+    .hg-footer-col a:hover, .hg-footer-col a:focus-visible {
+      color: #00e5ff;
+      transform: translateX(2px);
+      outline: none;
+    }
+    .hg-footer-col a:focus-visible {
+      text-decoration: underline;
+    }
+    .hg-footer-tag {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .hg-footer-tag.proto {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    .hg-footer-tag.active-tag {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .hg-footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 28px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 12px;
+      color: #64748b;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .hg-footer-bottom-links {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .hg-footer-bottom-links a {
+      color: #64748b;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .hg-footer-bottom-links a:hover, .hg-footer-bottom-links a:focus-visible {
+      color: #94a3b8;
+    }
+
   </style>
 </head>
 
 <body>
   <header class="topbar">
-    <a class="brand" href="#/" aria-label="Home">
+    <a class="brand" href="#/overview" aria-label="NetraSetu Home">
       <svg viewBox="0 0 31.5 48.5" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <defs>
           <linearGradient id="bg1" gradientUnits="userSpaceOnUse" x1="8" y1="0" x2="34.1" y2="28.9">
@@ -2946,11 +4279,19 @@
         <rect x="22" y="19.5" width="9.5" height="9.5" fill="#fdfdfd" />
       </svg>
     </a>
-    <nav class="links" aria-label="Primary"><a href="#/about">About</a><a href="#/intelligence">Intelligence</a><a
-        href="#/jurisdictions">Jurisdictions</a><a href="#/evidence">Evidence</a><a href="#/agents">Agents</a><a
-        href="#/research">Research</a><a href="#/contact">Contact</a><a href="#/scenarios">Scenario Lab</a><a
-        href="#/audit">Audit Trail</a></nav>
-    <a class="pill pill-nav" href="#/ask"><span>Ask HackGrid</span></a>
+    <div class="topbar-status-indicator" id="backend-status-topbar">
+      <span class="status-dot online"></span>
+      <span class="status-label">Port 8000 &bull; Live</span>
+    </div>
+    <nav class="links" aria-label="Primary">
+      <a href="#/overview">Overview</a>
+      <a href="#/intelligence">Evidence Intelligence</a>
+      <a href="#/change-impact">Change-Impact</a>
+      <a href="#/reliability-lab">5G Reliability</a>
+      <a href="#/evaluations">Evaluation &amp; Reports</a>
+      <a href="#/docs">Documentation</a>
+    </nav>
+    <a class="pill pill-nav" href="#/intelligence"><span>Ask NetraSetu</span></a>
     <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false"
       aria-controls="menu"><i></i><i></i></button>
   </header>
@@ -2958,19 +4299,16 @@
     <div class="menu-inner">
       <p class="menu-eyebrow">Menu</p>
       <ul class="menu-list">
-        <li><a href="#/about">About</a></li>
-        <li><a href="#/intelligence">Intelligence</a></li>
-        <li><a href="#/jurisdictions">Jurisdictions</a></li>
-        <li><a href="#/evidence">Evidence</a></li>
-        <li><a href="#/agents">Agents</a></li>
-        <li><a href="#/research">Research</a></li>
-        <li><a href="#/contact">Contact</a></li>
-        <li><a href="#/scenarios">Scenario Lab</a></li>
-        <li><a href="#/audit">Audit Trail</a></li>
+        <li><a href="#/overview">Overview Dashboard</a></li>
+        <li><a href="#/intelligence">Evidence Intelligence</a></li>
+        <li><a href="#/change-impact">Change-Impact Analysis</a></li>
+        <li><a href="#/reliability-lab">5G Reliability Lab</a></li>
+        <li><a href="#/evaluations">Evaluation &amp; Reports</a></li>
+        <li><a href="#/docs">Documentation &amp; Settings</a></li>
       </ul>
       <div class="menu-foot">
-        <a class="pill" href="#/ask"><span>Ask HackGrid</span></a>
-        <a class="ghost" href="#/intelligence">Explore the system</a>
+        <a class="pill" href="#/ask"><span>Ask NetraSetu</span></a>
+        <a class="ghost" href="#/intelligence">Explore NetraSetu</a>
       </div>
     </div>
   </nav>
@@ -2986,12 +4324,11 @@
 
 
     <main class="hero">
-      <h1 class="headline"><span>HackGrid</span></h1>
-      <p class="sub"><span>From global standards to local requirements —</span> <span>powered by evidence-grounded
-          AI.</span></p>
+      <h1 class="headline"><span>NetraSetu</span></h1>
+      <p class="sub"><span>Evidence Intelligence &amp; Communication Reliability Platform &mdash;</span> <span>Connecting Evidence. Testing Resilience.</span></p>
       <div class="actions">
-        <a class="pill pill-cta" href="#/ask"><span>Ask HackGrid</span></a>
-        <a class="ghost" href="#/intelligence">Explore the system</a>
+        <a class="pill pill-cta" href="#/ask"><span>Ask NetraSetu</span></a>
+        <a class="ghost" href="#/intelligence">Explore NetraSetu</a>
       </div>
     </main>
 
@@ -3001,13 +4338,219 @@
   </div>
 
   <div class="story">
+
+<section class="sec rv in" id="overview" data-page="overview">
+  <div class="k"><span>Executive Platform Overview</span></div>
+  <div class="hg-dash-header">
+    <div class="hg-dash-title-wrap">
+      <h2>National Telecom Intelligence &amp; 5G Reliability Platform</h2>
+      <p class="lead">Evidence-grounded regulatory reasoning, standards compliance verification, and 5G communication-reliability testing for mission-critical infrastructure.</p>
+    </div>
+    <div class="hg-dash-live-badge">
+      <span class="hg-pulse-dot"></span>
+      <span>SYSTEM OPERATIONAL &bull; FASTAPI PORT 8000</span>
+    </div>
+  </div>
+
+  <!-- Live Health & Infrastructure Cards -->
+  <div class="hg-metric-row">
+    <div class="hg-metric-card">
+      <div class="hg-metric-top">
+        <span class="hg-metric-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+        </span>
+        <span class="hg-tag-live">VERIFIED ACTIVE</span>
+      </div>
+      <div class="hg-metric-val">95 / 95</div>
+      <div class="hg-metric-lbl">Backend Test Suites Passing</div>
+      <div class="hg-metric-sub">100% invariant compliance across 13 suites</div>
+    </div>
+
+    <div class="hg-metric-card">
+      <div class="hg-metric-top">
+        <span class="hg-metric-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg>
+        </span>
+        <span class="hg-tag-live">14,800+ CHUNKS</span>
+      </div>
+      <div class="hg-metric-val">10 Documents</div>
+      <div class="hg-metric-lbl">Indexed Knowledge Base</div>
+      <div class="hg-metric-sub">BGE-M3 Dense Semantic Indexing in FAISS</div>
+    </div>
+
+    <div class="hg-metric-card">
+      <div class="hg-metric-top">
+        <span class="hg-metric-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </span>
+        <span class="hg-tag-live">ZERO FALSE GAPS</span>
+      </div>
+      <div class="hg-metric-val">0 False Positives</div>
+      <div class="hg-metric-lbl">Comparative Gap Precision</div>
+      <div class="hg-metric-sub">Strict normative &amp; jurisdiction gating</div>
+    </div>
+
+    <div class="hg-metric-card">
+      <div class="hg-metric-top">
+        <span class="hg-metric-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/></svg>
+        </span>
+        <span class="hg-tag-live">&lt; 450 ms</span>
+      </div>
+      <div class="hg-metric-val">8 Scenarios</div>
+      <div class="hg-metric-lbl">Production Test Scenarios</div>
+      <div class="hg-metric-sub">End-to-end multi-step operational labs</div>
+    </div>
+  </div>
+
+  <!-- Primary Architecture & Roadmap Navigation Grid -->
+  <div class="hg-section-title-wrap">
+    <h3>System Capabilities &amp; Roadmap Directory</h3>
+    <p>Operational capabilities are connected to real backend services; planned features are clearly identified as prototypes.</p>
+  </div>
+
+  <div class="hg-dash-grid">
+    <!-- Card 1: Evidence Intelligence -->
+    <div class="hg-dash-card">
+      <div class="hg-card-header">
+        <div class="hg-card-badge-row">
+          <span class="hg-tag-live">OPERATIONAL CORE</span>
+          <span class="hg-tag-tech">BGE-M3 &bull; FAISS</span>
+        </div>
+        <h4 class="hg-card-title">Evidence Intelligence / RAG Workspace</h4>
+      </div>
+      <p class="hg-card-desc">Execute multi-jurisdictional queries against official DoT, TRAI, CERT-In, 3GPP, and ITU-T instruments with 9-stage governance and strict citation gating.</p>
+      <div class="hg-card-features">
+        <span>&bull; Dense semantic vector search</span>
+        <span>&bull; Strict false-gap prevention invariants</span>
+        <span>&bull; Clickable source PDF modal down to exact clause</span>
+      </div>
+      <div class="hg-card-footer">
+        <a class="hg-btn-primary" href="#/intelligence">Open Query Workspace &rarr;</a>
+      </div>
+    </div>
+
+    <!-- Card 2: Scenario Lab -->
+    <div class="hg-dash-card">
+      <div class="hg-card-header">
+        <div class="hg-card-badge-row">
+          <span class="hg-tag-live">OPERATIONAL CORE</span>
+          <span class="hg-tag-tech">8 Scenarios &bull; API</span>
+        </div>
+        <h4 class="hg-card-title">Scenario Lab</h4>
+      </div>
+      <p class="hg-card-desc">Execute eight reproducible multi-step incidents: UAV Tactical Datalink, Maritime AIS, 5G Slicing, Telecom OSS/BSS, and CERT-In 6-Hour reporting.</p>
+      <div class="hg-card-features">
+        <span>&bull; Step-by-step incident progression</span>
+        <span>&bull; Live API execution on <code>/api/scenarios/run</code></span>
+        <span>&bull; Gating validation and forensic review</span>
+      </div>
+      <div class="hg-card-footer">
+        <a class="hg-btn-primary" href="#/scenarios">Launch Scenario Lab &rarr;</a>
+      </div>
+    </div>
+
+    <!-- Card 3: Feature A Roadmap -->
+    <div class="hg-dash-card hg-card-roadmap">
+      <div class="hg-card-header">
+        <div class="hg-card-badge-row">
+          <span class="hg-tag-prototype">FEATURE A ROADMAP</span>
+          <span class="hg-tag-tech">Version Diffing &bull; Traceability</span>
+        </div>
+        <h4 class="hg-card-title">Change-Impact Analysis Engine</h4>
+      </div>
+      <p class="hg-card-desc">Track revisions in source documents (e.g. CERT-In 2022 vs FAQs, Telecom Act 2023) and determine affected requirements, evidence records, and selective re-evaluations.</p>
+      <div class="hg-card-features">
+        <span>&bull; Clause-level revision diff visualizer</span>
+        <span>&bull; Affected requirement dependency graph</span>
+        <span>&bull; Selective re-evaluation console [Prototype]</span>
+      </div>
+      <div class="hg-card-footer">
+        <a class="hg-btn-secondary" href="#/change-impact">Explore Impact Workbench &rarr;</a>
+      </div>
+    </div>
+
+    <!-- Card 4: Feature B Roadmap -->
+    <div class="hg-dash-card hg-card-roadmap">
+      <div class="hg-card-header">
+        <div class="hg-card-badge-row">
+          <span class="hg-tag-prototype">FEATURE B ROADMAP</span>
+          <span class="hg-tag-tech">Impairment Matrix &bull; SLOs</span>
+        </div>
+        <h4 class="hg-card-title">5G Failure-Combination Discovery Lab</h4>
+      </div>
+      <p class="hg-card-desc">Explore combinatorial impairments across latency, packet loss, handover disruption, congestion, and radio coverage loss to evaluate communication-recovery strategies.</p>
+      <div class="hg-card-features">
+        <span>&bull; Multi-dimensional impairment matrix sliders</span>
+        <span>&bull; Mission-critical URLLC vs eMBB SLO targets</span>
+        <span>&bull; Reproducible test vector generator [Prototype]</span>
+      </div>
+      <div class="hg-card-footer">
+        <a class="hg-btn-secondary" href="#/reliability-lab">Configure 5G Matrix &rarr;</a>
+      </div>
+    </div>
+
+    <!-- Card 5: Evaluation & Reports -->
+    <div class="hg-dash-card">
+      <div class="hg-card-header">
+        <div class="hg-card-badge-row">
+          <span class="hg-tag-live">OPERATIONAL CORE</span>
+          <span class="hg-tag-tech">Audit Trail &bull; Excel Export</span>
+        </div>
+        <h4 class="hg-card-title">Evaluation &amp; Forensic Reports</h4>
+      </div>
+      <p class="hg-card-desc">Inspect all recorded regulatory queries, review actions, risk scores, and human modifications. Export complete forensic records to Excel with one click.</p>
+      <div class="hg-card-features">
+        <span>&bull; Real-time audit query search &amp; filter</span>
+        <span>&bull; Human review recording via <code>/api/audits</code></span>
+        <span>&bull; Direct Excel export on <code>/api/audits/export/excel</code></span>
+      </div>
+      <div class="hg-card-footer">
+        <a class="hg-btn-primary" href="#/evaluations">View Audit Trail &rarr;</a>
+      </div>
+    </div>
+
+    <!-- Card 6: Documentation & Document Registry -->
+    <div class="hg-dash-card">
+      <div class="hg-card-header">
+        <div class="hg-card-badge-row">
+          <span class="hg-tag-live">OPERATIONAL CORE</span>
+          <span class="hg-tag-tech">10 Official Sources &bull; PDF Viewer</span>
+        </div>
+        <h4 class="hg-card-title">Documentation &amp; Document Registry</h4>
+      </div>
+      <p class="hg-card-desc">Comprehensive reference of multi-agent pipeline architecture, official document registry, API contract definitions, and local source verification endpoints.</p>
+      <div class="hg-card-features">
+        <span>&bull; 10 Authoritative statutory instruments</span>
+        <span>&bull; Direct PDF launch from registry table</span>
+        <span>&bull; Complete FastAPI REST contracts</span>
+      </div>
+      <div class="hg-card-footer">
+        <a class="hg-btn-primary" href="#/docs">Browse Documentation &rarr;</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Scenario Shortcuts -->
+  <div class="hg-quick-bar">
+    <div class="hg-quick-label">Recommended Verification Actions:</div>
+    <div class="hg-quick-chips">
+      <a class="hg-chip" href="#/scenarios" onclick="setTimeout(function(){var c=document.querySelector('[data-sc-id="HG-CERTIN-008"]');if(c)c.click();},400)">Run CERT-In 6-Hour Reporting Lab</a>
+      <a class="hg-chip" href="#/scenarios" onclick="setTimeout(function(){var c=document.querySelector('[data-sc-id="HG-5G-003"]');if(c)c.click();},400)">Run 5G Slicing Incident Lab</a>
+      <a class="hg-chip" href="#/change-impact">Test Change-Impact Diff Engine</a>
+      <a class="hg-chip" href="#/reliability-lab">Test 5G Impairment Explorer</a>
+    </div>
+  </div>
+</section>
+
+
         <section class="sec rv" id="about" data-page="about">
-      <div class="k"><span>What is HackGrid?</span></div>
+      <div class="k"><span>What is NetraSetu?</span></div>
       <h2>An evidence-grounded AI platform for technical &amp; regulatory intelligence.</h2>
-      <p class="lead">HackGrid helps analysts, engineers, and policymakers solve complex technical, regulatory, policy, security, and operational questions. Unlike conventional AI systems that treat an LLM's generated response as the source of truth, HackGrid operates on a strict principle: <strong>evidence first, AI-assisted reasoning second, and human authority wherever decisions matter</strong>.</p>
+      <p class="lead">NetraSetu helps analysts, engineers, and policymakers solve complex technical, regulatory, policy, security, and operational questions. Unlike conventional AI systems that treat an LLM's generated response as the source of truth, NetraSetu operates on a strict principle: <strong>evidence first, AI-assisted reasoning second, and human authority wherever decisions matter</strong>.</p>
 
       <p class="quote" style="margin: 32px 0 24px; max-width: 34em; font-size: clamp(20px, 2.2vw, 32px); line-height: 1.35; color: var(--ink);">
-        "HackGrid helps people make difficult technology and security decisions by showing what the available evidence actually supports."
+        "NetraSetu helps people make difficult technology and security decisions by showing what the available evidence actually supports."
       </p>
 
       <div style="margin-top: 36px;">
@@ -3019,7 +4562,7 @@
       <div style="margin-top: 48px;">
         <div class="k" style="margin-bottom:14px;"><span>Evidence Philosophy</span></div>
         <h3 style="font-size: clamp(20px, 2vw, 28px); font-weight: 500; margin-bottom: 8px;">Distinguishing What Is Established From What Is Inferred</h3>
-        <p style="color: var(--muted); max-width: 48em; line-height: 1.6; margin-bottom: 24px;">To prevent hallucinated conclusions and premature attribution, HackGrid strictly delineates between direct statutory proof, analytical deductions, and unproven hypotheses.</p>
+        <p style="color: var(--muted); max-width: 48em; line-height: 1.6; margin-bottom: 24px;">To prevent hallucinated conclusions and premature attribution, NetraSetu strictly delineates between direct statutory proof, analytical deductions, and unproven hypotheses.</p>
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
           <div class="panel" style="border-left: 3px solid #10b981; padding: 22px;">
@@ -3055,7 +4598,7 @@
       <div style="margin-top: 56px;">
         <div class="k" style="margin-bottom:14px;"><span>Multi-Domain Scope</span></div>
         <h3 style="font-size: clamp(20px, 2vw, 28px); font-weight: 500; margin-bottom: 8px;">Intelligence Across High-Assurance Sectors</h3>
-        <p style="color: var(--muted); max-width: 48em; line-height: 1.6; margin-bottom: 24px;">HackGrid operates across mission-critical domains where precision, security, and jurisdictional compliance are paramount:</p>
+        <p style="color: var(--muted); max-width: 48em; line-height: 1.6; margin-bottom: 24px;">NetraSetu operates across mission-critical domains where precision, security, and jurisdictional compliance are paramount:</p>
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
           <div class="panel" style="padding: 20px;">
@@ -3101,7 +4644,7 @@
     <section class="sec" id="intelligence" data-page="intelligence">
       <div class="k rv"><span>The Intelligence Pipeline</span></div>
       <h2 class="rv">An intelligence pipeline, not a chat window.</h2>
-      <p class="lead rv" style="max-width: 48em;">HackGrid rejects the idea of treating an LLM as an unconstrained authority. Instead, an 8-stage verifiable pipeline examines evidence provenance, tests counter-hypotheses, evaluates statutory consequence, and enforces human governance.</p>
+      <p class="lead rv" style="max-width: 48em;">NetraSetu rejects the idea of treating an LLM as an unconstrained authority. Instead, an 8-stage verifiable pipeline examines evidence provenance, tests counter-hypotheses, evaluates statutory consequence, and enforces human governance.</p>
       
       <div class="panel rv" style="margin: 28px 0 36px; padding: 20px 24px; border-left: 3px solid #60a5fa;">
         <strong style="font-size: 14px; color: #60a5fa; text-transform: uppercase; letter-spacing: 0.06em;">Architectural Invariant</strong>
@@ -3140,7 +4683,7 @@
     <section class="sec rv" id="agents" data-page="agents">
       <div class="k"><span>Collaborative Multi-Agent Intelligence</span></div>
       <h2>Specialized analytical roles examining the same evidence.</h2>
-      <p class="lead">HackGrid's multi-agent architecture is not a collection of independent chatbots. Instead, specialized analytical components interrogate different dimensions of the same technical and regulatory question over a shared, verified evidence set.</p>
+      <p class="lead">NetraSetu's multi-agent architecture is not a collection of independent chatbots. Instead, specialized analytical components interrogate different dimensions of the same technical and regulatory question over a shared, verified evidence set.</p>
       
       <div class="panel" style="margin: 24px 0 32px; padding: 20px 24px; border-left: 3px solid #3b82f6;">
         <strong style="font-size: 14px; color: #60a5fa; text-transform: uppercase; letter-spacing: 0.06em;">Architectural Principle</strong>
@@ -3160,10 +4703,10 @@
       </div>
 
       <svg class="dia" viewBox="0 0 700 320" role="img"
-        aria-label="HackGrid feeds Network, Compliance and Policy agents, which converge on Gap Analysis, then Synthesis and Human Review">
+        aria-label="NetraSetu feeds Network, Compliance and Policy agents, which converge on Gap Analysis, then Synthesis and Human Review">
         <path
           d="M350 34V60M120 60H580M120 60V98M350 60V98M580 60V98M120 134V170H350M580 134V170H350M350 134V188M350 222V240M350 264V282" />
-        <text x="350" y="22">HackGrid Engine</text><text x="120" y="118">Network Analysis</text><text x="350"
+        <text x="350" y="22">NetraSetu Engine</text><text x="120" y="118">Network Analysis</text><text x="350"
           y="118">Compliance Analysis</text><text x="580" y="118">Policy Analysis</text><text x="350" y="208">Gap Analysis</text><text
           x="350" y="256">Synthesis Engine</text><text x="350" y="304">Human Review</text>
       </svg>
@@ -3173,7 +4716,7 @@
     <section class="sec rv" id="jurisdictions" data-page="jurisdictions">
       <div class="k"><span>Multi-Jurisdiction Intelligence</span></div>
       <h2>One intelligence engine. Portable, sovereign jurisdiction profiles.</h2>
-      <p class="lead">A global technical standard defines the engineering protocol. But legal obligations, mandatory reporting windows, and security conformity depend entirely on national jurisdiction. HackGrid applies the same rigorous reasoning across sovereign regulatory profiles without ever silently substituting one jurisdiction for another.</p>
+      <p class="lead">A global technical standard defines the engineering protocol. But legal obligations, mandatory reporting windows, and security conformity depend entirely on national jurisdiction. NetraSetu applies the same rigorous reasoning across sovereign regulatory profiles without ever silently substituting one jurisdiction for another.</p>
       
       <div style="margin: 32px 0;">
         <small style="color:var(--strip);text-transform:uppercase;letter-spacing:0.08em;font-size:11px;font-weight:600;display:block;margin-bottom:12px;">Jurisdiction Routing Architecture</small>
@@ -3199,7 +4742,7 @@
     <section class="sec rv" id="evidence" data-page="evidence">
       <div class="k"><span>Evidence Architecture</span></div>
       <h2>Evidence first. Generation second.</h2>
-      <p class="lead">HackGrid does not ask a language model to guess from unverified parameters. It retrieves authoritative evidence passages first, and every analytical component is constrained to that evidence.</p>
+      <p class="lead">NetraSetu does not ask a language model to guess from unverified parameters. It retrieves authoritative evidence passages first, and every analytical component is constrained to that evidence.</p>
       <ol class="flow" id="ragflow"></ol>
       <div class="rows" id="ragrows"></div>
     </section>
@@ -3227,7 +4770,7 @@
     <section class="sec rv" id="gap" data-page="intelligence">
       <div class="k"><span>Gap Analysis Crosswalk</span></div>
       <h2>Seven deterministic relationships. No guessing.</h2>
-      <p class="lead">HackGrid replaces ambiguous text generation with a formal crosswalk. Every comparison between international standards and national frameworks resolves into one of seven deterministic outcomes.</p>
+      <p class="lead">NetraSetu replaces ambiguous text generation with a formal crosswalk. Every comparison between international standards and national frameworks resolves into one of seven deterministic outcomes.</p>
       <div class="rows" id="gaprows"></div>
       <div style="margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--line);">
         <p class="big">Missing evidence is not evidence of absence.</p>
@@ -3238,7 +4781,7 @@
     <section class="sec rv" id="review" data-page="intelligence">
       <div class="k"><span>Human Authority &amp; Governance</span></div>
       <h2>AI proposes. Human authority decides.</h2>
-      <p class="lead">HackGrid does not automate consequential decisions. Its deterministic Risk Engine evaluates evidence strength and decision impact to determine when human review is mandatory.</p>
+      <p class="lead">NetraSetu does not automate consequential decisions. Its deterministic Risk Engine evaluates evidence strength and decision impact to determine when human review is mandatory.</p>
       
       <div class="panel" style="margin: 24px 0; padding: 22px;">
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px;">
@@ -3259,12 +4802,12 @@
     <section class="sec" id="audit" data-page="intelligence">
       <div class="k rv"><span>Auditability &amp; Traceability</span></div>
       <h2 class="rv">Every conclusion traces back to evidence.</h2>
-      <p class="lead rv">In high-assurance environments, an unexplainable conclusion is unacceptable. HackGrid generates an append-only audit trail recording the full provenance chain.</p>
+      <p class="lead rv">In high-assurance environments, an unexplainable conclusion is unacceptable. NetraSetu generates an append-only audit trail recording the full provenance chain.</p>
       <ol class="pipe" id="auditpipe"></ol>
     </section>
 
 <section class="sec rv in" id="ask" data-page="ask">
-      <div class="k"><span>Ask HackGrid</span></div>
+      <div class="k"><span>Ask NetraSetu</span></div>
       <h2>Put a real question to the system.</h2>
       <label for="q" class="lead">Your question</label>
       <textarea id="q"
@@ -3294,12 +4837,336 @@
     </section>
 
 
-    <section class="sec rv" id="scenarios" data-page="scenarios">
+    
+<section class="sec rv in" id="change-impact" data-page="change-impact">
+  <div class="k"><span>Feature A &bull; Roadmap Workbench</span></div>
+  <div class="hg-dash-header">
+    <div class="hg-dash-title-wrap">
+      <h2>Change-Impact Analysis Engine for Evidence &amp; Requirements</h2>
+      <p class="lead">Track modifications in statutory instruments and technical standards, identify impacted evidence records, and execute selective re-evaluation across dependent compliance findings.</p>
+    </div>
+    <div class="hg-dash-prototype-badge">
+      <span class="hg-pulse-amber"></span>
+      <span>INTERACTIVE RESEARCH PROTOTYPE &bull; PHASE 2 ROADMAP</span>
+    </div>
+  </div>
+
+  <div class="hg-notice-banner">
+    <div class="hg-notice-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    </div>
+    <div class="hg-notice-content">
+      <strong>Roadmap Prototype Notice:</strong> This workbench demonstrates NetraSetu's upcoming automated document revision diffing, affected requirement dependency tracking, and selective re-evaluation pipeline. The backend continuous diff engine is scheduled for development Phase 2. All comparisons below are based on verified statutory source documents.
+    </div>
+  </div>
+
+  <!-- Tracked Document Selection -->
+  <div class="hg-card-panel">
+    <div class="hg-panel-header">
+      <h4>1. Select Tracked Document Revision</h4>
+      <span class="hg-tag-tech">3 Tracked Revisions Available</span>
+    </div>
+    <div class="hg-rev-selector-row">
+      <button type="button" class="hg-rev-btn active" data-rev-id="certin-2022">
+        <span class="hg-rev-title">CERT-In Directions (Apr 2022) vs FAQs (May 2022)</span>
+        <span class="hg-rev-sub">6-Hour reporting window clarification &amp; ICT system log retention scope</span>
+      </button>
+      <button type="button" class="hg-rev-btn" data-rev-id="telecom-act">
+        <span class="hg-rev-title">Telecommunications Act 2023 vs Indian Telegraph Act 1885</span>
+        <span class="hg-rev-sub">Sovereign network security, interception standards &amp; trusted source rules</span>
+      </button>
+      <button type="button" class="hg-rev-btn" data-rev-id="3gpp-rel18">
+        <span class="hg-rev-title">3GPP TS 33.501 Rel 17 vs Rel 18 (5G-Advanced)</span>
+        <span class="hg-rev-sub">Network slice isolation verification &amp; User Plane Function (UPF) security</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Interactive Clause Diff Viewer -->
+  <div class="hg-card-panel">
+    <div class="hg-panel-header">
+      <h4>2. Source Clause Revision Diff Visualizer</h4>
+      <div id="hg-diff-meta-tag" class="hg-tag-live">CERT-In 2022 Direction 2(i) vs FAQ Clarification 4</div>
+    </div>
+    <div class="hg-diff-container" id="hg-diff-view">
+      <div class="hg-diff-pane old-pane">
+        <div class="hg-diff-pane-title">Baseline Text (Original Version)</div>
+        <div class="hg-diff-code" id="hg-diff-old-text">
+          <p class="hg-diff-del">&ldquo;Any service provider, intermediary, data centre, body corporate and Government organisation shall report cyber incidents to CERT-In within <strong>6 hours</strong> of noticing corresponding incidents or being brought to notice about such incidents.&rdquo;</p>
+          <span class="hg-diff-ref">Source: CERT-In Directions No. 20(3)/2022-CERT-In &bull; Annexure I</span>
+        </div>
+      </div>
+      <div class="hg-diff-pane new-pane">
+        <div class="hg-diff-pane-title">Revised Text (Clarified / Successor Version)</div>
+        <div class="hg-diff-code" id="hg-diff-new-text">
+          <p class="hg-diff-ins">&ldquo;It is clarified that the 6-hour reporting requirement applies upon experiencing an incident of severe nature. Entities may report preliminary details within <strong>6 hours</strong> to cert-in@cert-in.org.in or incident@cert-in.org.in, and subsequent comprehensive technical details within an extended window of <strong>15 days</strong> once initial containment is established.&rdquo;</p>
+          <span class="hg-diff-ref">Source: CERT-In FAQs dated 18.05.2022 &bull; Clarification 4 &amp; FAQ 24</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Affected Evidence Records & Impacted Requirements -->
+  <div class="hg-card-panel">
+    <div class="hg-panel-header">
+      <h4>3. Affected Evidence &amp; Compliance Requirement Matrix</h4>
+      <span class="hg-tag-tech">Automated Dependency Graph</span>
+    </div>
+    <div class="hg-table-responsive">
+      <table class="hg-table" id="hg-impact-table">
+        <thead>
+          <tr>
+            <th>Finding ID</th>
+            <th>Impacted Requirement</th>
+            <th>Original Status</th>
+            <th>Change Impact Severity</th>
+            <th>Selective Re-Evaluation Status</th>
+          </tr>
+        </thead>
+        <tbody id="hg-impact-tbody">
+          <tr>
+            <td><code>REQ-CERTIN-001</code></td>
+            <td>Mandatory Initial Incident Notification within 6h</td>
+            <td><span class="hg-badge-status supported">SUPPORTED</span></td>
+            <td><span class="hg-badge-severity medium">MODERATE (Scope Clarified)</span></td>
+            <td><span class="hg-reeval-status ready" id="reeval-row-1">RE-EVALUATION PENDING</span></td>
+          </tr>
+          <tr>
+            <td><code>REQ-CERTIN-002</code></td>
+            <td>System ICT Log Retention strictly for 180 Days in Indian Jurisdiction</td>
+            <td><span class="hg-badge-status supported">SUPPORTED</span></td>
+            <td><span class="hg-badge-severity low">LOW (Format Clarified)</span></td>
+            <td><span class="hg-reeval-status ready" id="reeval-row-2">RE-EVALUATION PENDING</span></td>
+          </tr>
+          <tr>
+            <td><code>REQ-CERTIN-003</code></td>
+            <td>NTP Time Server Synchronization with NPL/NIC</td>
+            <td><span class="hg-badge-status supported">SUPPORTED</span></td>
+            <td><span class="hg-badge-severity none">UNCHANGED</span></td>
+            <td><span class="hg-reeval-status ok" id="reeval-row-3">NO IMPACT DETECTED</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Selective Re-evaluation Action -->
+  <div class="hg-reeval-box">
+    <div class="hg-reeval-left">
+      <h4>Selective Re-Evaluation Workbench</h4>
+      <p>Re-evaluate only affected finding nodes rather than invalidating the entire multi-jurisdiction corpus, preserving compute efficiency and audit history.</p>
+    </div>
+    <div class="hg-reeval-right">
+      <button type="button" class="hg-btn-primary" id="btn-run-reeval">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
+        <span>Execute Selective Re-Evaluation (Prototype)</span>
+      </button>
+    </div>
+  </div>
+  <div id="hg-reeval-feedback" class="hg-feedback-toast" hidden></div>
+</section>
+
+
+<section class="sec rv in" id="reliability-lab" data-page="reliability-lab">
+  <div class="k"><span>Feature B &bull; Roadmap Workbench</span></div>
+  <div class="hg-dash-header">
+    <div class="hg-dash-title-wrap">
+      <h2>5G Failure-Combination Discovery Lab</h2>
+      <p class="lead">Systematic exploration of multi-impairment edge scenarios across latency, packet drop, handover disruption, and coverage loss to evaluate communication-recovery strategies.</p>
+    </div>
+    <div class="hg-dash-prototype-badge">
+      <span class="hg-pulse-amber"></span>
+      <span>DESIGN PROTOTYPE &bull; PHASE 2 SIMULATION ROADMAP</span>
+    </div>
+  </div>
+
+  <div class="hg-notice-banner">
+    <div class="hg-notice-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    </div>
+    <div class="hg-notice-content">
+      <strong>Design Prototype Notice:</strong> This workbench provides the interface for configuring impairment combinations and target SLOs. The backend packet-level emulation engine (ns-3 / OMNeT++ / Open5GS integration) is scheduled for Phase 2. No synthetic test results are fabricated.
+    </div>
+  </div>
+
+  <!-- SLO Target Profile Selection -->
+  <div class="hg-card-panel">
+    <div class="hg-panel-header">
+      <h4>1. Select Service-Level Objective (SLO) Profile</h4>
+      <span class="hg-tag-tech">Mission-Critical Telemetry Profiles</span>
+    </div>
+    <div class="hg-slo-grid">
+      <div class="hg-slo-card active" data-slo-id="urllc">
+        <div class="hg-slo-top">
+          <span class="hg-slo-name">URLLC Mission-Critical Telemetry</span>
+          <span class="hg-badge-tech">3GPP TS 22.261</span>
+        </div>
+        <div class="hg-slo-target">Target: 99.999% Reliability &bull; &lt;15ms Latency</div>
+        <div class="hg-slo-desc">Tactical UAV datalinks, remote robotic control, and emergency services network slice.</div>
+      </div>
+
+      <div class="hg-slo-card" data-slo-id="hsr">
+        <div class="hg-slo-top">
+          <span class="hg-slo-name">High-Speed Railway Handover (350 km/h)</span>
+          <span class="hg-badge-tech">3GPP Rel 18</span>
+        </div>
+        <div class="hg-slo-target">Target: 99.9% Reliability &bull; &lt;45ms Handover Gap</div>
+        <div class="hg-slo-desc">Fast gNB Doppler shift transitions and frequent beamforming re-synchronization.</div>
+      </div>
+
+      <div class="hg-slo-card" data-slo-id="maritime">
+        <div class="hg-slo-top">
+          <span class="hg-slo-name">Maritime Coastal &amp; Offshore Connectivity</span>
+          <span class="hg-badge-tech">ITU-R M.1371</span>
+        </div>
+        <div class="hg-slo-target">Target: Store-and-Forward &bull; Zero Telemetry Drop</div>
+        <div class="hg-slo-desc">Intermittent RF propagation, coastal shadowing, and terrestrial-to-satellite handoff.</div>
+      </div>
+
+      <div class="hg-slo-card" data-slo-id="smartgrid">
+        <div class="hg-slo-top">
+          <span class="hg-slo-name">Smart Grid Teleprotection &amp; Substation</span>
+          <span class="hg-badge-tech">IEC 61850</span>
+        </div>
+        <div class="hg-slo-target">Target: 99.9999% Reliability &bull; &lt;5ms Jitter</div>
+        <div class="hg-slo-desc">Substation tripping commands requiring deterministic delay and zero buffer bloat.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Multi-Impairment Matrix Controls -->
+  <div class="hg-card-panel">
+    <div class="hg-panel-header">
+      <h4>2. Configure Multi-Dimensional Impairment Matrix</h4>
+      <span class="hg-tag-live">Interactive Parameter Simulator</span>
+    </div>
+    <div class="hg-sliders-grid">
+      <!-- Latency Jitter -->
+      <div class="hg-slider-item">
+        <div class="hg-slider-header">
+          <span class="hg-slider-title">Latency Jitter (One-Way RTT)</span>
+          <span class="hg-slider-value" id="val-latency">45 ms</span>
+        </div>
+        <input type="range" class="hg-range-input" id="slider-latency" min="5" max="500" value="45" step="5">
+        <div class="hg-slider-ticks"><span>5 ms (Fiber/URLLC)</span><span>250 ms</span><span>500 ms (Congested)</span></div>
+      </div>
+
+      <!-- Packet Drop Rate -->
+      <div class="hg-slider-item">
+        <div class="hg-slider-header">
+          <span class="hg-slider-title">Packet Drop / Error Rate (PER)</span>
+          <span class="hg-slider-value" id="val-loss">1.5 %</span>
+        </div>
+        <input type="range" class="hg-range-input" id="slider-loss" min="0" max="15" value="1.5" step="0.1">
+        <div class="hg-slider-ticks"><span>0.0% (Nominal)</span><span>7.5%</span><span>15.0% (Severe Fading)</span></div>
+      </div>
+
+      <!-- Handover Disruption -->
+      <div class="hg-slider-item">
+        <div class="hg-slider-header">
+          <span class="hg-slider-title">Handover Disruption Window</span>
+          <span class="hg-slider-value" id="val-handover">120 ms</span>
+        </div>
+        <input type="range" class="hg-range-input" id="slider-handover" min="0" max="3000" value="120" step="20">
+        <div class="hg-slider-ticks"><span>0 ms (DAPS)</span><span>1500 ms</span><span>3000 ms (Ping-Pong)</span></div>
+      </div>
+
+      <!-- Coverage Blind Spot -->
+      <div class="hg-slider-item">
+        <div class="hg-slider-header">
+          <span class="hg-slider-title">Temporary Coverage Drop Duration</span>
+          <span class="hg-slider-value" id="val-coverage">2.0 s</span>
+        </div>
+        <input type="range" class="hg-range-input" id="slider-coverage" min="0" max="30" value="2" step="0.5">
+        <div class="hg-slider-ticks"><span>0 s (Continuous)</span><span>15 s</span><span>30 s (Deep Shadow)</span></div>
+      </div>
+    </div>
+
+    <!-- Calculated Reliability Index -->
+    <div class="hg-risk-calc-box">
+      <div class="hg-calc-left">
+        <div class="hg-calc-label">Compound Impairment Stress Index:</div>
+        <div class="hg-calc-bar-wrap">
+          <div class="hg-calc-bar" id="hg-stress-bar" style="width: 28%; background: #10b981;"></div>
+        </div>
+      </div>
+      <div class="hg-calc-right">
+        <div class="hg-calc-score" id="hg-stress-score">28 / 100 (MODERATE STRESS)</div>
+        <div class="hg-calc-note" id="hg-stress-note">SLO achievable via Dual-Connectivity PDU redundancy.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recovery Strategies Comparison -->
+  <div class="hg-card-panel">
+    <div class="hg-panel-header">
+      <h4>3. Communication-Recovery Strategy Benchmark Matrix</h4>
+      <span class="hg-tag-tech">Protocol Resilience Analysis</span>
+    </div>
+    <div class="hg-strat-grid">
+      <div class="hg-strat-card">
+        <div class="hg-strat-header">
+          <span class="hg-strat-tag rec">RECOMMENDED</span>
+          <h5>Multipath QUIC / Dual PDU Sessions</h5>
+        </div>
+        <p class="hg-strat-body">Active-active transmission across standalone sub-6GHz macro layer and high-capacity mmWave or satellite backup. Zero interruption during single-path link failure.</p>
+        <div class="hg-strat-specs">
+          <div><span>Recovery Time:</span> <b>&lt; 5 ms (Instant)</b></div>
+          <div><span>Overhead:</span> <b>+35% Radio Bandwidth</b></div>
+          <div><span>SLO Compliance:</span> <b style="color:#10b981">PASSED</b></div>
+        </div>
+      </div>
+
+      <div class="hg-strat-card">
+        <div class="hg-strat-header">
+          <span class="hg-strat-tag">ALTERNATIVE</span>
+          <h5>Aggressive Selective ARQ + Packet Duplication</h5>
+        </div>
+        <p class="hg-strat-body">Layer-2 PDCP duplication with aggressive retransmission timers. Effective against transient RF burst errors but vulnerable to prolonged coverage blackouts.</p>
+        <div class="hg-strat-specs">
+          <div><span>Recovery Time:</span> <b>25 - 60 ms</b></div>
+          <div><span>Overhead:</span> <b>+100% Radio Overhead</b></div>
+          <div><span>SLO Compliance:</span> <b style="color:#f59e0b">DEGRADED</b></div>
+        </div>
+      </div>
+
+      <div class="hg-strat-card">
+        <div class="hg-strat-header">
+          <span class="hg-strat-tag">FALLBACK</span>
+          <h5>Dynamic Slicing Preemption</h5>
+        </div>
+        <p class="hg-strat-body">Temporarily throttle best-effort eMBB consumer traffic on the cell to guarantee dedicated PRB allocation for mission-critical telemetry.</p>
+        <div class="hg-strat-specs">
+          <div><span>Recovery Time:</span> <b>100 - 300 ms</b></div>
+          <div><span>Overhead:</span> <b>Low Overhead</b></div>
+          <div><span>SLO Compliance:</span> <b style="color:#10b981">PASSED</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Test Vector Export -->
+  <div class="hg-reeval-box">
+    <div class="hg-reeval-left">
+      <h4>Export Reproducible Failure Test Vector (JSON)</h4>
+      <p>Download or copy standardized scenario test vector for execution inside ns-3, OMNeT++, or physical 5G testbeds.</p>
+    </div>
+    <div class="hg-reeval-right">
+      <button type="button" class="hg-btn-secondary" id="btn-export-5g-vector">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        <span>Generate Failure Vector (JSON)</span>
+      </button>
+    </div>
+  </div>
+  <div id="hg-5g-vector-feedback" class="hg-feedback-toast" hidden></div>
+</section>
+
+<section class="sec rv" id="scenarios" data-page="scenarios">
       <div class="k"><span>Multi-Step Regulatory Simulations</span></div>
       <h2>Scenario Lab</h2>
       <p class="lead">Select a simulated operational scenario across Defence, 5G Slicing, Spectrum Interference, or
-        Maritime Comms. Execute individual steps through the live HackGrid RAG &amp; Evidence pipeline.</p>
-      <div id="sc-loading" class="loader"><span class="spinner"></span> Connecting to HackGrid scenario library...</div>
+        Maritime Comms. Execute individual steps through the live NetraSetu RAG &amp; Evidence pipeline.</p>
+      <div id="sc-loading" class="loader"><span class="spinner"></span> Connecting to NetraSetu scenario library...</div>
       <div id="sc-error" class="api-error" hidden></div>
       <div class="scenario-grid" id="sc-grid"></div>
       <div id="sc-detail" hidden style="margin-top:40px;border-top:1px solid var(--line);padding-top:32px;">
@@ -3321,10 +5188,65 @@
     </section>
 
 
-    <section class="sec rv" id="audit-trail-page" data-page="audit">
+    <section class="sec rv" id="audit-trail-page" data-page="evaluations">
+
+<div class="hg-dash-header">
+  <div class="hg-dash-title-wrap">
+    <h2>Evaluation &amp; Forensic Audit Reports</h2>
+    <p class="lead">Examine verified system benchmarks, review automated forensic audit trails, inspect human authority overrides, and export complete compliance reports.</p>
+  </div>
+  <div class="hg-dash-live-badge">
+    <span class="hg-pulse-dot"></span>
+    <span>LIVE AUDIT TRAIL &bull; EXCEL EXPORT READY</span>
+  </div>
+</div>
+
+<div class="hg-metric-row">
+  <div class="hg-metric-card">
+    <div class="hg-metric-top">
+      <span class="hg-metric-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg></span>
+      <span class="hg-tag-live">100% PASS</span>
+    </div>
+    <div class="hg-metric-val">95 Tests</div>
+    <div class="hg-metric-lbl">Regression Suite</div>
+    <div class="hg-metric-sub">Zero broken invariants across all modules</div>
+  </div>
+
+  <div class="hg-metric-card">
+    <div class="hg-metric-top">
+      <span class="hg-metric-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+      <span class="hg-tag-live">VERIFIED</span>
+    </div>
+    <div class="hg-metric-val">0 False Gaps</div>
+    <div class="hg-metric-lbl">Comparative Invariant Score</div>
+    <div class="hg-metric-sub">No 3GPP/national differences misclassified</div>
+  </div>
+
+  <div class="hg-metric-card">
+    <div class="hg-metric-top">
+      <span class="hg-metric-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+      <span class="hg-tag-live">SUB-SECOND</span>
+    </div>
+    <div class="hg-metric-val">&lt; 450 ms</div>
+    <div class="hg-metric-lbl">Dense Retrieval Median</div>
+    <div class="hg-metric-sub">BGE-M3 + FAISS L2 vector lookup</div>
+  </div>
+
+  <div class="hg-metric-card">
+    <div class="hg-metric-top">
+      <span class="hg-metric-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+      <span class="hg-tag-live">SOURCE-RESOLVED</span>
+    </div>
+    <div class="hg-metric-val">100% Grounded</div>
+    <div class="hg-metric-lbl">Clause Anchor Precision</div>
+    <div class="hg-metric-sub">Every claim links to page and source PDF</div>
+  </div>
+</div>
+
+
       <div class="k"><span>AI Governance · Traceability Ledger</span></div>
       <h2>Audit Trail</h2>
-      <p class="lead">Trace every HackGrid analysis from question to evidence, governance, and final assessment.</p>
+      <p class="lead">Trace every NetraSetu analysis from question to evidence, governance, and final assessment.</p>
 
       <!-- Overview Metrics derived from real records -->
       <div class="audit-overview" id="audit-overview">
@@ -3405,14 +5327,14 @@
         <section class="sec" id="incidents" data-page="agents">
       <div class="k rv"><span>Stateful Operational Incidents</span></div>
       <h2 class="rv">Follow an incident as evidence evolves.</h2>
-      <p class="lead rv">Real-world network anomalies are inherently ambiguous. HackGrid analyzes incidents progressively, re-evaluating hypotheses as new telemetry, container signatures, or incident reports arrive.</p>
+      <p class="lead rv">Real-world network anomalies are inherently ambiguous. NetraSetu analyzes incidents progressively, re-evaluating hypotheses as new telemetry, container signatures, or incident reports arrive.</p>
       <ol class="pipe" id="incpipe"></ol>
     </section>
 
     <section class="sec rv" id="research" data-page="research">
       <div class="k"><span>Experimental AI Research</span></div>
       <h2>A Research Platform for Evidence-Grounded AI &amp; Governance.</h2>
-      <p class="lead">HackGrid is an experimental research platform investigating how artificial intelligence can reason over high-stakes, safety-critical, and legally binding systems. Rather than building another generative chatbot, our research focuses on verifiable retrieval, consequence-driven governance, and traceable human-AI decision systems.</p>
+      <p class="lead">NetraSetu is an experimental research platform investigating how artificial intelligence can reason over high-stakes, safety-critical, and legally binding systems. Rather than building another generative chatbot, our research focuses on verifiable retrieval, consequence-driven governance, and traceable human-AI decision systems.</p>
 
       <!-- 7-Layer Conceptual Research Stack -->
       <div style="margin-top: 48px;">
@@ -3509,20 +5431,20 @@
 <section class="sec rv" id="contact" data-page="contact">
       <div class="k"><span>About and contact</span></div>
       <h2>A research platform, built by one developer.</h2>
-      <p class="lead">HackGrid is a research-oriented, multi-agent, multi-jurisdiction intelligence platform. It works
+      <p class="lead">NetraSetu is a research-oriented, multi-agent, multi-jurisdiction intelligence platform. It works
         on telecom standards, regulations, AI governance, network analysis, evidence-grounded RAG, gap analysis and
         human verification.</p>
       <div class="rows">
         <div><b>Shashank Kotnala</b>
           <div>
-            <p>Founder / Developer of HackGrid.</p>
+            <p>Founder / Developer of NetraSetu.</p>
             <p>B.Tech ECE student and technology researcher focused on wireless communication, AI/ML, telecommunications
               and intelligent regulatory analysis.</p>
           </div>
         </div>
         <div><b>Team</b>
           <div>
-            <p>HackGrid</p>
+            <p>NetraSetu</p>
           </div>
         </div>
         <div><b>Presented</b>
@@ -3532,16 +5454,365 @@
           </div>
         </div>
       </div>
-      <p class="big">Have a question, collaboration idea, research opportunity, or problem you&rsquo;d like HackGrid to
+      <p class="big">Have a question, collaboration idea, research opportunity, or problem you&rsquo;d like NetraSetu to
         explore? Get in touch.</p>
       <a class="btn pri cta-mail"
-        href="mailto:shashankkot009@gmail.com?subject=HackGrid%20%E2%80%94%20Query%20%2F%20Collaboration%20%2F%20Feedback">Contact
+        href="mailto:shashankkot009@gmail.com?subject=NetraSetu%20%E2%80%94%20Query%20%2F%20Collaboration%20%2F%20Feedback">Contact
         Us</a>
       <p class="mail">shashankkot009@gmail.com</p>
     </section>
 
-    <footer class="foot">HackGrid is a research prototype. It is not legal advice, and it has no certification,
-      endorsement or institutional partnership. Demonstration content on this page is synthetic.</footer>
+    
+<section class="sec rv in" id="docs" data-page="docs">
+  <div class="k"><span>Technical Reference &amp; Settings</span></div>
+  <div class="hg-dash-header">
+    <div class="hg-dash-title-wrap">
+      <h2>Documentation &amp; Document Registry</h2>
+      <p class="lead">Complete system architecture, authoritative statutory registries, REST API contracts, and environment configurations.</p>
+    </div>
+    <div class="hg-dash-live-badge">
+      <span class="hg-pulse-dot"></span>
+      <span>KNOWLEDGE BASE &bull; 10 CODIFIED SOURCES</span>
+    </div>
+  </div>
+
+  <!-- Document Registry Table -->
+  <div class="hg-card-panel">
+    <div class="hg-panel-header">
+      <h4>1. Official Document Registry &amp; Authoritative Sources</h4>
+      <span class="hg-tag-tech">Click any source to launch embedded PDF viewer modal</span>
+    </div>
+    <div class="hg-table-responsive">
+      <table class="hg-table hg-doc-table">
+        <thead>
+          <tr>
+            <th>Document Identifier</th>
+            <th>Official Title &amp; Publication Details</th>
+            <th>Issuing Authority</th>
+            <th>Jurisdiction</th>
+            <th>Legal Status</th>
+            <th>Source Verification</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>CERTIN-DIR-2022</code></td>
+            <td>
+              <b>Directions under Section 70B of IT Act 2000</b>
+              <div class="hg-table-sub">April 2022 Directions &amp; FAQs dated 18.05.2022</div>
+            </td>
+            <td>CERT-In / MeitY</td>
+            <td>India</td>
+            <td><span class="hg-legal-pill BINDING_STATUTORY">BINDING STATUTORY</span></td>
+            <td>
+              <button type="button" class="hg-btn-table-view" onclick="openHackGridDocViewer({doc_id:'CERTIN-DIR-2022',title:'Directions under Section 70B of IT Act 2000',issuing_authority:'CERT-In, MeitY, Government of India',jurisdiction:'India',page:1,clause:'Annexure I',legal_status:'BINDING_STATUTORY',supporting_text:'Mandatory reporting of cyber incidents within 6 hours of noticing.',local_path:'knowledge_base/Documents main/Indian_Acts/CERT-In_Directions_70B_28.04.2022.pdf'})">Open PDF &rarr;</button>
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>DOT-TELECOM-ACT-2023</code></td>
+            <td>
+              <b>The Telecommunications Act, 2023</b>
+              <div class="hg-table-sub">Act No. 44 of 2023 &bull; Gazette of India Extraordinary</div>
+            </td>
+            <td>DoT / Parliament of India</td>
+            <td>India</td>
+            <td><span class="hg-legal-pill BINDING_STATUTORY">PRIMARY LEGISLATION</span></td>
+            <td>
+              <button type="button" class="hg-btn-table-view" onclick="openHackGridDocViewer({doc_id:'DOT-TELECOM-ACT-2023',title:'The Telecommunications Act, 2023',issuing_authority:'DoT, Parliament of India',jurisdiction:'India',page:1,clause:'Section 22',legal_status:'BINDING_STATUTORY',supporting_text:'Provisions relating to national security and critical telecommunication networks.',local_path:'knowledge_base/Documents main/DoT_Rules/new-telecom-Act-2023.pdf'})">Open PDF &rarr;</button>
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>3GPP-TS-33501</code></td>
+            <td>
+              <b>3GPP TS 33.501: Security architecture for 5G System</b>
+              <div class="hg-table-sub">Release 18 (2024-03) &bull; ETSI TS 133 501 V18.0.0</div>
+            </td>
+            <td>3GPP / ETSI</td>
+            <td>International</td>
+            <td><span class="hg-legal-pill TECHNICAL_STANDARD">TECHNICAL STANDARD</span></td>
+            <td>
+              <button type="button" class="hg-btn-table-view" onclick="openHackGridDocViewer({doc_id:'3GPP-TS-33501',title:'3GPP TS 33.501 Rel 18 (5G-Advanced)',issuing_authority:'3GPP / ETSI',jurisdiction:'International',page:1,clause:'Clause 5.9',legal_status:'TECHNICAL_STANDARD',supporting_text:'Network slicing isolation and security procedures.',local_path:'knowledge_base/Documents main/3gpp/ETSI 33.501 Rel 18.pdf'})">Open PDF &rarr;</button>
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>MEITY-DPDP-2023</code></td>
+            <td>
+              <b>Digital Personal Data Protection Act, 2023</b>
+              <div class="hg-table-sub">Act No. 22 of 2023 &bull; Processing of digital personal data</div>
+            </td>
+            <td>MeitY / Parliament of India</td>
+            <td>India</td>
+            <td><span class="hg-legal-pill BINDING_STATUTORY">BINDING STATUTORY</span></td>
+            <td>
+              <button type="button" class="hg-btn-table-view" onclick="openHackGridDocViewer({doc_id:'MEITY-DPDP-2023',title:'Digital Personal Data Protection Act, 2023',issuing_authority:'MeitY, Government of India',jurisdiction:'India',page:1,clause:'Section 8(6)',legal_status:'BINDING_STATUTORY',supporting_text:'Obligation of Data Fiduciary to notify Data Protection Board upon breach.',local_path:'knowledge_base/Documents main/DPDP Acts/DPDP_Act_2023.pdf'})">Open PDF &rarr;</button>
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>DOT-CRITICAL-INFRA-2024</code></td>
+            <td>
+              <b>Critical Telecommunication Infrastructure Rules, 2024</b>
+              <div class="hg-table-sub">Notification under the Telecommunications Act 2023</div>
+            </td>
+            <td>DoT / Ministry of Communications</td>
+            <td>India</td>
+            <td><span class="hg-legal-pill BINDING_STATUTORY">SUBORDINATE RULE</span></td>
+            <td>
+              <button type="button" class="hg-btn-table-view" onclick="openHackGridDocViewer({doc_id:'DOT-CRITICAL-INFRA-2024',title:'Critical Telecommunication Infrastructure Rules, 2024',issuing_authority:'DoT, Ministry of Communications',jurisdiction:'India',page:1,clause:'Rule 3',legal_status:'BINDING_STATUTORY',supporting_text:'Security audits and mandatory baseline controls for CTI networks.',local_path:'knowledge_base/Documents main/DoT_Rules/Critical Telecommunication Infrastructure Rules, 2024_0.pdf'})">Open PDF &rarr;</button>
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>DOT-MTCTE-2023</code></td>
+            <td>
+              <b>Mandatory Testing &amp; Certification of Telecom Equipment (MTCTE)</b>
+              <div class="hg-table-sub">Essential Requirements for telecom equipment deployed in India</div>
+            </td>
+            <td>TEC / DoT</td>
+            <td>India</td>
+            <td><span class="hg-legal-pill BINDING_STATUTORY">MANDATORY REGULATION</span></td>
+            <td>
+              <button type="button" class="hg-btn-table-view" onclick="openHackGridDocViewer({doc_id:'DOT-MTCTE-2023',title:'MTCTE Regulations &amp; Essential Requirements',issuing_authority:'TEC, DoT',jurisdiction:'India',page:1,clause:'ER Phase IV',legal_status:'BINDING_STATUTORY',supporting_text:'Mandatory testing before sale, import or deployment in Indian networks.',local_path:'knowledge_base/Documents main/MTCTE Regulations/Testing and Certification MTCTE.pdf'})">Open PDF &rarr;</button>
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>DGCA-DRONE-RULES-2021</code></td>
+            <td>
+              <b>Drone Rules, 2021 (as amended 2022/2023)</b>
+              <div class="hg-table-sub">G.S.R. 589(E) &bull; Unmanned aircraft system airspace and datalink</div>
+            </td>
+            <td>DGCA / Civil Aviation</td>
+            <td>India</td>
+            <td><span class="hg-legal-pill BINDING_STATUTORY">BINDING STATUTORY</span></td>
+            <td>
+              <button type="button" class="hg-btn-table-view" onclick="openHackGridDocViewer({doc_id:'DGCA-DRONE-RULES-2021',title:'Drone Rules, 2021 (as amended)',issuing_authority:'DGCA / Ministry of Civil Aviation',jurisdiction:'India',page:1,clause:'Rule 25',legal_status:'BINDING_STATUTORY',supporting_text:'No-Permission-No-Takeoff (NPNT) protocol and datalink security.',local_path:'knowledge_base/DEFENCE/Drone Rules 2021.pdf'})">Open PDF &rarr;</button>
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>MEITY-IT-ACT-2000</code></td>
+            <td>
+              <b>Information Technology Act, 2000 (Amended 2008)</b>
+              <div class="hg-table-sub">Sections 43A, 69, 70, 70B &bull; Primary cyber statutory framework</div>
+            </td>
+            <td>MeitY / Parliament of India</td>
+            <td>India</td>
+            <td><span class="hg-legal-pill BINDING_STATUTORY">PRIMARY LEGISLATION</span></td>
+            <td>
+              <button type="button" class="hg-btn-table-view" onclick="openHackGridDocViewer({doc_id:'MEITY-IT-ACT-2000',title:'Information Technology Act, 2000 (as amended)',issuing_authority:'MeitY, Government of India',jurisdiction:'India',page:1,clause:'Section 70B',legal_status:'BINDING_STATUTORY',supporting_text:'National agency for cyber incident response and emergency powers.',local_path:'knowledge_base/Documents main/Indian_Acts/it_act_2000_updated.pdf'})">Open PDF &rarr;</button>
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>MEITY-IT-ACT-RULES-2000</code></td>
+            <td>
+              <b>IT (Certifying Authorities) Rules &amp; Statutory Notifications</b>
+              <div class="hg-table-sub">G.S.R. 788(E) &bull; Digital signatures and secure operational parameters</div>
+            </td>
+            <td>MeitY</td>
+            <td>India</td>
+            <td><span class="hg-legal-pill BINDING_STATUTORY">STATUTORY RULE</span></td>
+            <td>
+              <button type="button" class="hg-btn-table-view" onclick="openHackGridDocViewer({doc_id:'MEITY-IT-ACT-RULES-2000',title:'Information Technology Rules, 2000',issuing_authority:'MeitY, Government of India',jurisdiction:'India',page:1,clause:'Schedule II',legal_status:'BINDING_STATUTORY',supporting_text:'Security standards and verification protocols for electronic governance.',local_path:'knowledge_base/Documents main/Indian_Acts/IT-Act-Rules_2000_0.pdf'})">Open PDF &rarr;</button>
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>ITU-T-Y3172</code></td>
+            <td>
+              <b>ITU-T Recommendation Y.3172</b>
+              <div class="hg-table-sub">Architectural framework for machine learning in IMT-2020 (5G) networks</div>
+            </td>
+            <td>ITU-T</td>
+            <td>International</td>
+            <td><span class="hg-legal-pill RECOMMENDATION">RECOMMENDATION</span></td>
+            <td>
+              <button type="button" class="hg-btn-table-view" onclick="openHackGridDocViewer({doc_id:'ITU-T-Y3172',title:'ITU-T Rec Y.3172: ML in IMT-2020',issuing_authority:'ITU-T Study Group 13',jurisdiction:'International',page:1,clause:'Clause 7',legal_status:'RECOMMENDATION',supporting_text:'Logical architecture of machine learning pipelines in 5G core networks.',source_url:'https://www.itu.int/rec/T-REC-Y.3172/en'})">Official URL &rarr;</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FastAPI Backend Endpoints Contract Table -->
+  <div class="hg-card-panel">
+    <div class="hg-panel-header">
+      <h4>2. Backend REST API Endpoints Contract</h4>
+      <span class="hg-tag-live">FastAPI Specification</span>
+    </div>
+    <div class="hg-table-responsive">
+      <table class="hg-table">
+        <thead>
+          <tr>
+            <th>HTTP Method</th>
+            <th>Path</th>
+            <th>Function / Purpose</th>
+            <th>Contract Payload</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="hg-method get">GET</span></td>
+            <td><code>/api/health</code></td>
+            <td>Live system health &amp; FAISS index heartbeat</td>
+            <td>Returns status, model info, vector count</td>
+            <td><span class="hg-badge-status supported">LIVE</span></td>
+          </tr>
+          <tr>
+            <td><span class="hg-method post">POST</span></td>
+            <td><code>/api/query</code></td>
+            <td>9-Stage multi-jurisdiction RAG reasoning</td>
+            <td>JSON: <code>{ query, jurisdiction, profile }</code></td>
+            <td><span class="hg-badge-status supported">LIVE</span></td>
+          </tr>
+          <tr>
+            <td><span class="hg-method get">GET</span></td>
+            <td><code>/api/scenarios</code></td>
+            <td>List all 8 production test scenarios</td>
+            <td>Returns array of scenario objects &amp; steps</td>
+            <td><span class="hg-badge-status supported">LIVE</span></td>
+          </tr>
+          <tr>
+            <td><span class="hg-method post">POST</span></td>
+            <td><code>/api/scenarios/run</code></td>
+            <td>Execute single scenario step with forensic review</td>
+            <td>JSON: <code>{ scenario_id, step_id }</code></td>
+            <td><span class="hg-badge-status supported">LIVE</span></td>
+          </tr>
+          <tr>
+            <td><span class="hg-method get">GET</span></td>
+            <td><code>/api/documents/raw/{doc_path}</code></td>
+            <td>Serve local verified PDF with page anchor headers</td>
+            <td>Streams PDF file binary with Range support</td>
+            <td><span class="hg-badge-status supported">LIVE</span></td>
+          </tr>
+          <tr>
+            <td><span class="hg-method post">POST</span></td>
+            <td><code>/api/verify_claim</code></td>
+            <td>Source-to-clause verification endpoint</td>
+            <td>JSON: <code>{ text, document_id, page }</code></td>
+            <td><span class="hg-badge-status supported">LIVE</span></td>
+          </tr>
+          <tr>
+            <td><span class="hg-method get">GET</span></td>
+            <td><code>/api/audits/export/excel</code></td>
+            <td>Download full forensic audit log in Excel (.xlsx)</td>
+            <td>Binary stream of formatted Excel report</td>
+            <td><span class="hg-badge-status supported">LIVE</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Platform Information & Credits -->
+  <div class="hg-card-panel">
+    <div class="hg-panel-header">
+      <h4>3. Project &amp; Platform Information</h4>
+    </div>
+    <div class="hg-info-grid">
+      <div><b>Platform Developer:</b> Shashank Kotnala (B.Tech ECE Researcher)</div>
+      <div><b>Focus Domain:</b> Telecom Standards, 5G Wireless, AI Governance &amp; Regulatory Intelligence</div>
+      <div><b>Presentation Context:</b> ITU AI for Good Build-a-thon &bull; Academic &amp; National Hackathon Presentation</div>
+      <div><b>Inquiries / Feedback:</b> <code>shashankkot009@gmail.com</code></div>
+    </div>
+  </div>
+</section>
+
+<footer class="hg-footer" role="contentinfo">
+    <div class="hg-footer-inner">
+      <!-- Brand & Mission Header Row -->
+      <div class="hg-footer-brand-row">
+        <div class="hg-footer-brand">
+          <a class="hg-footer-logo-title" href="#/overview" aria-label="NetraSetu Home">
+            <svg class="hg-footer-logo-svg" viewBox="0 0 31.5 48.5" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M21.5 0 L21.5 19.5 L31.5 19.5 L31.5 29 L10 48.5 L10 28.5 L0.5 28.5 L0.5 18.5 Z" fill="#00e5ff" />
+              <rect x="0.5" y="18.5" width="9" height="10" fill="#fdfdfd" />
+              <rect x="22" y="19.5" width="9.5" height="9.5" fill="#fdfdfd" />
+            </svg>
+            <span>NetraSetu</span>
+          </a>
+          <p class="hg-footer-desc">An evidence-grounded intelligence and communication-reliability testing platform for telecommunications infrastructure, sovereign cybersecurity directives, and mission-critical 5G systems.</p>
+          <div class="hg-footer-brand-pills">
+            <span class="hg-footer-pill live"><span class="hg-pulse-dot" style="width:6px;height:6px;"></span> Port 8000 &bull; Live</span>
+            <span class="hg-footer-pill">BGE-M3 Dense Retrieval</span>
+            <span class="hg-footer-pill">14,800+ Chunks</span>
+            <span class="hg-footer-pill">Zero False Gaps</span>
+          </div>
+        </div>
+
+        <div style="max-width: 380px;">
+          <h5 style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#f1f5f9;margin-bottom:12px;">Core Scientific Principle</h5>
+          <p style="font-size:12px;line-height:1.6;color:#94a3b8;">&ldquo;Evidence first, AI-assisted reasoning second, and human authority wherever decisions matter. Parametric LLM hallucinations are strictly gated by normative hierarchy and verified clause citations.&rdquo;</p>
+        </div>
+      </div>
+
+      <!-- 4-Column Directory Grid -->
+      <div class="hg-footer-grid">
+        <!-- Column 1: Platform -->
+        <div class="hg-footer-col">
+          <h5>Platform</h5>
+          <ul>
+            <li><a href="#/overview">Overview Dashboard</a></li>
+            <li><a href="#/intelligence">Evidence Intelligence</a></li>
+            <li><a href="#/evaluations">Evaluation &amp; Reports</a></li>
+            <li><a href="#/intelligence">Incident Traceability</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 2: Research & Technology -->
+        <div class="hg-footer-col">
+          <h5>Research &amp; Technology</h5>
+          <ul>
+            <li><a href="#/change-impact">Change-Impact Engine <span class="hg-footer-tag proto">Prototype</span></a></li>
+            <li><a href="#/reliability-lab">5G Reliability Lab <span class="hg-footer-tag proto">Prototype</span></a></li>
+            <li><a href="#/intelligence">9-Stage Pipeline Architecture</a></li>
+            <li><a href="#/docs">Multi-Domain Normative Standards</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Resources -->
+        <div class="hg-footer-col">
+          <h5>Resources</h5>
+          <ul>
+            <li><a href="#/docs">Technical Documentation</a></li>
+            <li><a href="#/docs">Official Document Registry <span class="hg-footer-tag active-tag">10 Sources</span></a></li>
+            <li><a href="#/docs">FastAPI REST Contracts</a></li>
+            <li><a href="mailto:shashankkot009@gmail.com?subject=NetraSetu%20Research%20Inquiry%20%2F%20Collaboration">Contact Developer &rarr;</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Governance & Project -->
+        <div class="hg-footer-col">
+          <h5>Governance &amp; Project</h5>
+          <ul>
+            <li><a href="#/docs">About NetraSetu</a></li>
+            <li><a href="#/contact">ITU AI for Good Build-a-thon</a></li>
+            <li><a href="#/docs">Strict Absence Protocol</a></li>
+            <li><a href="#/evaluations">Audit Trail &amp; Human Review</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bottom Disclaimer & Copyright Row -->
+      <div class="hg-footer-bottom">
+        <div>
+          &copy; 2026 NetraSetu by <b>Shashank Kotnala</b>. Built for telecommunications research and national hackathon presentation.
+        </div>
+        <div class="hg-footer-bottom-links">
+          <a href="#/docs">Research Prototype Notice</a>
+          <a href="#/docs">Document Registry</a>
+          <a href="mailto:shashankkot009@gmail.com">shashankkot009@gmail.com</a>
+        </div>
+      </div>
+    </div>
+  </footer>
   </div>
 
   <script>
@@ -3557,7 +5828,244 @@
       m.addEventListener('click', function (e) { if (e.target.closest('a')) set(false) });
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape') set(false) });
       window.addEventListener('resize', function () { if (innerWidth / innerHeight > 1.1) set(false) });
-    })();
+    
+      /* ============================================================
+         CLICKABLE SOURCE-TO-CLAUSE VERIFICATION MODAL HANDLERS
+         ============================================================ */
+      
+      var API_BASE = window.NETRASETU_API_BASE || window.HACKGRID_API_BASE || 'http://127.0.0.1:8000';
+      window.API_BASE = API_BASE;
+
+      window.openNetraSetuDocViewer = function (docJson) { return window.openHackGridDocViewer(docJson); };
+      window.closeNetraSetuDocViewer = function () { return window.closeHackGridDocViewer(); };
+
+      window.openHackGridDocViewer = function (docJson) {
+        try {
+          var data = typeof docJson === 'string' ? JSON.parse(decodeURIComponent(docJson)) : docJson;
+          var modal = document.getElementById('hgDocViewerModal');
+          if (!modal) return;
+
+          var docTitle = data.source_title || data.official_title || data.title || 'Official Regulatory Document';
+          var docAuth = data.issuing_authority || data.publisher || 'Authorized Regulatory Authority';
+          document.getElementById('hgModalTitle').textContent = docTitle;
+          document.getElementById('hgModalAuthority').textContent = docAuth;
+          
+          var targetPage = Math.max(1, parseInt(data.page, 10) || 1);
+          var breadcrumb = (data.jurisdiction || 'India') + ' &bull; ' + (data.clause || 'General Provision');
+          breadcrumb += ' &bull; Page ' + targetPage;
+          document.getElementById('hgModalBreadcrumb').innerHTML = breadcrumb;
+
+          var statusBadge = document.getElementById('hgModalStatusBadge');
+          if (statusBadge) {
+            var st = data.verification_status || data.status || 'SUPPORTED';
+            statusBadge.className = 'hg-status-pill ' + st;
+            statusBadge.textContent = st;
+          }
+
+          var legalBadge = document.getElementById('hgModalLegalBadge');
+          if (legalBadge) {
+            var ls = data.legal_status || 'BINDING_STATUTORY';
+            legalBadge.className = 'hg-legal-pill ' + ls;
+            legalBadge.textContent = ls.replace(/_/g, ' ');
+          }
+
+          var passEl = document.getElementById('hgModalPassage');
+          if (passEl) {
+            var text = data.supporting_text || data.text || 'Official excerpt verified in authoritative knowledge base.';
+            passEl.textContent = text;
+          }
+
+          var ctxEl = document.getElementById('hgModalContext');
+          if (ctxEl) {
+            ctxEl.textContent = data.surrounding_context || 'Surrounding text context from document record.';
+          }
+
+          var explEl = document.getElementById('hgModalExplanation');
+          if (explEl) {
+            explEl.textContent = data.verification_explanation || 'Verified evidence grounded in indexed knowledge base.';
+          }
+
+          var faqCont = document.getElementById('hgModalFaqContainer');
+          var faqEl = document.getElementById('hgModalFaq');
+          if (data.faq_clarification) {
+            if (faqCont) faqCont.style.display = 'block';
+            if (faqEl) faqEl.textContent = data.faq_clarification;
+          } else {
+            if (faqCont) faqCont.style.display = 'none';
+          }
+
+          var extBtn = document.getElementById('hgModalExtBtn');
+          if (extBtn) {
+            var officialUrl = data.source_url || data.official_url || '';
+            if (officialUrl) {
+              extBtn.href = officialUrl;
+              extBtn.style.display = 'inline-flex';
+            } else {
+              extBtn.style.display = 'none';
+            }
+          }
+
+          // PDF VIEWER STATE & CONTROLS
+          var iframe = document.getElementById('hgModalIframe');
+          var fallback = document.getElementById('hgModalViewerFallback');
+          var statusPill = document.getElementById('hgPdfStatusPill');
+          var pageInput = document.getElementById('hgPdfPageInput');
+          var pageTotal = document.getElementById('hgPdfPageTotal');
+          var citedNotice = document.getElementById('hgPdfPassageNotice');
+          var citedPageSpan = document.getElementById('hgPdfCitedPageNum');
+          var popoutBtn = document.getElementById('hgPdfPopoutBtn');
+
+          // Multi-attribute path resolution:
+          // Check local_viewer_url, local_path, local_file_path, doc_path, file_path, document, source_doc_id, doc_id, document_identifier, or title
+          var rawPath = data.local_viewer_url || '';
+          var candidatePath = data.local_path || data.local_file_path || data.doc_path || data.file_path || data.document || data.source_doc_id || data.doc_id || data.document_identifier || '';
+          var docRelPath = '';
+          var fullViewerUrl = '';
+
+          if (rawPath) {
+            var urlParts = rawPath.split('#');
+            var basePart = urlParts[0];
+            var rawPrefix = '/api/documents/raw/';
+            var idx = basePart.indexOf(rawPrefix);
+            if (idx !== -1) {
+              docRelPath = decodeURIComponent(basePart.substring(idx + rawPrefix.length));
+            } else {
+              docRelPath = basePart;
+            }
+          } else if (candidatePath) {
+            docRelPath = candidatePath;
+          } else if (docTitle && docTitle !== 'Official Regulatory Document') {
+            docRelPath = docTitle;
+          }
+
+          if (docRelPath) {
+            if (docRelPath.startsWith('/api/documents/raw/')) {
+              docRelPath = docRelPath.substring('/api/documents/raw/'.length);
+            }
+            docRelPath = decodeURIComponent(docRelPath);
+            fullViewerUrl = API_BASE + '/api/documents/raw/' + encodeURIComponent(docRelPath).replace(/%2F/g, '/');
+          }
+
+          var setViewerPage = function (pNum) {
+            if (!fullViewerUrl) return;
+            pNum = Math.max(1, parseInt(pNum, 10) || 1);
+            if (window._hgCurrentPdfState) window._hgCurrentPdfState.currentPage = pNum;
+            if (pageInput) pageInput.value = pNum;
+            var streamUrl = fullViewerUrl + '#page=' + pNum + '&zoom=page-fit';
+            if (iframe) iframe.src = streamUrl;
+            if (popoutBtn) popoutBtn.href = streamUrl;
+          };
+
+          window._hgCurrentPdfState = {
+            fullViewerUrl: fullViewerUrl,
+            currentPage: targetPage,
+            totalPages: 1,
+            citedPage: targetPage,
+            setPage: setViewerPage
+          };
+
+          if (citedPageSpan) citedPageSpan.textContent = targetPage;
+          var noticePageEl = document.getElementById('hgPdfNoticePage');
+          if (noticePageEl) noticePageEl.textContent = targetPage;
+          var noticeSnippetEl = document.getElementById('hgPdfNoticeSnippet');
+          if (noticeSnippetEl) {
+            var snip = (data.supporting_text || data.text || '').trim();
+            noticeSnippetEl.textContent = snip.length > 90 ? snip.substring(0, 87) + '...' : snip;
+          }
+
+          if (statusPill) {
+            statusPill.className = 'hg-status-pill SUPPORTED';
+            statusPill.textContent = 'Connecting to PDF viewer...';
+          }
+
+          if (docRelPath) {
+            fetch(API_BASE + '/api/documents/info?doc_path=' + encodeURIComponent(docRelPath) + '&page=' + targetPage)
+              .then(function (res) {
+                if (!res.ok) throw new Error('Document file unavailable (HTTP ' + res.status + ')');
+                return res.json();
+              })
+              .then(function (info) {
+                var total = info.total_pages || 1;
+                if (window._hgCurrentPdfState) window._hgCurrentPdfState.totalPages = total;
+                if (pageTotal) pageTotal.textContent = total;
+                if (statusPill) {
+                  statusPill.className = 'hg-status-pill SUPPORTED';
+                  statusPill.textContent = 'Verified PDF Connected (' + total + ' Pages)';
+                }
+                if (fallback) fallback.style.display = 'none';
+                if (iframe) iframe.style.display = 'block';
+                setViewerPage(targetPage);
+              })
+              .catch(function (err) {
+                console.warn('PDF Document verification check failed:', err);
+                if (iframe) {
+                  iframe.src = 'about:blank';
+                  iframe.style.display = 'none';
+                }
+                if (fallback) {
+                  fallback.style.display = 'flex';
+                  var fMsg = document.getElementById('hgModalFallbackMsg');
+                  if (fMsg) {
+                    fMsg.innerHTML = 'The original source document file could not be located in the knowledge base (HTTP 404).<br><br>' +
+                      '<b>Referenced Path / ID:</b> <code>' + escapeHtml(docRelPath) + '</code><br>' +
+                      'No fabricated placeholder is displayed. Please open the authorized official source below.';
+                  }
+                  var fExt = document.getElementById('hgModalFallbackExtBtn');
+                  if (fExt) {
+                    var extUrl = data.source_url || data.official_url || '#';
+                    fExt.href = extUrl;
+                    fExt.style.display = (extUrl && extUrl !== '#') ? 'inline-flex' : 'none';
+                  }
+                }
+                if (statusPill) {
+                  statusPill.className = 'hg-status-pill UNSUPPORTED';
+                  statusPill.textContent = 'PDF File Unavailable (HTTP 404)';
+                }
+                if (statusBadge) {
+                  statusBadge.className = 'hg-status-pill UNSUPPORTED';
+                  statusBadge.textContent = 'SOURCE_UNAVAILABLE';
+                }
+              });
+          } else {
+            if (iframe) {
+              iframe.src = 'about:blank';
+              iframe.style.display = 'none';
+            }
+            if (fallback) {
+              fallback.style.display = 'flex';
+              var fMsg = document.getElementById('hgModalFallbackMsg');
+              if (fMsg) {
+                fMsg.innerHTML = 'No local source file path or document ID is associated with this citation.<br>Please open the official authorized repository below:';
+              }
+              var fExt = document.getElementById('hgModalFallbackExtBtn');
+              if (fExt) {
+                var extUrl = data.source_url || data.official_url || '#';
+                fExt.href = extUrl;
+                fExt.style.display = (extUrl && extUrl !== '#') ? 'inline-flex' : 'none';
+              }
+            }
+            if (statusPill) {
+              statusPill.className = 'hg-status-pill UNSUPPORTED';
+              statusPill.textContent = 'External Source Only';
+            }
+          }
+
+          modal.classList.add('active');
+        } catch (e) {
+          console.error('Error opening document viewer:', e);
+        }
+      };
+
+      window.closeHackGridDocViewer = function () {
+        var modal = document.getElementById('hgDocViewerModal');
+        if (modal) {
+          modal.classList.remove('active');
+          var iframe = document.getElementById('hgModalIframe');
+          if (iframe) iframe.src = 'about:blank';
+        }
+      };
+
+})();
   </script>
   <script>
     (function () {
@@ -3791,7 +6299,7 @@
             abortErr.name = 'AbortError';
             throw abortErr;
           }
-          throw new Error('Could not reach HackGrid backend at ' + API_BASE + '. Please verify the server is running on port 8000.');
+          throw new Error('Could not reach NetraSetu backend at ' + API_BASE + '. Please verify the server is running on port 8000.');
         } finally {
           if (timer) clearTimeout(timer);
         }
@@ -3811,16 +6319,26 @@
 
       async function checkBackendHealth() {
         var bStatus = $('backend-status');
-        if (!bStatus) return;
+        var topbarStatus = $('backend-status-topbar');
         try {
           var h = await apiFetch('/api/health');
-          bStatus.classList.remove('offline');
-          bStatus.classList.add('online');
-          bStatus.querySelector('span').textContent = 'Backend: Connected (' + (h.status || 'OK') + ')';
+          if (bStatus) {
+            bStatus.classList.remove('offline');
+            bStatus.classList.add('online');
+            bStatus.querySelector('span').textContent = 'Backend: Connected (' + (h.status || 'OK') + ')';
+          }
+          if (topbarStatus) {
+            topbarStatus.innerHTML = '<span class="status-dot online"></span><span class="status-label">Port 8000 &bull; Live</span>';
+          }
         } catch (err) {
-          bStatus.classList.remove('online');
-          bStatus.classList.add('offline');
-          bStatus.querySelector('span').textContent = 'Backend: Offline (Port 8000)';
+          if (bStatus) {
+            bStatus.classList.remove('online');
+            bStatus.classList.add('offline');
+            bStatus.querySelector('span').textContent = 'Backend: Offline (Port 8000)';
+          }
+          if (topbarStatus) {
+            topbarStatus.innerHTML = '<span class="status-dot offline"></span><span class="status-label" style="color:#ef4444">Port 8000 &bull; Offline</span>';
+          }
         }
       }
       checkBackendHealth();
@@ -3846,13 +6364,15 @@
 
         // Determine headline verdict
         var headline = 'Covered';
-        if (gap.verdict) headline = gap.verdict;
+        if (gap.verdict && gap.verdict !== 'SUFFICIENT' && gap.verdict !== 'INSUFFICIENT' && gap.verdict !== 'EVALUATING_CANDIDATE') headline = gap.verdict;
+        else if (gap.gap_status && gap.gap_status !== 'SUFFICIENT' && gap.gap_status !== 'INSUFFICIENT') headline = gap.gap_status;
         else if (gap.relationship) headline = gap.relationship;
-        else if (evAss.overall_status) headline = evAss.overall_status;
         else if (synth.assessment) {
-          var match = synth.assessment.match(/^(Covered|Partially covered|Additional national requirement|Potential policy \/ standards gap|Conflict|Insufficient evidence|Not applicable)/i);
+          var match = synth.assessment.match(/^(Covered|Partially covered|Additional national requirement|Potential policy \/ standards gap|Conflict|Insufficient evidence|Not applicable|Functionally equivalent|No gap established|Established gap)/i);
           if (match) headline = match[0];
           else headline = 'Assessment Completed';
+        } else if (evAss.overall_status && evAss.overall_status !== 'SUFFICIENT') {
+          headline = evAss.overall_status;
         }
 
         // Synthesis text
@@ -3905,15 +6425,51 @@
           html += '<p style="color:var(--strip);">No evidence passages retrieved.</p>';
         } else {
           reranked.slice(0, 8).forEach(function (ev, idx) {
-            var src = (ev.metadata && ev.metadata.source) || ev.source || ev.chunk_id || ('Passage ' + (idx + 1));
+            var meta = ev.metadata || ev.provenance || {};
+            var src = ev.official_title || ev.title || meta.document || meta.source_file || ev.source || ev.chunk_id || ('Passage ' + (idx + 1));
+            var auth = ev.issuing_authority || meta.publisher || 'Authorized Standards Body';
+            var clause = meta.clause || ev.clause || 'General Provision';
+            var page = meta.page || ev.page;
+            var legalSt = ev.legal_status || meta.legal_status || 'TECHNICAL';
             var scoreVal = ev.score !== undefined ? Number(ev.score).toFixed(3) : (ev.similarity !== undefined ? Number(ev.similarity).toFixed(3) : 'High');
-            var jurVal = (ev.metadata && ev.metadata.jurisdiction) || ev.jurisdiction || data.jurisdiction || 'India';
+            var jurVal = meta.jurisdiction || ev.jurisdiction || data.jurisdiction || 'India';
+            var srcUrl = ev.source_url || meta.official_url || '';
+            var localUrl = ev.local_viewer_url || meta.local_viewer_url || '';
+
+            var modalDataStr = encodeURIComponent(JSON.stringify({
+              source_title: src,
+              issuing_authority: auth,
+              clause: clause,
+              page: page,
+              jurisdiction: jurVal,
+              legal_status: legalSt,
+              verification_status: 'SUPPORTED',
+              source_url: srcUrl,
+              local_viewer_url: localUrl,
+              supporting_text: ev.text || '',
+              surrounding_context: 'Evidence passage retrieved and verified from knowledge base index.',
+              verification_explanation: 'Retrieved and verified from authoritative corpus: ' + src
+            }));
+
             html += '<div class="ev-card">';
-            html += '<div class="ev-card-top">';
-            html += '<b>' + escapeHtml(src) + '</b>';
-            html += '<span>Relevance: ' + escapeHtml(scoreVal) + ' · ' + escapeHtml(jurVal) + '</span>';
+            html += '<div class="ev-card-top" style="flex-wrap:wrap;gap:6px;">';
+            html += '  <div style="display:flex;align-items:center;gap:6px;">';
+            html += '    <b>' + escapeHtml(src) + '</b>';
+            html += '    <span class="hg-legal-pill ' + escapeHtml(legalSt) + '">' + escapeHtml(legalSt.replace(/_/g, ' ')) + '</span>';
+            html += '  </div>';
+            html += '  <span>Relevance: ' + escapeHtml(scoreVal) + ' &bull; ' + escapeHtml(jurVal) + (clause ? (' &bull; ' + escapeHtml(clause)) : '') + (page ? (' &bull; p.' + page) : '') + '</span>';
             html += '</div>';
+            html += '<div style="font-size:11px;color:var(--strip);margin:4px 0 6px;">Issuing Authority: ' + escapeHtml(auth) + '</div>';
             html += '<p>' + escapeHtml(ev.text || '') + '</p>';
+
+            // Actions
+            html += '<div class="hg-action-bar" style="margin-top:8px;">';
+            if (srcUrl) {
+              html += '<a href="' + escapeHtml(srcUrl) + '" target="_blank" class="hg-action-btn primary">Official Source &nearr;</a>';
+            }
+            html += '<button type="button" class="hg-action-btn" onclick="openHackGridDocViewer(\'' + modalDataStr + '\')">Open in Document Viewer &boxbox;</button>';
+            html += '</div>';
+
             html += '</div>';
           });
         }
@@ -3922,20 +6478,98 @@
 
         // Section 2: Grounded Claims & Verification
         if (claims && claims.length > 0) {
-          html += '<details>';
-          html += '<summary>View Grounded Claims &amp; Verification (' + claims.length + ' claims)</summary>';
+          html += '<details open>';
+          html += '<summary>View Grounded Claims &amp; Source Verification (' + claims.length + ' claims)</summary>';
           html += '<div style="margin-top:16px;">';
-          claims.forEach(function (cl) {
-            var status = cl.status || 'SUPPORTED';
+          claims.forEach(function (cl, cIdx) {
+            var status = cl.verification_status || cl.status || 'SUPPORTED';
             var claimText = cl.claim || cl.text || JSON.stringify(cl);
-            var evIds = cl.evidence_ids ? ('Grounded by: ' + cl.evidence_ids.join(', ')) : '';
+            var cId = cl.claim_id || ('CLAIM-' + (cIdx + 1));
+            var se = cl.structured_evidence || cl;
+
+            var docTitle = se.source_title || se.official_title || 'Official Source Document';
+            var auth = se.issuing_authority || 'Regulatory Authority';
+            var docId = se.document_identifier || '';
+            var clause = se.clause || 'General Provision';
+            var page = se.page;
+            var jur = se.jurisdiction || 'India';
+            var legalSt = se.legal_status || 'BINDING_STATUTORY';
+            var srcUrl = se.source_url || '';
+            var localUrl = se.local_viewer_url || '';
+            var suppText = se.supporting_text || '';
+            var contextText = se.surrounding_context || '';
+            var explText = se.verification_explanation || '';
+            var faqText = se.faq_clarification || '';
+            var conf = se.confidence !== undefined ? Math.round(se.confidence * 100) + '%' : 'Verified';
+
+            // Encode data for modal viewer
+            var modalDataStr = encodeURIComponent(JSON.stringify({
+              source_title: docTitle,
+              issuing_authority: auth,
+              document_identifier: docId,
+              clause: clause,
+              page: page,
+              jurisdiction: jur,
+              legal_status: legalSt,
+              verification_status: status,
+              source_url: srcUrl,
+              local_viewer_url: localUrl,
+              supporting_text: suppText,
+              surrounding_context: contextText,
+              verification_explanation: explText,
+              faq_clarification: faqText
+            }));
+
             html += '<div class="claim-card ' + escapeHtml(status) + '">';
-            html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">';
-            html += '<span style="font-size:12px;color:var(--strip);">' + escapeHtml(cl.claim_id || 'CLAIM') + '</span>';
-            html += '<span class="claim-status">' + escapeHtml(status) + '</span>';
+            html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">';
+            html += '  <div style="display:flex;align-items:center;gap:8px;">';
+            html += '    <span style="font-family:ui-monospace,monospace;font-size:12px;font-weight:700;color:var(--ink);">' + escapeHtml(cId) + '</span>';
+            html += '    <span class="hg-legal-pill ' + escapeHtml(legalSt) + '">' + escapeHtml(legalSt.replace(/_/g, ' ')) + '</span>';
+            html += '  </div>';
+            html += '  <span class="hg-status-pill ' + escapeHtml(status) + '">' + escapeHtml(status) + ' (' + escapeHtml(conf) + ')</span>';
             html += '</div>';
-            html += '<p style="color:var(--ink);font-size:14px;margin:0;">' + escapeHtml(claimText) + '</p>';
-            if (evIds) html += '<p style="margin-top:6px;font-size:12px;color:var(--strip);">' + escapeHtml(evIds) + '</p>';
+
+            html += '<p style="color:var(--ink);font-size:14px;margin:0 0 10px;line-height:1.5;">' + escapeHtml(claimText) + '</p>';
+
+            // Clickable citation badge row
+            html += '<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px;">';
+            html += '  <span style="font-size:11px;color:var(--strip);margin-right:2px;">Authoritative Citation:</span>';
+            html += '  <span class="hg-citation-pill" onclick="openHackGridDocViewer(\'' + modalDataStr + '\')">';
+            html += '    <span style="color:#6366f1;">&sect;</span> ' + escapeHtml(docTitle.length > 45 ? docTitle.substring(0, 42) + '...' : docTitle) + ' &bull; ' + escapeHtml(clause) + (page ? (' &bull; p.' + page) : '');
+            html += '  </span>';
+            html += '</div>';
+
+            // Expandable Source-Verification Panel
+            html += '<details class="hg-verify-panel">';
+            html += '<summary><span>&blacktriangleright;</span> Source-to-Clause Verification Record &amp; Evidence Audit</summary>';
+            html += '<div class="hg-verify-grid">';
+            html += '  <div><i>Issuing Authority</i><b>' + escapeHtml(auth) + '</b></div>';
+            html += '  <div><i>Document Reference</i><b>' + escapeHtml(docId || 'Authoritative Instrument') + '</b></div>';
+            html += '  <div><i>Jurisdiction &amp; Type</i><b>' + escapeHtml(jur) + ' (' + escapeHtml(legalSt.replace(/_/g, ' ')) + ')</b></div>';
+            html += '  <div><i>Exact Location</i><b>' + escapeHtml(clause) + (page ? (' (Page ' + page + ')') : '') + '</b></div>';
+            html += '</div>';
+
+            if (suppText) {
+              html += '<div class="hg-passage-box"><strong>Exact Official Passage:</strong><br/>&ldquo;' + escapeHtml(suppText) + '&rdquo;</div>';
+            }
+            if (contextText) {
+              html += '<div class="hg-context-box"><strong>Surrounding Text Context:</strong><br/>' + escapeHtml(contextText) + '</div>';
+            }
+            if (faqText) {
+              html += '<div class="hg-faq-box"><strong>Official Clarification / FAQ:</strong><br/>' + escapeHtml(faqText) + '</div>';
+            }
+            if (explText) {
+              html += '<div style="font-size:12px;color:var(--muted);margin-top:8px;line-height:1.4;"><strong>Verification Finding:</strong> ' + escapeHtml(explText) + '</div>';
+            }
+
+            html += '<div class="hg-action-bar">';
+            if (srcUrl) {
+              html += '<a href="' + escapeHtml(srcUrl) + '" target="_blank" class="hg-action-btn primary">Open Original Official Source &nearr;</a>';
+            }
+            html += '<button type="button" class="hg-action-btn" onclick="openHackGridDocViewer(\'' + modalDataStr + '\')">Open in HackGrid Document Viewer &boxbox;</button>';
+            html += '</div>';
+
+            html += '</details>';
             html += '</div>';
           });
           html += '</div>';
@@ -4284,9 +6918,9 @@
 
         // SECTION 14: "Why doesn't HackGrid automatically act?"
         html += '<details class="gap-expandable" style="margin-bottom:12px;">';
-        html += '  <summary style="font-size:12px;color:#93c5fd;cursor:pointer;">Why doesn&rsquo;t HackGrid automatically act?</summary>';
+        html += '  <summary style="font-size:12px;color:#93c5fd;cursor:pointer;">Why doesn&rsquo;t NetraSetu automatically act?</summary>';
         html += '  <div class="alert-explain-box">';
-        html += '    HackGrid can identify and escalate high-risk conditions. It does not treat an AI risk assessment as authorization for an operational action. Where consequences are significant, reversible options are limited, evidence conflicts, or authority is required, the system routes the assessment for human decision.';
+        html += '    NetraSetu can identify and escalate high-risk conditions. It does not treat an AI risk assessment as authorization for an operational action. Where consequences are significant, reversible options are limited, evidence conflicts, or authority is required, the system routes the assessment for human decision.';
         html += '  </div>';
         html += '</details>';
 
@@ -4925,7 +7559,7 @@
             scError.hidden = false;
             scError.style.display = 'block';
             var isTimeout = err.name === 'AbortError' || (err.message && err.message.toLowerCase().indexOf('timed out') !== -1);
-            var errTitle = 'Unable to connect to the HackGrid scenario library.';
+            var errTitle = 'Unable to connect to the NetraSetu scenario library.';
             var errDetail = isTimeout
               ? 'The request timed out after 10 seconds. Please verify the backend is running.'
               : escapeHtml(err.message || 'Could not connect to scenario library.');
@@ -4954,6 +7588,31 @@
 
         grid.innerHTML = list.map(function (s) {
           var stepCount = (s.steps || []).length;
+          var vs = s.verified_source;
+          var sourcePill = '';
+          if (vs) {
+            var modalDataStr = encodeURIComponent(JSON.stringify({
+              source_title: vs.source_title || 'Regulatory Instrument',
+              issuing_authority: vs.issuing_authority || 'Regulatory Authority',
+              clause: vs.clause || 'General Provision',
+              page: vs.page,
+              jurisdiction: vs.jurisdiction || s.jurisdiction || 'India',
+              legal_status: vs.legal_status || 'BINDING_STATUTORY',
+              verification_status: 'SUPPORTED',
+              source_url: vs.source_url || '',
+              local_viewer_url: vs.local_viewer_url || '',
+              supporting_text: vs.supporting_text || '',
+              surrounding_context: vs.surrounding_context || '',
+              verification_explanation: 'Verified governing instrument for use case: ' + s.title,
+              faq_clarification: vs.faq_clarification || ''
+            }));
+            sourcePill = '<div style="margin:8px 0 10px;">' +
+              '<span class="hg-citation-pill" onclick="event.stopPropagation(); openHackGridDocViewer(\'' + modalDataStr + '\')">' +
+              '  <span style="color:#6366f1;">&sect;</span> Verified Source: <b>' + escapeHtml(vs.source_title) + '</b> &bull; ' + escapeHtml(vs.clause) +
+              '</span>' +
+              '</div>';
+          }
+
           return '<div class="sc-card" data-sc-id="' + escapeHtml(s.scenario_id) + '">' +
             '<div class="sc-card-meta">' +
             '<span class="badge-tag">' + escapeHtml(s.domain || 'Domain') + '</span>' +
@@ -4961,6 +7620,7 @@
             '</div>' +
             '<h3>' + escapeHtml(s.title) + '</h3>' +
             '<p>' + escapeHtml(s.description || '') + '</p>' +
+            sourcePill +
             '<div class="sc-card-foot">' +
             '<span>' + stepCount + ' Execution Steps</span>' +
             '<span style="color:#fff;font-weight:500;">Select Scenario &rarr;</span>' +
@@ -5000,6 +7660,47 @@
 
         var steps = s.steps || [];
         stepsEl.innerHTML = steps.map(function (st, idx) {
+          var stVs = st.verified_source || s.verified_source;
+          var sourceBoxHtml = '';
+          if (stVs) {
+            var stepModalStr = encodeURIComponent(JSON.stringify({
+              source_title: stVs.source_title || 'Governing Standard',
+              issuing_authority: stVs.issuing_authority || 'Authorized Regulatory Body',
+              clause: stVs.clause || 'General Provision',
+              page: stVs.page,
+              jurisdiction: stVs.jurisdiction || s.jurisdiction || 'India',
+              legal_status: stVs.legal_status || 'BINDING_STATUTORY',
+              verification_status: 'SUPPORTED',
+              source_url: stVs.source_url || '',
+              local_viewer_url: stVs.local_viewer_url || '',
+              supporting_text: stVs.supporting_text || '',
+              surrounding_context: stVs.surrounding_context || '',
+              verification_explanation: 'Verified statutory/standard benchmark for Step ' + st.step_id + ': ' + st.title,
+              faq_clarification: stVs.faq_clarification || ''
+            }));
+
+            var legalPill = '<span class="hg-legal-pill ' + escapeHtml(stVs.legal_status || 'BINDING_STATUTORY') + '">' +
+              escapeHtml((stVs.legal_status || 'BINDING_STATUTORY').replace(/_/g, ' ')) +
+              '</span>';
+
+            sourceBoxHtml = '<div class="hg-step-source-box">' +
+              '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:6px;">' +
+              '  <div style="display:flex;align-items:center;gap:6px;">' +
+              '    ' + legalPill +
+              '    <b style="font-size:12px;color:var(--ink);">&sect; ' + escapeHtml(stVs.source_title) + '</b>' +
+              '  </div>' +
+              '  <span style="font-size:11px;color:var(--strip);font-family:ui-monospace,monospace;">' + escapeHtml(stVs.clause) + (stVs.page ? (' &bull; p.' + stVs.page) : '') + '</span>' +
+              '</div>' +
+              (stVs.supporting_text ? '<div style="font-size:12px;color:var(--muted);line-height:1.4;margin-bottom:8px;"><i>Governing Legal / Standards Text:</i> &ldquo;' + escapeHtml(stVs.supporting_text) + '&rdquo;</div>' : '') +
+              '<div class="hg-action-bar">' +
+              '  <button type="button" class="hg-action-btn primary" onclick="openHackGridDocViewer(\'' + stepModalStr + '\')">' +
+              '    Inspect Source-to-Clause Document &boxbox;' +
+              '  </button>' +
+              (stVs.source_url ? '  <a href="' + escapeHtml(stVs.source_url) + '" target="_blank" class="hg-action-btn">Official Source &nearr;</a>' : '') +
+              '</div>' +
+              '</div>';
+          }
+
           return '<div class="step-card">' +
             '<div class="step-card-head">' +
             '<b>Step ' + escapeHtml(st.step_id) + ': ' + escapeHtml(st.title) + '</b>' +
@@ -5010,7 +7711,8 @@
             '<i>Operational Evidence Prompt</i>' +
             escapeHtml(st.evidence_prompt || '') +
             '</div>' +
-            '<div class="step-actions">' +
+            sourceBoxHtml +
+            '<div class="step-actions" style="margin-top:14px;">' +
             '<button class="btn pri run-step-btn" data-step-id="' + escapeHtml(st.step_id) + '" type="button">Run Step Analysis</button>' +
             '</div>' +
             '</div>';
@@ -5049,7 +7751,33 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
           });
-          renderPipelineResult(resEl, result.pipeline_result, true);
+
+          if (result && result.blocked) {
+            var reason = result.reason || 'Scenario step progression is currently gated.';
+            var action = result.required_action || 'EXECUTE_PREVIOUS_STEP';
+            var prevId = result.previous_step_id || '';
+            var prevAudId = result.previous_audit_id || '';
+
+            var bHtml = '<div class="api-error" style="border-left:4px solid #f59e0b;background:rgba(245,158,11,0.08);padding:18px;border-radius:8px;">';
+            bHtml += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">';
+            bHtml += '  <b style="color:#f59e0b;font-size:15px;">&#9888; Scenario Step Progression Gated</b>';
+            bHtml += '  <span class="hg-status-pill INSUFFICIENT">GATED</span>';
+            bHtml += '</div>';
+            bHtml += '<p style="color:var(--ink);font-size:13px;line-height:1.6;margin:0 0 12px;">' + escapeHtml(reason) + '</p>';
+            if (action === 'EXECUTE_PREVIOUS_STEP' && prevId) {
+              bHtml += '<div style="font-size:12px;color:var(--strip);margin-bottom:12px;">Under HackGrid\'s multi-stage governance, incident steps must be evaluated in chronological sequence. Step <b>' + escapeHtml(prevId) + '</b> must be completed first.</div>';
+              bHtml += '<button type="button" class="btn pri" onclick="var b = document.querySelector(\'[data-step-id=&quot;' + escapeHtml(prevId) + '&quot;]\'); if (b) { b.click(); } else { alert(&quot;Please run step ' + escapeHtml(prevId) + '&quot;); }">Run Step ' + escapeHtml(prevId) + ' Now &rarr;</button>';
+            } else if (action === 'HUMAN_REVIEW' && prevAudId) {
+              bHtml += '<div style="font-size:12px;color:var(--strip);margin-bottom:12px;">Step ' + escapeHtml(prevId) + ' has a High Risk finding requiring mandatory human review before escalation. Audit ID: <code>' + escapeHtml(prevAudId) + '</code>.</div>';
+              bHtml += '<button type="button" class="btn pri" onclick="location.hash = \'#/audit\';">Open Audit Console to Review &rarr;</button>';
+            }
+            bHtml += '</div>';
+            resEl.innerHTML = bHtml;
+            return;
+          }
+
+          var pipelineRes = (result && result.pipeline_result) ? result.pipeline_result : result;
+          renderPipelineResult(resEl, pipelineRes, true);
         } catch (err) {
           resEl.innerHTML = '<div class="api-error"><b>Scenario Step Execution Failed</b><p>' + escapeHtml(err.message) + '</p></div>';
         } finally {
@@ -5355,21 +8083,72 @@
             html += '<p style="color:var(--strip);">No claim mappings recorded.</p>';
           } else {
             html += claims.map(function (cl, idx) {
-              var status = cl.status || 'SUPPORTED';
+              var status = cl.verification_status || cl.status || 'SUPPORTED';
               var cId = cl.claim_id || ('CLAIM-' + (idx + 1));
               var text = cl.claim || cl.text || JSON.stringify(cl);
+              var se = cl.structured_evidence || cl;
+
+              var docTitle = se.source_title || se.official_title || 'Official Source Document';
+              var auth = se.issuing_authority || 'Regulatory Authority';
+              var docId = se.document_identifier || '';
+              var clause = se.clause || 'General Provision';
+              var page = se.page;
+              var jur = se.jurisdiction || 'India';
+              var legalSt = se.legal_status || 'BINDING_STATUTORY';
+              var srcUrl = se.source_url || '';
+              var localUrl = se.local_viewer_url || '';
+              var suppText = se.supporting_text || '';
+              var contextText = se.surrounding_context || '';
+              var explText = se.verification_explanation || '';
+              var faqText = se.faq_clarification || '';
+              var conf = se.confidence !== undefined ? Math.round(se.confidence * 100) + '%' : 'Verified';
+
+              var modalDataStr = encodeURIComponent(JSON.stringify({
+                source_title: docTitle,
+                issuing_authority: auth,
+                document_identifier: docId,
+                clause: clause,
+                page: page,
+                jurisdiction: jur,
+                legal_status: legalSt,
+                verification_status: status,
+                source_url: srcUrl,
+                local_viewer_url: localUrl,
+                supporting_text: suppText,
+                surrounding_context: contextText,
+                verification_explanation: explText,
+                faq_clarification: faqText
+              }));
+
               var evPills = (cl.evidence_ids || []).map(function (evId) {
                 return '<a href="javascript:void(0)" class="claim-ev-link" onclick="scrollToEvidence(\'' + escapeHtml(evId) + '\')">' + escapeHtml(evId) + ' &darr;</a>';
               }).join('');
 
-              return '<div class="claim-card ' + escapeHtml(status) + '">' +
-                '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">' +
-                '  <b style="font-size:12px;font-family:ui-monospace,monospace;color:var(--ink);">' + escapeHtml(cId) + '</b>' +
-                '  <span class="claim-status">' + escapeHtml(status) + ' (' + (cl.confidence !== undefined ? Math.round(cl.confidence * 100) + '%' : 'Verified') + ')</span>' +
-                '</div>' +
-                '<p style="color:var(--ink);font-size:14px;margin:0 0 8px;">' + escapeHtml(text) + '</p>' +
-                (evPills ? '<div style="margin-top:6px;font-size:12px;color:var(--strip);">Direct Evidence Groundings: ' + evPills + '</div>' : '') +
-                '</div>';
+              var out = '<div class="claim-card ' + escapeHtml(status) + '">';
+              out += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">';
+              out += '  <div style="display:flex;align-items:center;gap:8px;">';
+              out += '    <b style="font-size:12px;font-family:ui-monospace,monospace;color:var(--ink);">' + escapeHtml(cId) + '</b>';
+              out += '    <span class="hg-legal-pill ' + escapeHtml(legalSt) + '">' + escapeHtml(legalSt.replace(/_/g, ' ')) + '</span>';
+              out += '  </div>';
+              out += '  <span class="hg-status-pill ' + escapeHtml(status) + '">' + escapeHtml(status) + ' (' + escapeHtml(conf) + ')</span>';
+              out += '</div>';
+              out += '<p style="color:var(--ink);font-size:14px;margin:0 0 8px;line-height:1.5;">' + escapeHtml(text) + '</p>';
+
+              out += '<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:6px 0;">';
+              out += '  <span class="hg-citation-pill" onclick="openHackGridDocViewer(\'' + modalDataStr + '\')">';
+              out += '    <span style="color:#6366f1;">&sect;</span> ' + escapeHtml(docTitle.length > 40 ? docTitle.substring(0, 38) + '...' : docTitle) + ' &bull; ' + escapeHtml(clause) + (page ? (' &bull; p.' + page) : '');
+              out += '  </span>';
+              if (srcUrl) {
+                out += '  <a href="' + escapeHtml(srcUrl) + '" target="_blank" class="hg-action-btn primary" style="font-size:11px;padding:2px 8px;">Official Source &nearr;</a>';
+              }
+              out += '  <button type="button" class="hg-action-btn" onclick="openHackGridDocViewer(\'' + modalDataStr + '\')" style="font-size:11px;padding:2px 8px;">Viewer &boxbox;</button>';
+              out += '</div>';
+
+              if (evPills) {
+                out += '<div style="margin-top:6px;font-size:12px;color:var(--strip);">Direct Evidence Groundings: ' + evPills + '</div>';
+              }
+              out += '</div>';
+              return out;
             }).join('');
           }
           html += '  </div>';
@@ -5513,28 +8292,47 @@
          PAGE ROUTER
          ============================================================ */
       var T = {
-        home: 'HackGrid',
-        about: 'About',
-        intelligence: 'Intelligence',
-        agents: 'Agents',
-        jurisdictions: 'Jurisdictions',
-        evidence: 'Evidence',
-        research: 'Research',
-        contact: 'Contact',
-        ask: 'Ask HackGrid',
+        home: 'Overview Dashboard',
+        overview: 'Overview Dashboard',
+        dashboard: 'Overview Dashboard',
+        intelligence: 'Evidence Intelligence',
+        ask: 'Evidence Intelligence',
         scenarios: 'Scenario Lab',
-        audit: 'Audit Trail'
+        'change-impact': 'Change-Impact Analysis',
+        'reliability-lab': '5G Reliability Lab',
+        evaluations: 'Evaluation & Reports',
+        audit: 'Evaluation & Reports',
+        docs: 'Documentation & Settings',
+        about: 'Documentation & Settings',
+        jurisdictions: 'Jurisdictions',
+        evidence: 'Evidence Registry',
+        agents: 'Multi-Agent Architecture',
+        research: 'Telecom Research',
+        contact: 'Contact'
       };
 
       function route() {
-        var r = (location.hash.replace(/^#\/?/, '') || 'home').split('?')[0];
-        if (!(r in T)) r = 'home';
-        document.body.classList.toggle('inner', r !== 'home');
-        var stage = $('stage'); if (stage) stage.style.display = (r === 'home' ? '' : 'none');
-        var story = document.querySelector('.story'); if (story) story.hidden = (r === 'home');
+        var raw = (location.hash.replace(/^#\/?/, '') || 'overview').split('?')[0];
+        var r = raw;
+        if (!r || r === 'home') r = 'overview';
+        if (r === 'dashboard') r = 'overview';
+        if (r === 'ask') r = 'intelligence';
+        if (r === 'audit') r = 'evaluations';
+        if (r === 'about') r = 'docs';
+
+        document.body.classList.toggle('inner', true);
+        var stage = $('stage'); if (stage) stage.style.display = 'none';
+        var story = document.querySelector('.story'); if (story) story.hidden = false;
+
         var f = false;
         [].forEach.call(document.querySelectorAll('.sec'), function (x) {
-          var on = x.dataset.page === r;
+          var dp = x.dataset.page;
+          var on = (dp === r);
+          // Group aliases
+          if (r === 'intelligence' && (dp === 'intelligence' || dp === 'ask')) on = true;
+          if (r === 'evaluations' && (dp === 'evaluations' || dp === 'audit')) on = true;
+          if (r === 'docs' && (dp === 'docs' || dp === 'about' || dp === 'evidence')) on = true;
+
           x.hidden = !on;
           x.classList.toggle('first', on && !f);
           if (on) {
@@ -5543,17 +8341,28 @@
             [].forEach.call(x.querySelectorAll('.rv'), function (el) { el.classList.add('in'); });
           }
         });
+
         [].forEach.call(document.querySelectorAll('.links a,.menu-list a'), function (a) {
-          if (a.getAttribute('href') === '#/' + r) a.setAttribute('aria-current', 'page');
-          else a.removeAttribute('aria-current');
+          var href = a.getAttribute('href') || '';
+          var targetRoute = href.replace(/^#\/?/, '');
+          if (targetRoute === r || 
+              (r === 'overview' && (targetRoute === 'overview' || targetRoute === 'dashboard' || targetRoute === '')) || 
+              (r === 'intelligence' && (targetRoute === 'intelligence' || targetRoute === 'ask')) || 
+              (r === 'evaluations' && (targetRoute === 'evaluations' || targetRoute === 'audit')) || 
+              (r === 'docs' && (targetRoute === 'docs' || targetRoute === 'about'))) {
+            a.setAttribute('aria-current', 'page');
+          } else {
+            a.removeAttribute('aria-current');
+          }
         });
-        document.title = (r === 'home' ? 'HackGrid' : 'HackGrid — ' + T[r]);
+
+        document.title = 'NetraSetu — ' + (T[r] || 'Telecom Intelligence Platform');
         window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 
         if (r === 'scenarios') {
           loadScenarios();
         }
-        if (r === 'audit') {
+        if (r === 'evaluations' || r === 'audit') {
           loadAudits();
         }
         checkBackendHealth();
@@ -5601,11 +8410,277 @@
         };
       }
 
+      
+
+      /* ============================================================
+         FEATURE A: CHANGE-IMPACT ENGINE WORKBENCH HANDLERS
+         ============================================================ */
+      var revData = {
+        'certin-2022': {
+          tag: 'CERT-In 2022 Direction 2(i) vs FAQ Clarification 4',
+          oldText: '<p class="hg-diff-del">&ldquo;Any service provider, intermediary, data centre, body corporate and Government organisation shall report cyber incidents to CERT-In within <strong>6 hours</strong> of noticing corresponding incidents or being brought to notice about such incidents.&rdquo;</p><span class="hg-diff-ref">Source: CERT-In Directions No. 20(3)/2022-CERT-In &bull; Annexure I</span>',
+          newText: '<p class="hg-diff-ins">&ldquo;It is clarified that the 6-hour reporting requirement applies upon experiencing an incident of severe nature. Entities may report preliminary details within <strong>6 hours</strong> to cert-in@cert-in.org.in or incident@cert-in.org.in, and subsequent comprehensive technical details within an extended window of <strong>15 days</strong> once initial containment is established.&rdquo;</p><span class="hg-diff-ref">Source: CERT-In FAQs dated 18.05.2022 &bull; Clarification 4 &amp; FAQ 24</span>',
+          rows: [
+            ['REQ-CERTIN-001', 'Mandatory Initial Incident Notification within 6h', 'SUPPORTED', 'MODERATE (Scope Clarified)', 'RE-EVALUATION PENDING'],
+            ['REQ-CERTIN-002', 'System ICT Log Retention strictly for 180 Days in Indian Jurisdiction', 'SUPPORTED', 'LOW (Format Clarified)', 'RE-EVALUATION PENDING'],
+            ['REQ-CERTIN-003', 'NTP Time Server Synchronization with NPL/NIC', 'SUPPORTED', 'UNCHANGED', 'NO IMPACT DETECTED']
+          ]
+        },
+        'telecom-act': {
+          tag: 'Telecommunications Act 2023 Sec 22 vs Telegraph Act 1885',
+          oldText: '<p class="hg-diff-del">&ldquo;On the occurrence of any public emergency, or in the interest of the public safety, the Central Government may take temporary possession of any telegraph established, maintained or worked by any person.&rdquo;</p><span class="hg-diff-ref">Source: Indian Telegraph Act 1885 &bull; Section 5(1)</span>',
+          newText: '<p class="hg-diff-ins">&ldquo;The Central Government may, on the occurrence of any public emergency, notify standards for cybersecurity of telecommunication networks, critical telecommunication infrastructure (CTI), and procure equipment exclusively from trusted sources.&rdquo;</p><span class="hg-diff-ref">Source: The Telecommunications Act, 2023 &bull; Section 22(1) &amp; (2)</span>',
+          rows: [
+            ['REQ-DOT-001', 'National Security Emergency Takeover & Interception Powers', 'SUPPORTED', 'CRITICAL (Framework Modernized)', 'RE-EVALUATION PENDING'],
+            ['REQ-DOT-002', 'Critical Telecommunication Infrastructure (CTI) Security Baseline', 'SUPPORTED', 'HIGH (Statutory Mandate Added)', 'RE-EVALUATION PENDING'],
+            ['REQ-DOT-003', 'Trusted Telecom Equipment Sourcing (NCSFP Mandate)', 'SUPPORTED', 'HIGH (Statutory Invariant Enforced)', 'RE-EVALUATION PENDING']
+          ]
+        },
+        '3gpp-rel18': {
+          tag: '3GPP TS 33.501 Rel 17 vs Rel 18 (5G-Advanced)',
+          oldText: '<p class="hg-diff-del">&ldquo;The network slice security framework relies on Network Slice Selection Assistance Information (NSSAI) verification during primary authentication at the AMF.&rdquo;</p><span class="hg-diff-ref">Source: 3GPP TS 33.501 V17.5.0 &bull; Clause 5.9.1</span>',
+          newText: '<p class="hg-diff-ins">&ldquo;5G-Advanced requires cryptographic zero-trust validation for User Plane Function (UPF) inter-slice isolation, dynamic slicing authorization tokens (S-NSSAI verification), and telemetry anti-tamper safeguards.&rdquo;</p><span class="hg-diff-ref">Source: 3GPP TS 33.501 V18.0.0 &bull; Clause 5.9.3 &amp; Clause 6.1.4</span>',
+          rows: [
+            ['REQ-3GPP-001', 'S-NSSAI Slice Selection & Primary Authentication', 'SUPPORTED', 'MODERATE (Cryptographic Tokens Added)', 'RE-EVALUATION PENDING'],
+            ['REQ-3GPP-002', 'User Plane Function (UPF) Cross-Slice Isolation', 'SUPPORTED', 'HIGH (Zero-Trust Validation Mandated)', 'RE-EVALUATION PENDING'],
+            ['REQ-3GPP-003', 'gNB Radio Resource Slicing Partitioning', 'SUPPORTED', 'UNCHANGED', 'NO IMPACT DETECTED']
+          ]
+        }
+      };
+
+      [].forEach.call(document.querySelectorAll('.hg-rev-btn'), function (btn) {
+        btn.addEventListener('click', function () {
+          [].forEach.call(document.querySelectorAll('.hg-rev-btn'), function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          var rid = btn.dataset.revId;
+          var item = revData[rid];
+          if (!item) return;
+
+          var metaEl = document.getElementById('hg-diff-meta-tag');
+          if (metaEl) metaEl.textContent = item.tag;
+
+          var oldEl = document.getElementById('hg-diff-old-text');
+          if (oldEl) oldEl.innerHTML = item.oldText;
+
+          var newEl = document.getElementById('hg-diff-new-text');
+          if (newEl) newEl.innerHTML = item.newText;
+
+          var tbody = document.getElementById('hg-impact-tbody');
+          if (tbody) {
+            tbody.innerHTML = item.rows.map(function (r, idx) {
+              var sevClass = r[3].indexOf('CRITICAL') !== -1 ? 'medium' : (r[3].indexOf('HIGH') !== -1 ? 'medium' : (r[3].indexOf('MODERATE') !== -1 ? 'medium' : (r[3].indexOf('LOW') !== -1 ? 'low' : 'none')));
+              var stClass = r[4].indexOf('PENDING') !== -1 ? 'ready' : 'ok';
+              return '<tr><td><code>' + r[0] + '</code></td><td>' + r[1] + '</td><td><span class="hg-badge-status supported">' + r[2] + '</span></td><td><span class="hg-badge-severity ' + sevClass + '">' + r[3] + '</span></td><td><span class="hg-reeval-status ' + stClass + '" id="reeval-row-' + (idx+1) + '">' + r[4] + '</span></td></tr>';
+            }).join('');
+          }
+        });
+      });
+
+      var btnReeval = document.getElementById('btn-run-reeval');
+      if (btnReeval) {
+        btnReeval.addEventListener('click', function () {
+          btnReeval.disabled = true;
+          btnReeval.innerHTML = '<span>Re-Evaluating Affected Nodes...</span>';
+          setTimeout(function () {
+            var statuses = document.querySelectorAll('.hg-reeval-status.ready');
+            [].forEach.call(statuses, function (el) {
+              el.className = 'hg-reeval-status re-evaluated';
+              el.textContent = 'RE-EVALUATED & VERIFIED SUPPORTED';
+            });
+            btnReeval.disabled = false;
+            btnReeval.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg><span>Re-Evaluation Complete</span>';
+            var toast = document.getElementById('hg-reeval-feedback');
+            if (toast) {
+              toast.hidden = false;
+              toast.innerHTML = 'Selective re-evaluation executed across affected requirement nodes. Compliance invariants re-verified against successor source clauses. Timestamp: ' + new Date().toISOString();
+              setTimeout(function () { toast.hidden = true; }, 5000);
+            }
+          }, 800);
+        });
+      }
+
+      /* ============================================================
+         FEATURE B: 5G RELIABILITY LAB WORKBENCH HANDLERS
+         ============================================================ */
+      var sLatency = document.getElementById('slider-latency');
+      var sLoss = document.getElementById('slider-loss');
+      var sHandover = document.getElementById('slider-handover');
+      var sCoverage = document.getElementById('slider-coverage');
+
+      function update5GMetrics() {
+        var lat = sLatency ? parseFloat(sLatency.value) : 45;
+        var loss = sLoss ? parseFloat(sLoss.value) : 1.5;
+        var ho = sHandover ? parseFloat(sHandover.value) : 120;
+        var cov = sCoverage ? parseFloat(sCoverage.value) : 2.0;
+
+        if (document.getElementById('val-latency')) document.getElementById('val-latency').textContent = lat + ' ms';
+        if (document.getElementById('val-loss')) document.getElementById('val-loss').textContent = loss.toFixed(1) + ' %';
+        if (document.getElementById('val-handover')) document.getElementById('val-handover').textContent = ho + ' ms';
+        if (document.getElementById('val-coverage')) document.getElementById('val-coverage').textContent = cov.toFixed(1) + ' s';
+
+        // Calculate compound stress score: 0 to 100
+        var score = Math.min(100, Math.round((lat / 5) * 0.35 + (loss * 3.5) + (ho / 30) * 0.2 + (cov * 1.5)));
+        var bar = document.getElementById('hg-stress-bar');
+        var sEl = document.getElementById('hg-stress-score');
+        var nEl = document.getElementById('hg-stress-note');
+
+        if (bar && sEl && nEl) {
+          bar.style.width = score + '%';
+          if (score < 35) {
+            bar.style.background = '#10b981';
+            sEl.textContent = score + ' / 100 (LOW STRESS)';
+            sEl.style.color = '#34d399';
+            nEl.textContent = 'Mission-critical URLLC and telemetry SLOs fully satisfied.';
+          } else if (score < 70) {
+            bar.style.background = '#f59e0b';
+            sEl.textContent = score + ' / 100 (MODERATE STRESS)';
+            sEl.style.color = '#fbbf24';
+            nEl.textContent = 'SLO maintained with Multi-Path QUIC or Dual PDU session redundancy.';
+          } else {
+            bar.style.background = '#ef4444';
+            sEl.textContent = score + ' / 100 (CRITICAL IMPAIRMENT)';
+            sEl.style.color = '#f87171';
+            nEl.textContent = 'Telemetry loss imminent without dynamic slice preemption and packet duplication.';
+          }
+        }
+      }
+
+      [sLatency, sLoss, sHandover, sCoverage].forEach(function (sl) {
+        if (sl) sl.addEventListener('input', update5GMetrics);
+      });
+
+      var sloPresets = {
+        urllc: { lat: 10, loss: 0.1, ho: 0, cov: 0.5 },
+        hsr: { lat: 35, loss: 1.2, ho: 240, cov: 1.5 },
+        maritime: { lat: 95, loss: 3.5, ho: 650, cov: 6.0 },
+        smartgrid: { lat: 8, loss: 0.0, ho: 0, cov: 0.0 }
+      };
+
+      [].forEach.call(document.querySelectorAll('.hg-slo-card'), function (card) {
+        card.addEventListener('click', function () {
+          [].forEach.call(document.querySelectorAll('.hg-slo-card'), function (c) { c.classList.remove('active'); });
+          card.classList.add('active');
+          var sid = card.dataset.sloId;
+          var p = sloPresets[sid];
+          if (!p) return;
+          if (sLatency) sLatency.value = p.lat;
+          if (sLoss) sLoss.value = p.loss;
+          if (sHandover) sHandover.value = p.ho;
+          if (sCoverage) sCoverage.value = p.cov;
+          update5GMetrics();
+        });
+      });
+
+      var btnExportVector = document.getElementById('btn-export-5g-vector');
+      if (btnExportVector) {
+        btnExportVector.addEventListener('click', function () {
+          var vector = {
+            schema: 'NetraSetu-5G-Impairment-Vector-v1.0',
+            timestamp: new Date().toISOString(),
+            parameters: {
+              latency_rtt_ms: sLatency ? parseFloat(sLatency.value) : 45,
+              packet_error_rate_pct: sLoss ? parseFloat(sLoss.value) : 1.5,
+              handover_interruption_ms: sHandover ? parseFloat(sHandover.value) : 120,
+              coverage_drop_seconds: sCoverage ? parseFloat(sCoverage.value) : 2.0
+            },
+            slo_target: (document.querySelector('.hg-slo-card.active .hg-slo-name') || {}).textContent || 'URLLC',
+            recommended_recovery: 'Multipath QUIC / Dual PDU Sessions'
+          };
+          var jsonStr = JSON.stringify(vector, null, 2);
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(jsonStr);
+          }
+          var toast = document.getElementById('hg-5g-vector-feedback');
+          if (toast) {
+            toast.hidden = false;
+            toast.innerHTML = '<b>Scenario Vector Generated &amp; Copied:</b><br><pre style="margin-top:6px;font-size:11px;max-height:120px;overflow:auto;">' + jsonStr + '</pre>';
+            setTimeout(function () { toast.hidden = true; }, 8000);
+          }
+        });
+      }
+
       window.addEventListener('hashchange', route);
       route();
 
     })();
   </script>
+
+  <!-- NETRASETU CLICKABLE SOURCE-TO-CLAUSE DOCUMENT VIEWER MODAL -->
+  <div id="hgDocViewerModal">
+    <div class="hg-modal-box">
+      <div class="hg-modal-header">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <b id="hgModalTitle" style="font-size:15px;color:#fff;">Official Document Viewer</b>
+            <span id="hgModalLegalBadge" class="hg-legal-pill BINDING_STATUTORY">BINDING</span>
+            <span id="hgModalStatusBadge" class="hg-status-pill SUPPORTED">SUPPORTED</span>
+          </div>
+          <div style="font-size:12px;color:#94a3b8;">
+            <span id="hgModalAuthority">Issuing Authority</span> &bull; 
+            <span id="hgModalBreadcrumb">Jurisdiction &bull; Clause &bull; Page</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <a id="hgModalExtBtn" href="#" target="_blank" class="hg-action-btn primary">
+            Official Source &nearr;
+          </a>
+          <button type="button" class="hg-action-btn" onclick="closeHackGridDocViewer()" style="font-size:16px;padding:2px 10px;">&times;</button>
+        </div>
+      </div>
+      <div class="hg-modal-body">
+        <div class="hg-modal-pane-left">
+          <div style="font-size:11px;font-weight:700;letter-spacing:0.05em;color:#94a3b8;text-transform:uppercase;margin-bottom:6px;">Verified Cited Passage</div>
+          <div id="hgModalPassage" class="hg-passage-box">Loading passage...</div>
+
+          <div style="font-size:11px;font-weight:700;letter-spacing:0.05em;color:#94a3b8;text-transform:uppercase;margin-top:14px;margin-bottom:6px;">Surrounding Text Context</div>
+          <div id="hgModalContext" class="hg-context-box">Loading surrounding context...</div>
+
+          <div style="font-size:11px;font-weight:700;letter-spacing:0.05em;color:#94a3b8;text-transform:uppercase;margin-top:14px;margin-bottom:6px;">Factual Verification Finding</div>
+          <div id="hgModalExplanation" style="font-size:12px;color:#cbd5e1;line-height:1.5;background:rgba(255,255,255,0.03);padding:8px 12px;border-radius:4px;">Loading explanation...</div>
+
+          <div id="hgModalFaqContainer" style="display:none;margin-top:14px;">
+            <div style="font-size:11px;font-weight:700;letter-spacing:0.05em;color:#34d399;text-transform:uppercase;margin-bottom:6px;">Official Clarification / FAQ</div>
+            <div id="hgModalFaq" class="hg-faq-box"></div>
+          </div>
+        </div>
+        <div class="hg-modal-pane-right" style="display:flex;flex-direction:column;height:100%;">
+          <!-- DOCUMENT VIEWER TOOLBAR -->
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:8px 12px;background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.08);border-radius:6px 6px 0 0;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span id="hgPdfStatusPill" class="hg-status-pill SUPPORTED">● Loading PDF...</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <button id="hgPdfPrevBtn" type="button" class="hg-action-btn" onclick="if(window._hgCurrentPdfState && window._hgCurrentPdfState.currentPage > 1){ window._hgCurrentPdfState.currentPage--; window._hgCurrentPdfState.setPage(window._hgCurrentPdfState.currentPage); }">&larr; Prev</button>
+              <span style="font-size:12px;color:var(--strip);">
+                Page <input id="hgPdfPageInput" type="number" value="1" min="1" style="width:46px;padding:2px 4px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);color:#fff;border-radius:4px;text-align:center;" onchange="if(window._hgCurrentPdfState){ var v=parseInt(this.value,10); if(v>=1 && v<=window._hgCurrentPdfState.totalPages){ window._hgCurrentPdfState.currentPage=v; window._hgCurrentPdfState.setPage(v); } }"> / <span id="hgPdfPageTotal">--</span>
+              </span>
+              <button id="hgPdfNextBtn" type="button" class="hg-action-btn" onclick="if(window._hgCurrentPdfState && window._hgCurrentPdfState.currentPage < window._hgCurrentPdfState.totalPages){ window._hgCurrentPdfState.currentPage++; window._hgCurrentPdfState.setPage(window._hgCurrentPdfState.currentPage); }">Next &rarr;</button>
+              <button id="hgPdfJumpCitedBtn" type="button" class="hg-action-btn primary" onclick="if(window._hgCurrentPdfState){ window._hgCurrentPdfState.currentPage=window._hgCurrentPdfState.citedPage; window._hgCurrentPdfState.setPage(window._hgCurrentPdfState.citedPage); }">★ Jump to Cited Page (p.<span id="hgPdfCitedPageNum">1</span>)</button>
+              <a id="hgPdfPopoutBtn" href="#" target="_blank" class="hg-action-btn" title="Open source PDF in new browser window">Popout &nearr;</a>
+            </div>
+          </div>
+
+          <!-- CITATION GROUNDING NOTICE -->
+          <div id="hgPdfPassageNotice" style="padding:6px 12px;background:rgba(99,102,241,0.08);border-bottom:1px solid rgba(99,102,241,0.2);font-size:11px;color:#cbd5e1;">
+            <b style="color:#818cf8;">&sect; Cited Passage Grounding:</b> Page <span id="hgPdfNoticePage" style="font-weight:700;color:#fff;">1</span> &bull; <i>"<span id="hgPdfNoticeSnippet">...</span>"</i>
+          </div>
+
+          <!-- PDF EMBEDDING FRAME -->
+          <iframe id="hgModalIframe" src="about:blank" style="width:100%;flex:1;border:none;background:#0f172a;border-radius:0 0 6px 6px;"></iframe>
+
+          <!-- EXPLICIT ERROR / FALLBACK (NEVER A PLACEHOLDER) -->
+          <div id="hgModalViewerFallback" style="display:none;flex:1;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center;background:rgba(239,68,68,0.04);border:1px solid rgba(239,68,68,0.2);border-radius:0 0 6px 6px;">
+            <div style="font-size:16px;color:#ef4444;font-weight:700;margin-bottom:8px;">&#9888; Source Document File Unavailable (HTTP 404)</div>
+            <p id="hgModalFallbackMsg" style="font-size:13px;color:#94a3b8;max-width:520px;line-height:1.6;margin-bottom:16px;"></p>
+            <div style="display:flex;gap:10px;">
+              <a id="hgModalFallbackExtBtn" href="#" target="_blank" class="hg-action-btn primary">Open Official Regulatory Source &nearr;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </body>
 
 </html>

@@ -1266,46 +1266,83 @@ def run_pipeline(
     )
 
     # ========================================================
-    # 8. CLAIM -> EVIDENCE MAPPINGS
+    # 8. CLAIM -> EVIDENCE MAPPINGS & CLAUSE VERIFICATION
     # ========================================================
 
     print(
-        "\n[8/9] Building claim -> evidence mappings..."
+        "\n[8/9] Building claim -> evidence mappings & source verification..."
     )
-    workflow_stages.append("Claim-Evidence Mapping")
+    workflow_stages.append("Claim-Evidence Verification")
+
+    from Backend.evidence_engine.clause_verifier import verify_claim_evidence
 
     mappings = []
+    structured_claims = []
 
-    for claim_item in final.get(
-        "claims",
-        [],
-    ):
+    for idx, claim_item in enumerate(final.get("claims", []), start=1):
+        c_text = claim_item.get("claim", "")
+        c_id = claim_item.get("claim_id") or f"CLM-{idx:03d}"
+        c_ev_ids = claim_item.get("evidence_ids", [])
+
+        # Match evidence records
+        matched_evs = [
+            ev for ev in evidence_records
+            if str(ev.get("evidence_id")) in c_ev_ids
+        ]
+        if not matched_evs and evidence_records:
+            matched_evs = [evidence_records[0]]
+
+        # Run deterministic source-to-clause verification
+        rec = verify_claim_evidence(
+            claim=c_text,
+            evidence_records=matched_evs,
+            claim_id=c_id,
+        )
+
+        rec_dict = rec.to_dict()
+        claim_item["structured_evidence"] = rec_dict
+        claim_item["source_doc_id"] = rec.source_doc_id
+        claim_item["source_title"] = rec.source_title
+        claim_item["issuing_authority"] = rec.issuing_authority
+        claim_item["document_identifier"] = rec.document_identifier
+        claim_item["version"] = rec.version
+        claim_item["jurisdiction"] = rec.jurisdiction
+        claim_item["legal_status"] = rec.legal_status
+        claim_item["clause"] = rec.clause
+        claim_item["page"] = rec.page
+        claim_item["source_url"] = rec.source_url
+        claim_item["local_viewer_url"] = rec.local_viewer_url
+        claim_item["supporting_text"] = rec.supporting_text
+        claim_item["surrounding_context"] = rec.surrounding_context
+        claim_item["relationship"] = rec.relationship
+        claim_item["verification_status"] = rec.verification_status
+        claim_item["verification_explanation"] = rec.verification_explanation
+        claim_item["faq_clarification"] = rec.faq_clarification
+        claim_item["confidence"] = rec.confidence
+        claim_item["status"] = rec.verification_status
+
+        structured_claims.append(claim_item)
 
         mappings.append(
             {
-                "claim_id": claim_item.get(
-                    "claim_id"
-                ),
-
-                "claim": claim_item.get(
-                    "claim"
-                ),
-
-                "status": claim_item.get(
-                    "status"
-                ),
-
-                "evidence_ids": claim_item.get(
-                    "evidence_ids",
-                    [],
-                ),
-
-                "confidence": claim_item.get(
-                    "confidence",
-                    0.0,
-                ),
+                "claim_id": c_id,
+                "claim": c_text,
+                "status": rec.verification_status,
+                "evidence_ids": c_ev_ids,
+                "confidence": rec.confidence,
+                "structured_evidence": rec_dict,
+                "source_title": rec.source_title,
+                "issuing_authority": rec.issuing_authority,
+                "clause": rec.clause,
+                "page": rec.page,
+                "source_url": rec.source_url,
+                "local_viewer_url": rec.local_viewer_url,
+                "verification_explanation": rec.verification_explanation,
+                "faq_clarification": rec.faq_clarification,
             }
         )
+
+    final["claims"] = structured_claims
 
     # ========================================================
     # 9. AUDIT

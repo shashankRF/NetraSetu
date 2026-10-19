@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List
+from typing import Any, Dict, List, Optional
 
 
 @dataclass(frozen=True)
@@ -8,6 +8,7 @@ class ScenarioStep:
     title: str
     event: str
     evidence_prompt: str
+    verified_source: Optional[Dict[str, Any]] = None
 
 
 @dataclass(frozen=True)
@@ -19,6 +20,7 @@ class Scenario:
     description: str
     simulated: bool
     steps: List[ScenarioStep]
+    verified_source: Optional[Dict[str, Any]] = None
 
     def to_dict(self):
         return {
@@ -28,12 +30,14 @@ class Scenario:
             "jurisdiction": self.jurisdiction,
             "description": self.description,
             "simulated": self.simulated,
+            "verified_source": self.verified_source,
             "steps": [
                 {
                     "step_id": step.step_id,
                     "title": step.title,
                     "event": step.event,
                     "evidence_prompt": step.evidence_prompt,
+                    "verified_source": step.verified_source,
                 }
                 for step in self.steps
             ],

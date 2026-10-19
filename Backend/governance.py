@@ -1330,15 +1330,96 @@ def evaluate_governance(
     # A gap must be positively established by evidence.
     # Retrieval alone is not sufficient.
     #
-    # CRITICAL GOVERNANCE RULE:
-    #
-    # If final synthesis says the claim is CONTRADICTED or INSUFFICIENT,
-    # governance MUST NOT override it and declare the gap established.
+    # CRITICAL GOVERNANCE RULES:
+    # - Local operator internal policies DO NOT constitute national policy gaps.
+    # - Functional equivalence between mechanisms is NOT a regulatory gap.
+    # - Additional/stricter sovereign national requirements are NOT gaps.
+    # - Absence of retrieved evidence does NOT establish a regulatory gap.
+    # - If final synthesis says CONTRADICTED or INSUFFICIENT, gap is NOT established.
     # -----------------------------------------------------------------------
 
     if _is_gap_establishment_question(
         question
     ):
+
+        # ---------------------------------------------------------------
+        # HARD GUARD AGAINST LOCAL OPERATOR REQUIREMENT FALSE GAPS
+        # ---------------------------------------------------------------
+        q_lower = _text(question)
+        if any(term in q_lower for term in [
+            "operator x", "operator internal", "operator requirement", "local security requirement",
+            "internal security policy", "internal baseline", "operator policy", "enterprise baseline",
+            "operator's internal"
+        ]):
+            result.update({
+                "status": "NO_GAP_ESTABLISHED",
+                "evidence_status": original_evidence_status,
+                "gap_status": "NO_GAP_ESTABLISHED",
+                "human_review_required": False,
+                "reason": (
+                    "Operator-specific internal security requirements are private enterprise controls. "
+                    "They do not establish an Indian national regulatory or policy gap."
+                ),
+                "rule": "LOCAL_OPERATOR_REQUIREMENT_PRESERVED",
+            })
+            return _finish(result)
+
+        # ---------------------------------------------------------------
+        # HARD GUARD AGAINST RETRIEVAL FAILURE FALSE GAPS
+        # ---------------------------------------------------------------
+        if original_gap_status == "ABSENCE_NOT_ESTABLISHED" or original_evidence_status in {"INSUFFICIENT", "ABSENCE_NOT_ESTABLISHED"}:
+            result.update({
+                "status": "POLICY_GAP_NOT_ESTABLISHED",
+                "evidence_status": "INSUFFICIENT",
+                "gap_status": "ABSENCE_NOT_ESTABLISHED",
+                "human_review_required": True,
+                "escalation_level": (
+                    escalation
+                    or "SENIOR_AUTHORITY"
+                ),
+                "reason": (
+                    "The available evidence does not establish the existence of a policy, regulatory, "
+                    "or standards gap. Absence of retrieved evidence from examined sources is not proof "
+                    "that no Indian requirement exists."
+                ),
+                "rule": "ABSENCE_NOT_ESTABLISHED",
+            })
+            return _finish(result)
+
+        # ---------------------------------------------------------------
+        # HARD GUARD AGAINST FUNCTIONAL EQUIVALENCE FALSE GAPS
+        # ---------------------------------------------------------------
+        synth_text = _text(final_synthesis)
+        if any(term in synth_text for term in ["functionally equivalent", "functional equivalence"]):
+            result.update({
+                "status": "NO_GAP_ESTABLISHED",
+                "evidence_status": original_evidence_status,
+                "gap_status": "NO_GAP_ESTABLISHED",
+                "human_review_required": False,
+                "reason": (
+                    "Available evidence demonstrates functional equivalence in achieving the underlying security objective. "
+                    "Different technical mechanisms do not constitute a regulatory or policy gap."
+                ),
+                "rule": "FUNCTIONAL_EQUIVALENCE_PRESERVED",
+            })
+            return _finish(result)
+
+        # ---------------------------------------------------------------
+        # HARD GUARD AGAINST ADDITIONAL NATIONAL REQUIREMENT FALSE GAPS
+        # ---------------------------------------------------------------
+        if any(term in synth_text for term in ["additional national requirement", "stricter national requirement"]):
+            result.update({
+                "status": "NO_GAP_ESTABLISHED",
+                "evidence_status": original_evidence_status,
+                "gap_status": "NO_GAP_ESTABLISHED",
+                "human_review_required": False,
+                "reason": (
+                    "The examined Indian instrument imposes an additional sovereign requirement beyond the technical baseline. "
+                    "This is an exercise of sovereign regulatory authority, not a policy gap."
+                ),
+                "rule": "ADDITIONAL_NATIONAL_REQUIREMENT_PRESERVED",
+            })
+            return _finish(result)
 
         # ---------------------------------------------------------------
         # HARD GUARD AGAINST CONTRADICTORY FINAL CLAIMS
@@ -1411,7 +1492,7 @@ def evaluate_governance(
         result.update({
             "status": "POLICY_GAP_ESTABLISHED",
             "evidence_status": "SUFFICIENT",
-            "gap_status": "SUFFICIENT",
+            "gap_status": "ESTABLISHED_GAP",
             "reason": (
                 "Available evidence explicitly supports the existence "
                 "of the identified policy/regulatory gap."

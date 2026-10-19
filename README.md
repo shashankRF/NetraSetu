@@ -1,8 +1,10 @@
-# HackGrid
+# NetraSetu
 
-## An Evidence-Grounded, Jurisdiction-Aware Decision Intelligence Framework
+## Evidence Intelligence & Communication Reliability Platform
 
-HackGrid is an evidence-grounded decision intelligence framework designed to evaluate high-stakes technical, regulatory, and operational questions without ungrounded LLM assumptions. Rather than operating as a conversational chatbot that retrieves passages and directly generates uncalibrated text, HackGrid enforces an end-to-end reasoning and governance pipeline:
+> **Connecting Evidence. Testing Resilience.**
+
+NetraSetu is an evidence-grounded decision intelligence framework designed to evaluate high-stakes technical, regulatory, and operational questions without ungrounded LLM assumptions. Rather than operating as a conversational chatbot that retrieves passages and directly generates uncalibrated text, NetraSetu enforces an end-to-end reasoning and governance pipeline:
 
 > **EVIDENCE IS THE SOURCE OF TRUTH.**  
 > The language model serves strictly as an analytical and synthesis instrument over verified evidence, never as a parametric knowledge store or autonomous decision authority.
@@ -11,11 +13,11 @@ HackGrid is an evidence-grounded decision intelligence framework designed to eva
 
 Mission-critical systems across telecommunications (5G/O-RAN), maritime navigation, defence infrastructure, and cybersecurity require verifiable, auditable reasoning. Standard Large Language Model (LLM) applications fail in these environments because they confuse retrieval failures with regulatory absence, hallucinate legal citations, collapse distinct national jurisdictions, and treat model recommendations as operational authorizations.
 
-HackGrid resolves these failure modes by enforcing strict epistemic boundaries: it discovers supporting and counter-evidence across specialized knowledge bases, verifies absence claims through a formal Absence Protocol, performs strict multi-step gap analysis, calculates deterministic risk scores, and gates consequential decisions behind evidence-backed authority boundaries and mandatory human review.
+NetraSetu resolves these failure modes by enforcing strict epistemic boundaries: it discovers supporting and counter-evidence across specialized knowledge bases, verifies absence claims through a formal Absence Protocol, performs strict multi-step gap analysis, calculates deterministic risk scores, and gates consequential decisions behind evidence-backed authority boundaries and mandatory human review.
 
-## What HackGrid Does
+## What NetraSetu Does
 
-HackGrid provides controlled, evidence-traceable decision support for mission-critical inquiries:
+NetraSetu provides controlled, evidence-traceable decision support for mission-critical inquiries:
 - **Retrieves & Reranks Evidence:** Queries specialized corpora using dense semantic vectors and cross-encoder reranking.
 - **Validates & Discovers Counter-Evidence:** Discovers supporting, contradicting, limiting, and contextual evidence roles.
 - **Safeguards Against Negative Inferences:** Distinguishes between unretrieved provisions and verified absence (`ABSENCE_NOT_ESTABLISHED`).
@@ -33,6 +35,30 @@ Conventional RAG pipelines follow an unconstrained path (`Query ──► Top-K 
 3. **False Absence Inferences:** Concludes a regulation does not exist simply because it was absent from top retrieval results.
 4. **False Gaps:** Assumes minor wording differences between standards represent compliance gaps.
 5. **Autonomous Mission Creep:** Treats an AI recommendation as an operational authorization to execute actions.
+
+
+## Updated Product Roadmap: Strategic Capabilities
+
+NetraSetu is evolving from a static compliance reasoning tool into an **evidence-grounded intelligence and communication-reliability testing platform**. The roadmap centers around two core planned capabilities:
+
+### Feature A — Change-Impact Engine for Evidence and Requirements (Research Prototype)
+* **Objective:** Track revisions in statutory instruments, technical specifications, and guidelines (e.g., CERT-In Directions 2022 vs FAQs, Telecommunications Act 2023 transitions, 3GPP Rel 17 vs Rel 18 5G-Advanced).
+* **Core Capabilities:**
+  * Clause-level document diffing and lineage tracking.
+  * Automated impact mapping linking revised clauses to affected compliance requirements and previous findings.
+  * Selective re-evaluation engine that updates only affected finding nodes rather than invalidating the entire corpus.
+* **Current Status:** Available as an interactive research prototype workbench (`#/change-impact`) in the refreshed frontend console. Automated continuous diff ingestion backend is scheduled for development Phase 2.
+
+### Feature B — Failure-Combination Discovery Engine for 5G Reliability (Design Prototype)
+* **Objective:** Systematically explore multi-dimensional edge failure scenarios and compare communication-recovery strategies across mission-critical wireless infrastructure.
+* **Core Capabilities:**
+  * Combinatorial impairment matrix: Latency jitter (5–500ms), packet loss rate (0–15%), handover interruption window (0–3000ms), temporary coverage blind spot (0–30s), and radio slice congestion.
+  * Service-Level Objective (SLO) targeting: Ultra-Reliable Low-Latency Communication (URLLC), High-Speed Rail (350 km/h) Doppler handover, Maritime coastal store-and-forward, and Smart Grid teleprotection.
+  * Resilience strategy benchmarking: Multipath QUIC / Dual PDU Session active-active failover, Aggressive Selective ARQ + packet duplication, and Dynamic Slicing Preemption.
+  * Reproducible failure vector generation (standardized JSON test configurations for ns-3 / OMNeT++ / Open5GS simulation).
+* **Current Status:** Available as an interactive configuration and strategy comparison prototype (`#/reliability-lab`). Direct hardware-in-the-loop and packet-level emulation backend connections are scheduled for development Phase 2.
+
+---
 
 ## Current Architecture
 
@@ -86,7 +112,7 @@ PRIMARY EVIDENCE   +   COUNTER-EVIDENCE DISCOVERY
 
 ## Multi-Knowledge-Base Architecture
 
-HackGrid indexes domain evidence in isolated, targeted knowledge bases:
+NetraSetu indexes domain evidence in isolated, targeted knowledge bases:
 - **Main Knowledge Base (14,143 chunks):** Indian DoT Rules, Gazette of India, ETSI/3GPP releases, TEC standards.
 - **Defence Knowledge Base (397 chunks):** Tactical communications, UAV datalinks, electronic warfare response, secure C2 specs.
 - **Maritime Knowledge Base (273 chunks):** Navigational safety, ECDIS/AIS integrity, SOLAS, port cybersecurity.
@@ -116,10 +142,10 @@ Jurisdiction governs evidence applicability, not merely display filtering:
 
 ## Primary and Counter-Evidence
 
-HackGrid pairs every retrieval with active counter-evidence discovery:
+NetraSetu pairs every retrieval with active counter-evidence discovery:
 - **PRIMARY / SUPPORTING EVIDENCE:** Surfaces passages directly supporting the inquiry hypothesis.
 - **COUNTER / LIMITING EVIDENCE:** Actively searches for contradictions, exceptions, limitations, and exclusions.
-- **Evidence Roles:** `SUPPORTING`, `CONTRADICTING`, `LIMITING`, `CONTEXTUAL`. HackGrid does not become more confident simply because supporting evidence exists.
+- **Evidence Roles:** `SUPPORTING`, `CONTRADICTING`, `LIMITING`, `CONTEXTUAL`. NetraSetu does not become more confident simply because supporting evidence exists.
 
 ## Evidence Sufficiency
 
@@ -136,7 +162,7 @@ The Absence Protocol enforces epistemic safety:
 
 ## Strict Gap Analysis
 
-HackGrid rejects naive text diffing. Wording variations, structural differences, differing abstraction levels, additional national mandates, or unretrieved text do **not** constitute a gap.
+NetraSetu rejects naive text diffing. Wording variations, structural differences, differing abstraction levels, additional national mandates, or unretrieved text do **not** constitute a gap.
 
 ```
 Technical Requirement ──► Jurisdiction Applicability ──► National Provision ──► Identifiable Missing Element ──► Gap Status ──► Remediation
@@ -147,7 +173,7 @@ Technical Requirement ──► Jurisdiction Applicability ──► National Pr
 
 ## Regulatory Reasoning Safeguards
 
-HackGrid strictly separates: (1) Technical Requirements, (2) Regulatory Mandates, (3) Incident Reporting Obligations, and (4) Decision Authorities. A detected incident does not automatically imply a mandatory reporting duty; reporting triggers require evidence establishing jurisdiction, mandatory status, and legal thresholds. If authority is unproven: `"Authority not established by supplied evidence."`
+NetraSetu strictly separates: (1) Technical Requirements, (2) Regulatory Mandates, (3) Incident Reporting Obligations, and (4) Decision Authorities. A detected incident does not automatically imply a mandatory reporting duty; reporting triggers require evidence establishing jurisdiction, mandatory status, and legal thresholds. If authority is unproven: `"Authority not established by supplied evidence."`
 
 ## Risk Assessment
 
@@ -160,7 +186,7 @@ Risk is calculated deterministically across operational impact, consequence seve
 
 ## Governance and Authority
 
-HackGrid enforces an inviolable separation: `EVIDENCE ──► RISK ──► RECOMMENDATION ──► AUTHORITY ──► AUTHORIZATION ──► ACTION`.
+NetraSetu enforces an inviolable separation: `EVIDENCE ──► RISK ──► RECOMMENDATION ──► AUTHORITY ──► AUTHORIZATION ──► ACTION`.
 - **WHO SHOULD ACT?** The operational or technical role responsible for response (e.g., *Network Operations*, *Incident Response*).
 - **WHO CAN DECIDE?** The entity legally empowered to authorize consequential action. If unproven: `"Authority not established by supplied evidence."`
 - **AUTHORIZATION BOUNDARY States:** `AUTOMATION PERMITTED`, `AUTOMATION LIMITED`, `HUMAN AUTHORIZATION REQUIRED`, `AUTOMATION PROHIBITED`, `AUTHORITY NOT ESTABLISHED`.
@@ -224,12 +250,27 @@ The Scenario Lab provides a controlled, stateful simulation environment demonstr
 
 ## Multi-Domain Decision Support
 
-HackGrid supports decision-making across complex mission-critical domains:
+NetraSetu supports decision-making across complex mission-critical domains:
 - **Telecom / 5G / O-RAN:** Slice isolation, subscriber privacy, interface encryption (ETSI 33.501), DoT telecom rules.
 - **Defence Systems:** Tactical comms resilience, UAV datalinks, electronic warfare response, secure command boundaries.
 - **Maritime Navigation:** AIS spoofing, ECDIS integrity, SOLAS compliance, port cybersecurity.
 - **Policy & Compliance:** Cross-jurisdiction crosswalks, statutory compliance verification, standards gap analysis.
 - **Enterprise Cyber Incidents:** Critical infrastructure intrusion analysis, notification window verification.
+
+
+## Refreshed 7-Pillar Information Architecture
+
+The frontend console has been refreshed into a modern technical dashboard tailored for telecommunication research and national-level hackathon evaluation:
+
+1. **Overview Dashboard (`#/overview` / `#/dashboard`):** Real-time platform status (FastAPI Port 8000, FAISS 14,800+ vector chunks, BGE-M3 retriever, 10-document registry), core capability directory, 95/95 test benchmarks, and quick action launchpads.
+2. **Evidence Intelligence & RAG Workspace (`#/intelligence`):** Interactive query terminal with sample scenario queries, multi-jurisdiction selection, 9-stage governance pipeline visualizer, profile switcher (General, Telecom, Defence, Maritime), and clickable source citation verification.
+3. **Scenario Lab (`#/scenarios`):** Production laboratory featuring all 8 pre-configured operational test scenarios (UAV Tactical Datalink, Maritime AIS, 5G Network Slicing, Telecom OSS/BSS, O-RAN Conflict, EU 5G Function, Enterprise Conflicting Evidence, and CERT-In 6-Hour Reporting) with live step execution on `/api/scenarios/run`.
+4. **Change-Impact Analysis (`#/change-impact`):** Interactive Feature A prototype workbench demonstrating source revision diffing, affected requirement dependency tracking, and selective re-evaluation execution.
+5. **5G Reliability Lab (`#/reliability-lab`):** Interactive Feature B design prototype workbench providing multi-dimensional impairment sliders, SLO target profiles, resilience strategy comparisons, and JSON failure vector generation.
+6. **Evaluation & Reports (`#/evaluations` / `#/audit`):** Consolidated forensic evaluation console featuring 95-test regression benchmarks, zero false-gap invariant metrics, live audit trail search, human review overrides, and single-click Excel export (`/api/audits/export/excel`).
+7. **Documentation & Settings (`#/docs`):** Complete system architecture specifications, 10-document statutory registry with direct PDF viewer modal links, and FastAPI REST endpoint contracts.
+
+---
 
 ## Technology Stack
 
@@ -242,6 +283,14 @@ HackGrid supports decision-making across complex mission-critical domains:
 - **Audit Persistence:** Append-only JSONL cryptographic ledger (`audit.jsonl`)
 
 ## Evaluation
+
+NetraSetu enforces strict regression testing across all governance, retrieval, scenario, and verification pipelines:
+
+* **Backend Test Suites:** 13 test files in `Backend/tests/`.
+* **Test Pass Rate:** **95 / 95 tests passing (100%)** via `python -m pytest -o pythonpath=. Backend/tests/`.
+* **False-Gap Invariants:** 100% verified (`test_false_gap_prevention.py`, `test_regional_comparative_gap.py`).
+* **Source-to-Clause Resolution:** 100% verified with resolvable PDF paths, pages, and official URLs (`test_source_clause_verification.py`).
+
 
 In prototype internal evaluation across 40 specialized test cases spanning telecommunications, maritime, and defense domains:
 - **Jurisdiction Boundary Adherence:** 100% (zero foreign provisions applied as domestic law).
@@ -256,9 +305,9 @@ In prototype internal evaluation across 40 specialized test cases spanning telec
 - **Statutory Interpretation:** AI analysis provides technical decision support, not certified legal counsel.
 - **Live Telemetry:** Prototype processes static scenario dumps and document corpora, not live telemetry streams.
 
-## What HackGrid Does Not Do
+## What NetraSetu Does Not Do
 
-HackGrid explicitly does **NOT**:
+NetraSetu explicitly does **NOT**:
 - ✕ Guarantee legal compliance or provide binding legal advice.
 - ✕ Replace designated regulatory agencies or operational commanders.
 - ✕ Infer that an unretrieved regulation does not exist.
@@ -271,7 +320,7 @@ HackGrid explicitly does **NOT**:
 
 ## Research Significance
 
-HackGrid represents a principled neuro-symbolic governance architecture that integrates:
+NetraSetu represents a principled neuro-symbolic governance architecture that integrates:
 ```
 RAG + Semantic Reranking + Jurisdiction Gating + Counter-Evidence + Evidence Sufficiency
   + Absence Protocol + Strict Gap Analysis + Deterministic Risk + Authority Boundary
@@ -303,7 +352,7 @@ Its core contribution is demonstrating that high-stakes AI safety is achieved no
 ### 1. Environment Setup
 ```bash
 git clone <repository-url>
-cd HackGrid_new
+cd NetraSetu_new
 python -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 pip install -r requirements.txt

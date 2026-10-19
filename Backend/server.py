@@ -2,7 +2,7 @@ import os
 os.environ["HF_HUB_OFFLINE"] = "1"
 os.environ["TRANSFORMERS_OFFLINE"] = "1"
 import uuid
-from typing import Optional
+from typing import Optional, List, Dict, Any
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -22,6 +22,8 @@ load_dotenv(
 # ============================================================
 
 from fastapi import FastAPI, HTTPException
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -31,6 +33,7 @@ from pydantic import BaseModel
 
 from .risk_engine_api import router as risk_router
 from .audit_api import router as audit_router
+from .verification_api import router as verification_router
 from .audit.recorder import (
     create_audit_record,
     append_audit_record,
@@ -55,7 +58,7 @@ from rag.retrieval import (
 # ============================================================
 
 app = FastAPI(
-    title="HackGrid Backend",
+    title="NetraSetu Backend",
     version="1.0",
     description=(
         "HackGrid Evidence Intelligence Backend"
@@ -64,14 +67,16 @@ app = FastAPI(
 
 @app.on_event("startup")
 def warmup_services():
+    if os.environ.get("HACKGRID_TESTING") or os.environ.get("NETRASETU_TESTING"):
+        return
     try:
         from rag.multi_kb_retriever import get_unified_retriever
         from Backend.orchestrator import get_ranking_pipeline
-        print("[STARTUP] Pre-warming HackGrid Multi-KB Retriever...")
+        print("[STARTUP] Pre-warming NetraSetu Multi-KB Retriever...")
         get_unified_retriever()
         print("[STARTUP] Pre-warming Evidence Ranking Pipeline...")
         get_ranking_pipeline()
-        print("[STARTUP] HackGrid models pre-warmed successfully. Ready for live queries.")
+        print("[STARTUP] NetraSetu models pre-warmed successfully. Ready for live queries.")
     except Exception as exc:
         print(f"[STARTUP] Warning during pre-warming: {exc}")
 
@@ -79,6 +84,13 @@ def warmup_services():
 # ============================================================
 # CORS
 # ============================================================
+
+
+app.mount(
+    "/frontend",
+    StaticFiles(directory=str(PROJECT_ROOT / "Frontend"), html=True),
+    name="frontend"
+)
 
 app.add_middleware(
     CORSMiddleware,
@@ -126,6 +138,10 @@ app.include_router(
     audit_router
 )
 
+app.include_router(
+    verification_router
+)
+
 
 # ============================================================
 # REQUEST MODELS
@@ -156,6 +172,21 @@ class ScenarioRunRequest(BaseModel):
     jurisdiction: str = "India"
 
     step_id: Optional[str] = None
+
+
+class VerifyClaimRequest(BaseModel):
+
+    claim: str
+
+    clause: Optional[str] = None
+
+    document: Optional[str] = None
+
+    page: Optional[int] = None
+
+    evidence_id: Optional[str] = None
+
+    deliberate_clause_override: Optional[str] = None
 
 
 # ============================================================
@@ -199,6 +230,8 @@ def root():
     return {
         "status": "online",
         "project": "HackGrid",
+        "product_name": "NetraSetu",
+        "tagline": "Connecting Evidence. Testing Resilience.",
         "backend": "FastAPI",
         "version": "1.0",
     }
@@ -262,6 +295,8 @@ def health():
         "status": "healthy",
 
         "project": "HackGrid",
+        "product_name": "NetraSetu",
+        "tagline": "Connecting Evidence. Testing Resilience.",
 
         "risk_engine": "available",
 
@@ -437,6 +472,120 @@ def query(
                 f"{exc}"
             ),
         )
+
+
+# ============================================================
+# Source document endpoints routed via verification_router
+
+# ============================================================
+
+from fastapi.responses import FileResponse
+
+@app.get("/api/documents/raw/{doc_path:path}")
+def get_raw_document(
+    doc_path: str,
+):
+    """
+    Safely stream local knowledge base document (PDF or text)
+    with inline disposition to support browser document viewer.
+    """
+    clean_path = os.path.normpath(doc_path).lstrip("/\\")
+    full_path = (PROJECT_ROOT / clean_path).resolve()
+
+    if not str(full_path).startswith(str(PROJECT_ROOT.resolve())):
+        raise HTTPException(
+            status_code=403,
+            detail="Access denied outside project root.",
+        )
+
+    if not full_path.is_file():
+        kb_path = (PROJECT_ROOT / "knowledge_base" / clean_path).resolve()
+        if kb_path.is_file():
+            full_path = kb_path
+        else:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Document file '{doc_path}' not found in knowledge base.",
+            )
+
+    media_type = (
+        "application/pdf"
+        if str(full_path).lower().endswith(".pdf")
+        else "text/plain; charset=utf-8"
+    )
+
+    return FileResponse(
+        path=str(full_path),
+        media_type=media_type,
+        headers={
+            "Content-Disposition": "inline",
+            "Cache-Control": "public, max-age=3600",
+        },
+    )
+
+
+@app.get("/api/document_metadata")
+def get_document_metadata_endpoint(
+    doc_id: Optional[str] = None,
+    query: Optional[str] = None,
+):
+    """
+    Query official document registry metadata.
+    """
+    from Backend.evidence_engine.document_registry import (
+        DOCUMENT_REGISTRY,
+        resolve_document_metadata,
+    )
+
+    if doc_id:
+        doc = DOCUMENT_REGISTRY.get(doc_id.upper())
+        if doc:
+            return doc.to_dict()
+
+    if query:
+        doc = resolve_document_metadata(query)
+        if doc:
+            return doc.to_dict()
+
+    return {
+        "count": len(DOCUMENT_REGISTRY),
+        "documents": [d.to_dict() for d in DOCUMENT_REGISTRY.values()],
+    }
+
+
+@app.post("/api/verify_claim")
+def verify_claim_endpoint(
+    request: VerifyClaimRequest,
+):
+    """
+    On-demand deterministic claim-to-clause verification.
+    """
+    from Backend.evidence_engine.clause_verifier import verify_claim_evidence
+
+    mock_ev = []
+    if request.document or request.evidence_id:
+        mock_ev.append(
+            {
+                "title": request.document or "Source Document",
+                "evidence_id": request.evidence_id or "EV-001",
+                "text": request.claim,
+                "provenance": {
+                    "document": request.document,
+                    "clause": request.clause,
+                    "page": request.page,
+                },
+            }
+        )
+
+    record = verify_claim_evidence(
+        claim=request.claim,
+        evidence_records=mock_ev,
+        deliberate_clause_override=(
+            request.deliberate_clause_override or request.clause
+        ),
+    )
+
+    return record.to_dict()
 
 
 # ============================================================
@@ -856,3 +1005,83 @@ def run_scenario(
                 f"{exc}"
             ),
         )
+
+# ============================================================
+# NETRASETU 5G TELEMETRY & CHANGE-IMPACT ENDPOINTS
+# ============================================================
+
+class TelemetryTestRequest(BaseModel):
+    profile: str = "URLLC"
+    impairments: List[str] = []
+    num_samples: int = 100
+
+
+class ChangeImpactPlanRequest(BaseModel):
+    revision_id: str
+
+
+@app.get("/api/5g/profiles")
+def get_5g_profiles():
+    """
+    Return 3GPP and DoT Critical Infrastructure SLO profiles for deterministic evaluation.
+    """
+    from Backend.telemetry_5g.models import SLO_PROFILES
+    return {
+        k.value: {
+            "profile": k.value,
+            "max_latency_ms": v.max_latency_ms,
+            "max_jitter_ms": v.max_jitter_ms,
+            "max_packet_loss_rate": v.max_packet_loss_rate,
+            "min_throughput_mbps": v.min_throughput_mbps,
+            "max_handover_interruption_ms": v.max_handover_interruption_ms,
+            "max_recovery_time_ms": v.max_recovery_time_ms,
+        }
+        for k, v in SLO_PROFILES.items()
+    }
+
+
+@app.post("/api/5g/test")
+def run_5g_test(req: TelemetryTestRequest):
+    """
+    Execute deterministic simulated 5G impairment & reliability test.
+    NO LLM is invoked in monitoring, prediction, failure detection, or recovery decisions.
+    """
+    from Backend.telemetry_5g.engine import get_5g_telemetry_engine
+    engine = get_5g_telemetry_engine()
+    return engine.run_impairment_test(
+        profile_name=req.profile,
+        impairments=req.impairments,
+        num_samples=req.num_samples,
+    )
+
+
+@app.get("/api/change_impact/revisions")
+def get_change_impact_revisions():
+    """
+    Return tracked statutory and technical standard revisions.
+    """
+    from Backend.change_impact.engine import get_change_impact_engine
+    return get_change_impact_engine().get_tracked_revisions()
+
+
+@app.post("/api/change_impact/plan")
+def build_change_impact_plan(req: ChangeImpactPlanRequest):
+    """
+    Generate dependency tracking and selective re-evaluation plan for a revision.
+    Explicitly labeled as PLANNED_PHASE_2 (not yet tested).
+    """
+    from Backend.change_impact.engine import get_change_impact_engine
+    try:
+        plan = get_change_impact_engine().build_impact_plan(req.revision_id)
+        return {
+            "plan_id": plan.plan_id,
+            "revision_id": plan.revision_id,
+            "status": plan.status,
+            "affected_evidence_chunks": plan.affected_evidence_chunks,
+            "affected_scenarios": plan.affected_scenarios,
+            "re_evaluation_triggers": plan.re_evaluation_triggers,
+            "implementation_status": plan.implementation_status,
+            "testing_verified": plan.testing_verified,
+        }
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail=str(exc))

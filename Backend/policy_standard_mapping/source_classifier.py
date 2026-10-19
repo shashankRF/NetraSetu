@@ -149,6 +149,10 @@ def classify_source_type(
             return SourceType.NATIONAL_REGULATION
         return SourceType.NATIONAL_TECHNICAL_STANDARD
 
+    # Guard against unknown or unverified authority metadata
+    if any(k in doc for k in ["unknown", "unverified", "blog", "anonymous", "draft note", "informal"]):
+        return SourceType.OTHER
+
     # Fallbacks based on jurisdiction metadata
     if jurisdiction == "International":
         return SourceType.INTERNATIONAL_TECHNICAL_STANDARD
@@ -157,6 +161,8 @@ def classify_source_type(
             return SourceType.NATIONAL_REGULATION
         if "act" in doc:
             return SourceType.LAW
-        return SourceType.NATIONAL_REGULATION
+        if any(term in doc or term in folder or term in source_file for term in ["dot", "trai", "tec", "telecom", "license", "guideline", "standard"]):
+            return SourceType.NATIONAL_REGULATION
+        return SourceType.OTHER
 
     return SourceType.OTHER

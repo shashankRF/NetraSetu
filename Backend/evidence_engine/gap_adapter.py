@@ -9,8 +9,8 @@ Governance principles:
 - Evidence retrieval != proof of a claim.
 - Absence of retrieved evidence != proof of absence.
 - Policy/regulatory gaps must not be declared without supporting evidence.
+- Evidence status and gap status are separate analytical dimensions.
 """
-
 
 from dataclasses import asdict, is_dataclass
 from typing import Any, Dict
@@ -47,7 +47,6 @@ def _to_dict(value: Any) -> Dict[str, Any]:
     Convert EvidenceAssessment dataclass or dictionary
     into a dictionary.
     """
-
     if isinstance(value, dict):
         return value
 
@@ -64,7 +63,6 @@ def _text(value: Any) -> str:
     """
     Safely convert arbitrary values to lowercase text.
     """
-
     if value is None:
         return ""
 
@@ -90,7 +88,6 @@ def _explicit_absence_claim(question: str) -> bool:
     """
     Detect explicit questions about absence or non-existence.
     """
-
     query = _text(question)
 
     return any(
@@ -105,13 +102,8 @@ def _absence_was_not_established(
     """
     Return True only when an ABSENCE_NOT_ESTABLISHED
     verification belongs to an actual absence/non-existence claim.
-
-    A generic verification status alone must NOT convert a
-    normal decision question into an absence claim.
     """
-
     for verification in absence_verifications:
-
         if not isinstance(verification, dict):
             continue
 
@@ -146,15 +138,10 @@ def build_gap_input(
     """
     Build the structured gap-analysis input.
 
-    EvidenceAssessment may be either:
-    - the EvidenceAssessment dataclass, or
-    - a dictionary.
+    Separates evidence status from gap status:
+    - evidence_status: intrinsic evidence quality (SUFFICIENT, etc.)
+    - gap_status: whether an actual policy gap is established (NO_GAP_ESTABLISHED, etc.)
     """
-
-    # ---------------------------------------------------------------
-    # Normalize inputs
-    # ---------------------------------------------------------------
-
     absence_verifications = (
         absence_verifications
         if absence_verifications is not None
@@ -164,19 +151,26 @@ def build_gap_input(
     evidence = _to_dict(evidence_assessment)
 
     # ---------------------------------------------------------------
-    # Evidence status
+    # Evidence status & strength
     # ---------------------------------------------------------------
+    raw_status = evidence.get("overall_status", "SUFFICIENT")
+    if hasattr(raw_status, "value"):
+        evidence_status = str(raw_status.value).upper()
+    else:
+        evidence_status = str(raw_status).upper()
 
-    evidence_status = str(
-        evidence.get(
-            "overall_status",
-            "SUFFICIENT",
-        )
-    ).upper()
+    raw_strength = evidence.get("overall_strength", getattr(evidence_assessment, "overall_strength", "INSUFFICIENT"))
+    if hasattr(raw_strength, "value"):
+        overall_strength = str(raw_strength.value).upper()
+    else:
+        overall_strength = str(raw_strength).upper()
 
-    # ---------------------------------------------------------------
-    # Missing evidence
-    # ---------------------------------------------------------------
+    supporting_count = int(
+        evidence.get("supporting_count", getattr(evidence_assessment, "supporting_count", 0)) or 0
+    )
+    contradicting_count = int(
+        evidence.get("contradicting_count", getattr(evidence_assessment, "contradicting_count", 0)) or 0
+    )
 
     missing_evidence = list(
         evidence.get(
@@ -188,75 +182,60 @@ def build_gap_input(
 
     # ---------------------------------------------------------------
     # Explicit absence detection
-    #
-    # Either:
-    # 1. The question itself explicitly asks about absence, OR
-    # 2. An absence verification is attached to an actual
-    #    absence/non-existence claim.
     # ---------------------------------------------------------------
+    explicit_absence = _explicit_absence_claim(question)
+    verified_absence_uncertainty = _absence_was_not_established(absence_verifications)
 
-    explicit_absence = _explicit_absence_claim(
-        question
-    )
-
-    verified_absence_uncertainty = (
-        _absence_was_not_established(
-            absence_verifications
-        )
-    )
-
-    if (
-        explicit_absence
-        or verified_absence_uncertainty
-    ):
-
-        if (
-            "ABSENCE_NOT_ESTABLISHED"
-            not in missing_evidence
-        ):
-            missing_evidence.append(
-                "ABSENCE_NOT_ESTABLISHED"
-            )
+    if explicit_absence or verified_absence_uncertainty:
+        if "ABSENCE_NOT_ESTABLISHED" not in missing_evidence:
+            missing_evidence.append("ABSENCE_NOT_ESTABLISHED")
 
         return {
-            "overall_status": (
-                "ABSENCE_NOT_ESTABLISHED"
-            ),
+            "overall_status": "ABSENCE_NOT_ESTABLISHED",
             "evidence_status": evidence_status,
+            "gap_status": "ABSENCE_NOT_ESTABLISHED",
+            "gap_verdict": "ABSENCE_NOT_ESTABLISHED",
+            "overall_strength": overall_strength,
+            "supporting_count": supporting_count,
+            "contradicting_count": contradicting_count,
             "missing_evidence": missing_evidence,
-            "absence_verifications": (
-                absence_verifications
-            ),
+            "absence_verifications": absence_verifications,
             "reason": (
-                "The available evidence does not establish "
-                "that the relevant regulation, policy, "
-                "requirement, provision, or standard "
-                "does not exist."
+                "The available evidence does not establish that the "
+                "relevant regulation, policy, requirement, provision, "
+                "or standard does not exist."
             ),
             "governance_note": (
-                "Absence of retrieved evidence is not "
-                "proof of absence."
+                "Absence of retrieved evidence is not proof of absence."
             ),
         }
 
     # ---------------------------------------------------------------
-    # Normal gap analysis
+    # Normal gap input: preserve evidence status and separate gap status
     # ---------------------------------------------------------------
+    if evidence_status in {"INSUFFICIENT", "INCONCLUSIVE"}:
+        derived_gap_status = "INSUFFICIENT_EVIDENCE"
+    elif evidence_status == "CONTRADICTORY":
+        derived_gap_status = "CONFLICTING"
+    else:
+        derived_gap_status = "POTENTIAL_GAP_NOT_ESTABLISHED"
 
     return {
         "overall_status": evidence_status,
         "evidence_status": evidence_status,
+        "gap_status": derived_gap_status,
+        "gap_verdict": derived_gap_status,
+        "overall_strength": overall_strength,
+        "supporting_count": supporting_count,
+        "contradicting_count": contradicting_count,
         "missing_evidence": missing_evidence,
-        "absence_verifications": (
-            absence_verifications
-        ),
+        "absence_verifications": absence_verifications,
         "reason": (
-            "Gap status follows the Evidence Engine "
-            "assessment. No unsupported absence conclusion "
-            "is made."
+            "Evidence Engine assessment passed to gap analysis. "
+            "Evidence status preserved separately from gap status."
         ),
         "governance_note": (
-            "A policy or regulatory gap must be established "
-            "by appropriate supporting evidence."
+            "A policy or regulatory gap must be established by "
+            "appropriate supporting evidence."
         ),
     }

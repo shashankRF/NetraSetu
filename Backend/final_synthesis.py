@@ -714,7 +714,12 @@ VALID_GAP_STATUSES = {
     "PARTIALLY COVERED",
     "POTENTIAL GAP — NOT ESTABLISHED",
     "NOT A GAP",
+    "NO GAP ESTABLISHED",
     "INSUFFICIENT EVIDENCE",
+    "FUNCTIONALLY EQUIVALENT",
+    "ADDITIONAL NATIONAL REQUIREMENT",
+    "NOT ADDRESSED IN EXAMINED SOURCES",
+    "LOCAL REQUIREMENT — NOT NATIONAL GAP",
 }
 
 VALID_GAP_ACTIONS = {
@@ -880,9 +885,29 @@ def _apply_gap_guardrails(
                 # Absence protocol & Action-Status Discipline
                 why_text = str(item.get("why", "")).strip()
                 lower_reasoning = (gap_text + " " + why_text).lower()
+
+                # Guard against local operator requirement false gaps
+                is_local_operator = any(
+                    t in lower_reasoning
+                    for t in ["operator internal", "operator-specific", "operator x", "local operator requirement", "internal security policy", "enterprise baseline"]
+                )
+                if is_local_operator:
+                    status = "NO GAP ESTABLISHED"
+                    action = "NO ACTION"
+
+                # Guard against functional equivalence false gaps
+                if any(t in lower_reasoning for t in ["functionally equivalent", "functional equivalence"]):
+                    status = "NO GAP ESTABLISHED"
+                    action = "NO ACTION"
+
+                # Guard against additional national requirement false gaps
+                if any(t in lower_reasoning for t in ["additional national requirement", "stricter national requirement"]):
+                    status = "NO GAP ESTABLISHED"
+                    action = "NO ACTION"
+
                 is_retrieval_absence = any(
                     phrase in lower_reasoning
-                    for phrase in ["not retrieved", "not found", "no document", "corpus omission", "absence of evidence"]
+                    for phrase in ["not retrieved", "not found", "no document", "corpus omission", "absence of evidence", "not addressed in examined sources"]
                 )
 
                 if is_retrieval_absence:
@@ -897,9 +922,9 @@ def _apply_gap_guardrails(
                         ).strip(". ") + "."
 
                 # Strict action discipline: FIX is ONLY allowed if ESTABLISHED GAP or PARTIALLY COVERED
-                if status in {"POTENTIAL GAP — NOT ESTABLISHED", "INSUFFICIENT EVIDENCE", "NOT A GAP"} and action == "FIX":
+                if status in {"POTENTIAL GAP — NOT ESTABLISHED", "INSUFFICIENT EVIDENCE", "NOT A GAP", "NO GAP ESTABLISHED", "NOT ADDRESSED IN EXAMINED SOURCES"} and action == "FIX":
                     action = "VERIFY"
-                elif status == "NOT A GAP" and action != "NO ACTION":
+                elif status in {"NOT A GAP", "NO GAP ESTABLISHED", "FUNCTIONALLY EQUIVALENT", "ADDITIONAL NATIONAL REQUIREMENT", "LOCAL REQUIREMENT — NOT NATIONAL GAP"} and action != "NO ACTION":
                     action = "NO ACTION"
 
                 # Evidence traceability
