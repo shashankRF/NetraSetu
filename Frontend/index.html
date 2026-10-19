@@ -4747,7 +4747,6 @@
     </div>
     <nav class="links" aria-label="Primary">
       <a href="#/overview">Overview</a>
-      <a href="#/intelligence">Evidence Intelligence</a>
       <a href="#/how-it-works">How It Works</a>
       <a href="#/change-impact">Change-Impact</a>
       <a href="#/reliability-lab">5G Reliability</a>
@@ -4755,7 +4754,7 @@
       <a href="#/about">About Us</a>
       <a href="#/contact">Contact Us</a>
     </nav>
-    <a class="pill pill-nav" href="#/intelligence"><span>Ask NetraSetu</span></a>
+    <a class="pill pill-nav" href="#/how-it-works"><span>How It Works</span></a>
     <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false"
       aria-controls="menu"><i></i><i></i></button>
   </header>
@@ -4764,7 +4763,6 @@
       <p class="menu-eyebrow">Menu</p>
       <ul class="menu-list">
         <li><a href="#/overview">Overview</a></li>
-        <li><a href="#/intelligence">Evidence Intelligence</a></li>
         <li><a href="#/how-it-works">How NetraSetu Works</a></li>
         <li><a href="#/change-impact">Change-Impact Analysis</a></li>
         <li><a href="#/reliability-lab">5G Reliability Lab</a></li>
@@ -4773,8 +4771,8 @@
         <li><a href="#/contact">Contact Us</a></li>
       </ul>
       <div class="menu-foot">
-        <a class="pill" href="#/ask"><span>Ask NetraSetu</span></a>
-        <a class="ghost" href="#/intelligence">Explore NetraSetu</a>
+        <a class="pill" href="#/how-it-works"><span>Explore Platform</span></a>
+        <a class="ghost" href="#/how-it-works">How It Works</a>
       </div>
     </div>
   </nav>
@@ -4803,7 +4801,7 @@
         NetraSetu is an evidence-intelligence platform designed to connect technical requirements, traceable evidence, and structured analysis to support more transparent and reliable decision-making.
       </p>
       <div class="actions">
-        <a class="pill pill-cta" href="#/intelligence"><span>Explore Evidence Intelligence &rarr;</span></a>
+        <a class="pill pill-cta" href="#/how-it-works"><span>How NetraSetu Works &rarr;</span></a>
         <a class="ghost" href="#/how-it-works">How It Works</a>
       </div>
     </main>
@@ -4902,7 +4900,7 @@
         <span>&bull; Clickable source PDF modal down to exact clause</span>
       </div>
       <div class="hg-card-footer">
-        <a class="hg-btn-primary" href="#/intelligence">Open Query Workspace &rarr;</a>
+        <a class="hg-btn-primary" href="#/how-it-works">Explore Pipeline Stages &rarr;</a>
       </div>
     </div>
 
@@ -5029,7 +5027,7 @@
     </div>
     <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
       <button type="button" class="btn sec" id="btn-reset-workflow" onclick="resetWorkflowView()">Reset Overview</button>
-      <a class="btn pri" href="#/intelligence">Test Pipeline Live &rarr;</a>
+      <a class="btn pri" href="#/change-impact">Explore Change-Impact &rarr;</a>
     </div>
   </div>
 
@@ -5348,46 +5346,7 @@
       <p class="quote">The real question: how does this requirement apply here, and what does the evidence actually prove?</p>
     </section>
 
-    <section class="sec" id="intelligence" data-page="intelligence">
-      <div class="k rv"><span>The Intelligence Pipeline</span></div>
-      <h2 class="rv">An intelligence pipeline, not a chat window.</h2>
-      <p class="lead rv" style="max-width: 48em;">NetraSetu rejects the idea of treating an LLM as an unconstrained authority. Instead, an 8-stage verifiable pipeline examines evidence provenance, tests counter-hypotheses, evaluates statutory consequence, and enforces human governance.</p>
-      
-      <div class="panel rv" style="margin: 28px 0 36px; padding: 20px 24px; border-left: 3px solid #60a5fa;">
-        <strong style="font-size: 14px; color: #60a5fa; text-transform: uppercase; letter-spacing: 0.06em;">Architectural Invariant</strong>
-        <p style="margin: 6px 0 0; color: var(--ink); font-size: 15px; line-height: 1.5;">"AI synthesizes evidence. Evidence supports the conclusion. Human authority governs consequential decisions."</p>
-      </div>
-
-      <ol class="pipe" id="pipe"></ol>
-
-      <!-- Counter-Evidence Section -->
-      <div class="rv" style="margin-top: 56px;">
-        <div class="k"><span>Counter-Evidence Framework</span></div>
-        <h3 style="font-size: clamp(22px, 2.2vw, 32px); font-weight: 500; margin-bottom: 8px;">Active Counter-Evidence Reasoning</h3>
-        <p style="color: var(--muted); max-width: 48em; line-height: 1.6; margin-bottom: 24px;">Instead of merely asking <em>"What evidence supports this conclusion?"</em>, HackGrid systematically retrieves and evaluates <strong>what weakens, contradicts, or limits it</strong>.</p>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
-          <div class="panel" style="border-left: 3px solid #10b981; padding: 18px 20px;">
-            <b style="color: #10b981; font-size: 12px; text-transform: uppercase;">Supporting Evidence</b>
-            <p style="margin: 6px 0 0; font-size: 13px; color: var(--muted); line-height: 1.5;">Directly corroborates the technical finding, parameter baseline, or statutory duty with cited passages.</p>
-          </div>
-          <div class="panel" style="border-left: 3px solid #ef4444; padding: 18px 20px;">
-            <b style="color: #ef4444; font-size: 12px; text-transform: uppercase;">Contradicting Evidence</b>
-            <p style="margin: 6px 0 0; font-size: 13px; color: var(--muted); line-height: 1.5;">Directly conflicts with a claim, invalidates an assumption, or disproves premature attribution.</p>
-          </div>
-          <div class="panel" style="border-left: 3px solid #f59e0b; padding: 18px 20px;">
-            <b style="color: #f59e0b; font-size: 12px; text-transform: uppercase;">Limiting Evidence</b>
-            <p style="margin: 6px 0 0; font-size: 13px; color: var(--muted); line-height: 1.5;">Restricts scope (e.g., valid vendor signatures and clean SBOMs limiting supply-chain compromise claims).</p>
-          </div>
-          <div class="panel" style="border-left: 3px solid #60a5fa; padding: 18px 20px;">
-            <b style="color: #60a5fa; font-size: 12px; text-transform: uppercase;">Contextual Evidence</b>
-            <p style="margin: 6px 0 0; font-size: 13px; color: var(--muted); line-height: 1.5;">Provides operational environment background without establishing direct causal or legal liability.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="sec rv" id="agents" data-page="agents">
+<section class="sec rv" id="agents" data-page="agents">
       <div class="k"><span>Collaborative Multi-Agent Intelligence</span></div>
       <h2>Specialized analytical roles examining the same evidence.</h2>
       <p class="lead">NetraSetu's multi-agent architecture is not a collection of independent chatbots. Instead, specialized analytical components interrogate different dimensions of the same technical and regulatory question over a shared, verified evidence set.</p>
@@ -5474,77 +5433,6 @@
       <span class="note">Representative crosswalk analysis. Real assessments are generated dynamically from retrieved evidence records.</span>
     </section>
 
-    <section class="sec rv" id="gap" data-page="intelligence">
-      <div class="k"><span>Gap Analysis Crosswalk</span></div>
-      <h2>Seven deterministic relationships. No guessing.</h2>
-      <p class="lead">NetraSetu replaces ambiguous text generation with a formal crosswalk. Every comparison between international standards and national frameworks resolves into one of seven deterministic outcomes.</p>
-      <div class="rows" id="gaprows"></div>
-      <div style="margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--line);">
-        <p class="big">Missing evidence is not evidence of absence.</p>
-        <p class="big">A stricter national requirement is not automatically a conflict.</p>
-      </div>
-    </section>
-
-    <section class="sec rv" id="review" data-page="intelligence">
-      <div class="k"><span>Human Authority &amp; Governance</span></div>
-      <h2>AI proposes. Human authority decides.</h2>
-      <p class="lead">NetraSetu does not automate consequential decisions. Its deterministic Risk Engine evaluates evidence strength and decision impact to determine when human review is mandatory.</p>
-      
-      <div class="panel" style="margin: 24px 0; padding: 22px;">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px;">
-          <div>
-            <b style="color: #10b981; font-size: 13px; text-transform: uppercase;">Lower Consequence Scenarios</b>
-            <p style="margin: 6px 0 0; font-size: 13px; color: var(--muted); line-height: 1.55;">Routine compliance queries, technical standard references, and verified documentation with unambiguous evidence allow automated system recommendations.</p>
-          </div>
-          <div>
-            <b style="color: #f87171; font-size: 13px; text-transform: uppercase;">High Consequence / Ambiguous Evidence</b>
-            <p style="margin: 6px 0 0; font-size: 13px; color: var(--muted); line-height: 1.55;">Emergency slice disruptions, security breaches, mandatory regulatory reporting obligations, or conflicting evidence require mandatory human reviewer sign-off.</p>
-          </div>
-        </div>
-      </div>
-
-      <ol class="flow" id="revflow"></ol>
-    </section>
-
-    <section class="sec" id="audit" data-page="intelligence">
-      <div class="k rv"><span>Auditability &amp; Traceability</span></div>
-      <h2 class="rv">Every conclusion traces back to evidence.</h2>
-      <p class="lead rv">In high-assurance environments, an unexplainable conclusion is unacceptable. NetraSetu generates an append-only audit trail recording the full provenance chain.</p>
-      <ol class="pipe" id="auditpipe"></ol>
-    </section>
-
-<section class="sec rv in" id="ask" data-page="ask">
-      <div class="k"><span>Ask NetraSetu</span></div>
-      <h2>Put a real question to the system.</h2>
-      <label for="q" class="lead">Your question</label>
-      <textarea id="q"
-        placeholder="Type your compliance or regulatory question here... (Press Enter to execute)">How does Indian regulation apply to a 5G network slicing requirement defined by 3GPP?</textarea>
-      <div class="askbar">
-        <div class="ask-action-col">
-          <button class="btn pri" id="askbtn" type="button" title="Execute query (or press Enter)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="margin-right:2px;">
-              <polygon points="5 3 19 12 5 21 5 3" />
-            </svg>
-            <span>Execute Query</span>
-            <span class="kbd-badge">↵ Enter</span>
-          </button>
-          <div id="ask-timer" class="ask-timer" hidden>
-            <span class="timer-dot"></span>
-            <span id="ask-timer-text">Analysing · 0.0s</span>
-          </div>
-        </div>
-        <div class="seg" role="radiogroup" aria-label="Country profile"><button type="button" role="radio"
-            aria-checked="true" data-p="IN">IN</button><button type="button" role="radio" aria-checked="false"
-            data-p="EU">EU</button></div>
-        <span class="exec-hint">Press <kbd>Enter ↵</kbd> or <kbd>Ctrl+Enter</kbd> to run</span>
-        <span class="mail" id="proflabel" style="margin:0"></span>
-        <span id="backend-status" class="api-badge"><i></i><span>Connecting to backend...</span></span>
-      </div>
-      <div class="res" id="res" hidden></div>
-    </section>
-
-
-    
 <section class="sec rv in" id="change-impact" data-page="change-impact">
   <div class="k"><span>Feature A &bull; Roadmap Workbench</span></div>
   <div class="hg-dash-header">
@@ -6495,7 +6383,6 @@
           <h5>Platform &amp; Navigation</h5>
           <ul>
             <li><a href="#/overview">Overview Dashboard</a></li>
-            <li><a href="#/intelligence">Evidence Intelligence</a></li>
             <li><a href="#/how-it-works">How NetraSetu Works <span class="hg-footer-tag active-tag">6 Stages</span></a></li>
             <li><a href="#/scenarios">Scenario Lab (8 Incidents)</a></li>
             <li><a href="#/evaluations">Evaluation &amp; Audit Trail</a></li>
@@ -9040,8 +8927,6 @@
         home: 'Overview Dashboard',
         overview: 'Overview Dashboard',
         dashboard: 'Overview Dashboard',
-        intelligence: 'Evidence Intelligence',
-        ask: 'Evidence Intelligence',
         scenarios: 'Scenario Lab',
         'change-impact': 'Change-Impact Analysis',
         'reliability-lab': '5G Reliability Lab',
@@ -9063,7 +8948,7 @@
         var r = raw;
         if (!r || r === 'home') r = 'overview';
         if (r === 'dashboard') r = 'overview';
-        if (r === 'ask') r = 'intelligence';
+        if (r === 'intelligence' || r === 'ask') r = 'overview';
         if (r === 'audit') r = 'evaluations';
 
         document.body.classList.toggle('inner', true);
@@ -9075,7 +8960,6 @@
           var dp = x.dataset.page;
           var on = (dp === r);
           // Group aliases
-          if (r === 'intelligence' && (dp === 'intelligence' || dp === 'ask')) on = true;
           if (r === 'evaluations' && (dp === 'evaluations' || dp === 'audit')) on = true;
           if (r === 'docs' && (dp === 'docs' || dp === 'about' || dp === 'evidence')) on = true;
 
@@ -9092,8 +8976,7 @@
           var href = a.getAttribute('href') || '';
           var targetRoute = href.replace(/^#\/?/, '');
           if (targetRoute === r || 
-              (r === 'overview' && (targetRoute === 'overview' || targetRoute === 'dashboard' || targetRoute === '')) || 
-              (r === 'intelligence' && (targetRoute === 'intelligence' || targetRoute === 'ask')) || 
+              (r === 'overview' && (targetRoute === 'overview' || targetRoute === 'dashboard' || targetRoute === '')) ||
               (r === 'how-it-works' && targetRoute === 'how-it-works') ||
               (r === 'sdg' && targetRoute === 'sdg') ||
               (r === 'about' && targetRoute === 'about') ||
