@@ -646,6 +646,7 @@ def classify_evidence(
     evidence_records: List[Dict[str, Any]],
     demo_mode: bool = False,
     timeout: Optional[float] = None,
+    model_backend: Optional[str] = None,
 ) -> Dict[str, Any]:
     """
     Classify retrieved evidence against a claim using GPT-OSS.
@@ -673,6 +674,31 @@ def classify_evidence(
             "classifier": GROQ_MODEL,
             "status": "NO_EVIDENCE",
         }
+
+    # --------------------------------------------------------
+    # Local Qwen2.5-0.5B-Instruct Mode (Configurable Candidate)
+    # --------------------------------------------------------
+    use_qwen = (
+        model_backend == "qwen"
+        or os.getenv("NETRASETU_EVIDENCE_MODEL", "").lower() == "qwen"
+        or os.getenv("USE_LOCAL_QWEN", "0") == "1"
+    )
+    if use_qwen:
+        try:
+            from .qwen_analyzer import get_qwen_analyzer
+            analyzer = get_qwen_analyzer()
+            qwen_res = analyzer.classify_with_qwen(claim, evidence_records)
+            return qwen_res
+        except Exception as qwen_exc:
+            return {
+                "claim": claim,
+                "classifications": [],
+                "all_evidence_classified": False,
+                "missing_classifications": [str(r.get("evidence_id")) for r in evidence_records],
+                "classifier": "Qwen2.5-0.5B-Instruct (Local)",
+                "status": "MODEL_LIMITATION",
+                "limitation": f"Qwen2.5 analysis reported limitation: {qwen_exc}",
+            }
 
     # --------------------------------------------------------
     # Compact demo mode: Fast, deterministic classification
