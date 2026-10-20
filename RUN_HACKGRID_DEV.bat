@@ -4,7 +4,7 @@ setlocal
 cd /d "%~dp0"
 
 echo ==========================================
-echo       HACKGRID DEVELOPMENT MODE
+echo               NETRASETU
 echo ==========================================
 echo.
 
