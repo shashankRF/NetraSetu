@@ -1,13 +1,13 @@
 @echo off
 setlocal
 
-title HackGrid - IMC Demo
+title NetraSetu
 
 cd /d "%~dp0"
 
 echo.
 echo ==========================================
-echo          HACKGRID IMC DEMO
+echo          NETRASETU
 echo ==========================================
 echo.
 echo Project:
