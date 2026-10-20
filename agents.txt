@@ -1,0 +1,796 @@
+===== NETWORK =====
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+from google import genai
+
+GEMINI_MODEL = "gemini-3-flash-preview"
+
+api_key = os.getenv("GEMINI_API_KEY")
+
+if not api_key:
+    raise ValueError("GEMINI_API_KEY not found.")
+
+client = genai.Client(api_key=api_key)
+
+
+def network_agent(question):
+
+    print("\n[NETWORK AGENT] Analyzing 5G architecture...")
+
+    prompt = f"""
+You are the Network Analysis Agent in a telecom regulatory
+compliance system.
+
+Analyze ONLY the technical/network aspects of the user's scenario.
+
+Identify:
+
+1. Affected 5G network components or functions.
+2. Possible network-slicing dependencies.
+3. Possible architectural failure points.
+4. Relevant security implications.
+5. Technical recommendations that could reduce the risk.
+
+IMPORTANT:
+- Do not invent regulatory requirements.
+- Do not claim that a technical issue is a policy gap.
+- Clearly label technical reasoning as analysis/inference.
+- Do not provide regulatory conclusions. That is handled by other agents.
+
+USER SCENARIO:
+{question}
+
+Return the result in this structure:
+
+1. Affected network components
+2. Slicing dependencies
+3. Possible architectural failure points
+4. Security implications
+5. Technical recommendations
+"""
+
+    response = client.interactions.create(
+        model=GEMINI_MODEL,
+        input=prompt,
+        generation_config={
+            "thinking_level": "low"
+        }
+    )
+
+    return response.output_text
+
+
+if __name__ == "__main__":
+
+    question = input("Enter network incident: ")
+
+    result = network_agent(question)
+
+    print("\n" + "=" * 80)
+    print("NETWORK AGENT RESULT")
+    print("=" * 80)
+    print(result)===== COMPLIANCE =====
+import os
+from google import genai
+
+from .rag_gemini import retrieve
+
+
+# ============================================================
+# CONFIG
+# ============================================================
+
+GEMINI_MODEL = "gemini-3-flash-preview"
+
+
+# ============================================================
+# GEMINI
+# ============================================================
+
+api_key = os.getenv("GEMINI_API_KEY")
+
+if not api_key:
+    raise ValueError("GEMINI_API_KEY not found.")
+
+client = genai.Client(api_key=api_key)
+
+
+# ============================================================
+# COMPLIANCE AGENT
+# ============================================================
+
+def compliance_agent(question):
+
+    print("\n[COMPLIANCE AGENT] Retrieving regulatory evidence...")
+
+    retrieved_chunks = retrieve(question, k=5)
+
+    context_parts = []
+
+    for r in retrieved_chunks:
+
+        metadata = r["metadata"]
+
+        context_parts.append(
+            f"""
+SOURCE {r['rank']}
+Document: {metadata.get('document')}
+Page: {metadata.get('page')}
+Source file: {metadata.get('source_file')}
+
+CONTENT:
+{r['text']}
+"""
+        )
+
+    context = "\n".join(context_parts)
+
+    print(
+        f"[COMPLIANCE AGENT] Retrieved "
+        f"{len(retrieved_chunks)} regulatory sources."
+    )
+
+    prompt = f"""
+You are the Compliance Agent in an AI-based telecom regulatory
+compliance system.
+
+Your ONLY responsibility is to analyze the user's issue against the
+retrieved regulatory and standards evidence.
+
+Do NOT perform policy-gap analysis.
+Do NOT invent regulations.
+Do NOT use knowledge outside the retrieved evidence.
+
+USER QUESTION:
+{question}
+
+RETRIEVED REGULATORY EVIDENCE:
+{context}
+
+Analyze the evidence and identify:
+
+1. Applicable Acts, Rules, regulations, policies, or standards.
+2. Specific regulatory requirements relevant to the question.
+3. Security obligations, if applicable.
+4. Incident-response obligations, if applicable.
+5. Monitoring and logging obligations, if applicable.
+6. Risk-assessment obligations, if applicable.
+7. Reporting obligations and deadlines, if explicitly stated.
+8. Government-cooperation obligations, if applicable.
+9. Concrete compliance actions the telecom entity should take.
+
+IMPORTANT RULES:
+
+- Every regulatory requirement must be supported by the retrieved
+  evidence.
+- Cite the document and page for each important requirement.
+- Do not infer a reporting deadline if the retrieved evidence does
+  not explicitly provide one.
+- Clearly distinguish an explicit regulatory requirement from your
+  practical explanation.
+- Do not call something a policy gap.
+- Do not recommend creating a new policy or standard.
+- If the evidence is insufficient for a requirement, say:
+  "The retrieved evidence is insufficient to establish this
+  requirement."
+
+Return the result using exactly this structure:
+
+1. Applicable regulatory framework
+
+2. Regulatory requirements
+   - Requirement
+   - Source
+   - Page
+   - Evidence
+
+3. Required compliance actions
+
+4. Reporting and government-cooperation obligations
+
+5. Evidence limitations
+"""
+
+
+    try:
+
+        response = client.interactions.create(
+            model=GEMINI_MODEL,
+            input=prompt,
+            generation_config={
+                "thinking_level": "low"
+            }
+        )
+
+        return {
+            "agent": "Compliance Agent",
+            "query": question,
+            "retrieved_evidence": retrieved_chunks,
+            "analysis": response.output_text
+        }
+
+    except Exception as e:
+
+        return {
+            "agent": "Compliance Agent",
+            "query": question,
+            "retrieved_evidence": retrieved_chunks,
+            "analysis": None,
+            "error": str(e)
+        }
+
+
+# ============================================================
+# STANDALONE TEST
+# ============================================================
+
+if __name__ == "__main__":
+
+    question = input(
+        "\nEnter compliance question: "
+    )
+
+    result = compliance_agent(question)
+
+    print("\n" + "=" * 80)
+    print("COMPLIANCE AGENT RESULT")
+    print("=" * 80)
+
+    if result["analysis"]:
+
+        print(result["analysis"])
+
+    else:
+
+        print("\nGemini request failed.")
+        print(result["error"])
+
+    print("\n" + "=" * 80)===== POLICY =====
+import os
+from google import genai
+from .rag_gemini import retrieve
+
+GEMINI_MODEL = "gemini-3-flash-preview"
+
+api_key = os.getenv("GEMINI_API_KEY")
+
+if not api_key:
+    raise ValueError("GEMINI_API_KEY not found.")
+
+client = genai.Client(api_key=api_key)
+
+
+def policy_agent(question):
+
+    print("\n[POLICY AGENT] Analyzing policy and framework coverage...")
+
+    # ---------------------------------------------------------
+    # 1. Retrieve policy/framework evidence
+    # ---------------------------------------------------------
+
+    retrieved_chunks = retrieve(question, k=8)
+
+    context_parts = []
+
+    for r in retrieved_chunks:
+
+        metadata = r["metadata"]
+
+        context_parts.append(
+            f"""
+SOURCE {r['rank']}
+
+Document:
+{metadata.get('document')}
+
+Category:
+{metadata.get('category')}
+
+Page:
+{metadata.get('page')}
+
+Source file:
+{metadata.get('source_file')}
+
+Content:
+{r['text']}
+"""
+        )
+
+    context = "\n".join(context_parts)
+
+    print(
+        f"[POLICY AGENT] Retrieved "
+        f"{len(retrieved_chunks)} policy/framework sources."
+    )
+
+    # ---------------------------------------------------------
+    # 2. Gemini policy analysis
+    # ---------------------------------------------------------
+
+    prompt = f"""
+You are the Policy Analysis Agent in an AI-based
+telecom regulatory compliance system.
+
+Your responsibility is to analyze POLICY, STRATEGY,
+FRAMEWORK, and STANDARDIZATION coverage related to
+the user's telecom/5G scenario.
+
+You are NOT the Compliance Agent.
+
+The Compliance Agent identifies explicit legal and
+regulatory obligations.
+
+You analyze how existing policy and standards frameworks
+address the broader issue.
+
+IMPORTANT RULES:
+
+1. Use ONLY the retrieved evidence provided below.
+
+2. Do NOT invent policies, strategies, standards,
+   regulations, or government initiatives.
+
+3. Do NOT make a final policy-gap determination.
+   That decision belongs to the Gap Analysis Agent.
+
+4. Do NOT assume that the absence of a keyword means
+   that a policy gap exists.
+
+5. Identify whether the issue is:
+
+   A. Directly covered
+   B. Broadly or partially covered
+   C. Covered by a related framework
+   D. Not sufficiently covered in the retrieved evidence
+
+6. Look for relevant coverage across:
+   - Indian telecom policy
+   - Indian telecom standards
+   - cybersecurity frameworks
+   - AI-related policy/frameworks
+   - 5G/6G frameworks
+   - national standards frameworks
+   - international standards frameworks
+
+7. Clearly distinguish:
+   - Explicit policy/framework statements
+   - Standardization mechanisms
+   - Your technical interpretation
+
+8. If the retrieved evidence does not establish coverage,
+   say:
+
+   "The retrieved evidence is insufficient to establish
+   policy coverage."
+
+9. Do NOT recommend creating a new policy.
+
+10. Do NOT claim that a policy gap exists.
+
+USER QUESTION:
+{question}
+
+RETRIEVED POLICY AND STANDARDS EVIDENCE:
+
+{context}
+
+
+Return the analysis using exactly this structure:
+
+1. POLICY / FRAMEWORK LANDSCAPE
+
+Identify the relevant policies, strategies,
+frameworks, or standards mechanisms.
+
+For each:
+- Name
+- Type
+- Organization
+- Relevant scope
+- Source and page
+
+
+2. DIRECT POLICY COVERAGE
+
+Explain whether an existing policy or framework
+directly addresses the user's issue.
+
+If yes:
+- What does it cover?
+- Source
+- Page
+
+If no:
+- State that direct coverage was not established.
+
+
+3. BROADER / PARTIAL COVERAGE
+
+Identify policies or frameworks that address
+the issue indirectly or partially.
+
+Explain:
+- What is covered?
+- What aspect is covered?
+- Source
+- Page
+
+
+4. RELATED FRAMEWORK COVERAGE
+
+Identify related telecom, cybersecurity,
+AI, 5G, or standards frameworks that may
+cover part of the issue.
+
+
+5. POLICY / STANDARDS IMPLICATIONS
+
+Explain what the existing policy and standards
+frameworks imply for the user's scenario.
+
+Clearly label technical or analytical
+interpretations as inference.
+
+
+6. EVIDENCE LIMITATIONS
+
+State what cannot be established from
+the retrieved evidence.
+
+Do NOT declare a policy gap here.
+"""
+
+
+    try:
+
+        response = client.interactions.create(
+            model=GEMINI_MODEL,
+            input=prompt,
+            generation_config={
+                "thinking_level": "low"
+            }
+        )
+
+        return {
+            "agent": "Policy Agent",
+            "query": question,
+            "retrieved_evidence": retrieved_chunks,
+            "analysis": response.output_text
+        }
+
+    except Exception as e:
+
+        return {
+            "agent": "Policy Agent",
+            "query": question,
+            "retrieved_evidence": retrieved_chunks,
+            "analysis": None,
+            "error": str(e)
+        }
+
+
+# ---------------------------------------------------------
+# Standalone testing
+# ---------------------------------------------------------
+
+if __name__ == "__main__":
+
+    question = input(
+        "\nEnter policy-related question: "
+    )
+
+    result = policy_agent(question)
+
+    print("\n" + "=" * 80)
+    print("POLICY AGENT RESULT")
+    print("=" * 80)
+
+    if result["analysis"]:
+
+        print(result["analysis"])
+
+    else:
+
+        print("\nGemini request failed.")
+        print(result["error"])
+
+    print("\n" + "=" * 80)===== GAP =====
+import os
+from google import genai
+
+GEMINI_MODEL = "gemini-3-flash-preview"
+
+api_key = os.getenv("GEMINI_API_KEY")
+
+if not api_key:
+    raise ValueError("GEMINI_API_KEY not found.")
+
+client = genai.Client(api_key=api_key)
+
+
+def gap_analysis_agent(
+    question,
+    network_result,
+    compliance_result,
+    policy_result
+):
+
+    print("\n[GAP ANALYSIS AGENT] Comparing existing coverage...")
+
+
+    # ---------------------------------------------------------
+    # Extract previous agent outputs
+    # ---------------------------------------------------------
+
+    network_analysis = network_result
+
+    compliance_analysis = compliance_result.get(
+        "analysis",
+        "No compliance analysis available."
+    )
+
+    policy_analysis = policy_result.get(
+        "analysis",
+        "No policy analysis available."
+    )
+
+
+    # ---------------------------------------------------------
+    # Build evidence for Gemini
+    # ---------------------------------------------------------
+
+    prompt = f"""
+You are the Gap Analysis Agent in an AI-based
+telecom regulatory compliance system.
+
+Your ONLY responsibility is to determine whether the
+available evidence supports a potential policy or
+standards gap.
+
+You receive analysis from:
+
+1. Network Agent
+2. Compliance Agent
+3. Policy Agent
+
+You must compare their findings before reaching
+a conclusion.
+
+
+USER QUESTION:
+{question}
+
+
+========================
+NETWORK AGENT ANALYSIS
+========================
+
+{network_analysis}
+
+
+========================
+COMPLIANCE AGENT ANALYSIS
+========================
+
+{compliance_analysis}
+
+
+========================
+POLICY AGENT ANALYSIS
+========================
+
+{policy_analysis}
+
+
+IMPORTANT RULES:
+
+1. Do NOT invent regulations, policies, standards,
+   or technical requirements.
+
+2. Do NOT treat the absence of a keyword as proof
+   of a policy gap.
+
+3. First determine what existing frameworks already
+   cover.
+
+4. Compare:
+   - Direct coverage
+   - Partial/broader coverage
+   - Related framework coverage
+
+5. Only identify a POTENTIAL GAP if the evidence
+   indicates that a specific aspect remains
+   unaddressed.
+
+6. If an existing framework adequately addresses
+   the issue, state:
+
+   "NO GAP ESTABLISHED"
+
+   and identify the framework that provides
+   the relevant coverage.
+
+7. If existing frameworks address only part of
+   the issue, classify it as:
+
+   "PARTIALLY COVERED"
+
+   and clearly identify the remaining aspect.
+
+8. If the evidence supports an unaddressed
+   specific aspect, classify it as:
+
+   "POTENTIAL POLICY/STANDARDS GAP"
+
+9. If the available evidence is insufficient,
+   classify it as:
+
+   "INSUFFICIENT EVIDENCE"
+
+10. Do not recommend creating a new policy merely
+    because the retrieved documents do not contain
+    an exact keyword.
+
+11. Clearly distinguish:
+    - Established regulatory requirements
+    - Existing policy/standards coverage
+    - Technical inference
+    - Potential gap
+
+12. A potential gap means the evidence supports
+    further policy/standards review. It does NOT
+    mean that a definitive legal or regulatory gap
+    has been proven.
+
+13. Explain why the classification was reached.
+
+14. Keep the analysis concise and practical.
+
+
+Return EXACTLY this structure:
+
+
+1. GAP STATUS
+
+Choose ONE:
+
+- NO GAP ESTABLISHED
+- PARTIALLY COVERED
+- POTENTIAL POLICY/STANDARDS GAP
+- INSUFFICIENT EVIDENCE
+
+
+2. EXISTING COVERAGE
+
+Explain which existing policies, regulations,
+or standards already address the issue.
+
+Include source/document names and pages when
+available.
+
+
+3. COVERED ASPECTS
+
+List the specific aspects that are already
+addressed.
+
+
+4. REMAINING UNADDRESSED ASPECT
+
+If applicable, identify the specific aspect
+that is not adequately addressed.
+
+If none is established, write:
+
+"No specific unaddressed aspect established."
+
+
+5. GAP JUSTIFICATION
+
+Explain why the evidence does or does not
+support treating the issue as a potential gap.
+
+
+6. TECHNICAL SIGNIFICANCE
+
+Explain why the issue matters technically
+for the 5G/network scenario.
+
+Clearly label technical reasoning as analysis
+or inference.
+
+
+7. EVIDENCE LIMITATIONS
+
+State what cannot be concluded from the
+available evidence.
+"""
+
+
+    # ---------------------------------------------------------
+    # Gemini analysis
+    # ---------------------------------------------------------
+
+    try:
+
+        response = client.interactions.create(
+            model=GEMINI_MODEL,
+            input=prompt,
+            generation_config={
+                "thinking_level": "low"
+            }
+        )
+
+        return {
+            "agent": "Gap Analysis Agent",
+            "query": question,
+            "analysis": response.output_text
+        }
+
+    except Exception as e:
+
+        return {
+            "agent": "Gap Analysis Agent",
+            "query": question,
+            "analysis": None,
+            "error": str(e)
+        }
+
+
+# ---------------------------------------------------------
+# Standalone testing
+# ---------------------------------------------------------
+
+if __name__ == "__main__":
+
+    question = input(
+        "\nEnter question for gap analysis: "
+    )
+
+    print(
+        "\nThis agent normally receives outputs "
+        "from the other agents through the orchestrator."
+    )
+
+    print(
+        "\nFor standalone testing, provide the "
+        "previous agent outputs."
+    )
+
+    network_result = input(
+        "\nNetwork Agent output: "
+    )
+
+    compliance_result = {
+        "analysis": input(
+            "\nCompliance Agent output: "
+        )
+    }
+
+    policy_result = {
+        "analysis": input(
+            "\nPolicy Agent output: "
+        )
+    }
+
+    result = gap_analysis_agent(
+        question,
+        network_result,
+        compliance_result,
+        policy_result
+    )
+
+    print("\n" + "=" * 80)
+    print("GAP ANALYSIS AGENT RESULT")
+    print("=" * 80)
+
+    if result["analysis"]:
+        print(result["analysis"])
+    else:
+        print("\nGemini request failed.")
+        print(result["error"])
+
+    print("\n" + "=" * 80)

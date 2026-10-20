@@ -1,0 +1,55 @@
+{
+  "evaluation_version": "taxonomy-v1",
+  "categories": [
+    {
+      "id": "RETRIEVAL",
+      "name": "Retrieval Quality",
+      "description": "Whether relevant evidence is retrieved from the knowledge base."
+    },
+    {
+      "id": "SUFFICIENCY",
+      "name": "Evidence Sufficiency",
+      "description": "Whether the retrieved evidence is sufficient to support the requested conclusion."
+    },
+    {
+      "id": "CONTRADICTION",
+      "name": "Contradiction Detection",
+      "description": "Whether supporting, contradicting, limiting, and contextual evidence are distinguished correctly."
+    },
+    {
+      "id": "ABSENCE",
+      "name": "Absence Handling",
+      "description": "Whether the system avoids treating retrieval failure as proof of absence."
+    },
+    {
+      "id": "GROUNDING",
+      "name": "Claim Grounding",
+      "description": "Whether substantive claims are linked to valid evidence identifiers."
+    },
+    {
+      "id": "GAP",
+      "name": "Gap Analysis",
+      "description": "Whether technical or regulatory gaps are classified conservatively."
+    },
+    {
+      "id": "RISK",
+      "name": "Risk Assessment",
+      "description": "Whether consequence, evidence quality, and decision impact produce an appropriate risk level."
+    },
+    {
+      "id": "ESCALATION",
+      "name": "Escalation",
+      "description": "Whether high-impact decisions are routed to the appropriate human authority."
+    },
+    {
+      "id": "HUMAN_REVIEW",
+      "name": "Human Review",
+      "description": "Whether consequential or uncertain decisions require human review."
+    },
+    {
+      "id": "SYNTHESIS",
+      "name": "Final Synthesis",
+      "description": "Whether the final answer preserves evidence, uncertainty, and governance constraints."
+    }
+  ]
+}

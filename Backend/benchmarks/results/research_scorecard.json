@@ -1,0 +1,74 @@
+{
+  "benchmark": "HackGrid Evidence-Aware Pipeline",
+  "evaluation_version": "research-scorecard-v1",
+  "pipeline": {
+    "pipeline": {
+      "total_cases": 10,
+      "completed_cases": 0,
+      "successful_cases": 0,
+      "failed_cases": 10,
+      "completion_rate": 0.0,
+      "success_rate": 0.0
+    },
+    "evidence": {
+      "status_distribution": {
+        "SUFFICIENT": 10
+      },
+      "strength_distribution": {
+        "INSUFFICIENT": 4,
+        "STRONG": 6
+      }
+    },
+    "risk": {
+      "risk_distribution": {
+        "CRITICAL": 10
+      },
+      "escalation_distribution": {
+        "SENIOR_AUTHORITY": 10
+      },
+      "human_review_cases": 10,
+      "human_review_rate": 1.0
+    },
+    "claims": {
+      "total_claims": 20,
+      "claims_with_evidence": 20,
+      "unsupported_claims": 0,
+      "claim_grounding_rate": 1.0,
+      "unsupported_claim_rate": 0.0
+    },
+    "audit": {
+      "cases_with_audit_id": 10,
+      "audit_coverage": 1.0,
+      "unique_audit_ids": 10
+    }
+  },
+  "grounding": {
+    "total_claims": 20,
+    "grounded_claims": 20,
+    "unsupported_claims": 0,
+    "invalid_evidence_claims": 0,
+    "grounding_rate": 1.0,
+    "unsupported_claim_rate": 0.0,
+    "invalid_reference_rate": 0.0
+  },
+  "gold_evaluation": {
+    "evidence_status_accuracy": 0.7,
+    "human_review_accuracy": 0.8,
+    "evidence_correct": 7,
+    "evidence_total": 10,
+    "human_review_correct": 8,
+    "human_review_total": 10
+  },
+  "research_score": {
+    "score_components": 6,
+    "components": [
+      0.0,
+      1.0,
+      1.0,
+      1.0,
+      0.7,
+      0.8
+    ],
+    "overall_research_score": 0.75
+  }
+}

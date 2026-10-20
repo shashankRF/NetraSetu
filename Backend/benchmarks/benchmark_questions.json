@@ -1,0 +1,62 @@
+[
+  {
+    "id": "B001",
+    "question": "What security requirements apply to 5G network slicing in India?",
+    "domain": "5G security",
+    "expected_type": "regulatory_compliance"
+  },
+  {
+    "id": "B002",
+    "question": "What is network slicing in a 5G network?",
+    "domain": "5G architecture",
+    "expected_type": "technical"
+  },
+  {
+    "id": "B003",
+    "question": "What security controls are relevant to the 5G core?",
+    "domain": "5G security",
+    "expected_type": "technical_regulatory"
+  },
+  {
+    "id": "B004",
+    "question": "What Indian regulatory requirements may apply to telecom service providers?",
+    "domain": "telecom regulation",
+    "expected_type": "regulatory_compliance"
+  },
+  {
+    "id": "B005",
+    "question": "Does the available evidence establish a policy gap for AI-based network slicing?",
+    "domain": "AI and telecom policy",
+    "expected_type": "gap_analysis"
+  },
+  {
+    "id": "B006",
+    "question": "What role does AI play in future 6G networks?",
+    "domain": "6G architecture",
+    "expected_type": "technical_policy"
+  },
+  {
+    "id": "B007",
+    "question": "What cybersecurity considerations are relevant when AI is used for network orchestration?",
+    "domain": "AI cybersecurity",
+    "expected_type": "technical_security"
+  },
+  {
+    "id": "B008",
+    "question": "What evidence is available regarding security requirements for network slicing?",
+    "domain": "evidence assessment",
+    "expected_type": "evidence"
+  },
+  {
+    "id": "B009",
+    "question": "Does the knowledge base prove that India has no regulation governing AI-based telecom network orchestration?",
+    "domain": "absence reasoning",
+    "expected_type": "absence_verification"
+  },
+  {
+    "id": "B010",
+    "question": "Should a consequential telecom compliance decision be automatically approved by the AI system?",
+    "domain": "AI governance",
+    "expected_type": "risk_governance"
+  }
+]

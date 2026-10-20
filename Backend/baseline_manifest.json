@@ -1,0 +1,40 @@
+{
+  "project": "HackGrid_new",
+  "baseline": "evidence-aware-pipeline-v1",
+  "status": "ENGINEERING_BASELINE",
+  "retrieval": {
+    "embedding_model": "BAAI/bge-m3",
+    "index": "FAISS",
+    "chunks": 14143,
+    "vectors": 14143,
+    "dimensions": 1024
+  },
+  "generation": {
+    "model": "openai/gpt-oss-120b",
+    "provider": "Groq"
+  },
+  "pipeline": [
+    "RAG retrieval",
+    "GPT-OSS evidence classification",
+    "Evidence Engine",
+    "Absence Verification",
+    "Gap Analysis",
+    "Risk Engine",
+    "GPT-OSS final synthesis",
+    "Claim-Evidence Mapping",
+    "Audit Trail"
+  ],
+  "governance": {
+    "human_review": true,
+    "absence_not_established": true,
+    "evidence_is_source_of_truth": true,
+    "llm_is_not_source_of_truth": true
+  },
+  "audit": {
+    "pipeline_version": "hackgrid-evidence-pipeline-v1",
+    "append_only": true
+  },
+  "benchmark": {
+    "evaluation": "research-scorecard-v1"
+  }
+}

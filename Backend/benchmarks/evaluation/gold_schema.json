@@ -1,0 +1,38 @@
+{
+  "schema_version": "gold-v1",
+  "required_fields": [
+    "id",
+    "question",
+    "category",
+    "expected_evidence_status",
+    "expected_human_review",
+    "expected_absence_behavior",
+    "expected_risk",
+    "expected_escalation",
+    "rationale"
+  ],
+  "allowed_evidence_status": [
+    "SUFFICIENT",
+    "INSUFFICIENT",
+    "CONFLICTING",
+    "AMBIGUOUS",
+    "ABSENCE_NOT_ESTABLISHED"
+  ],
+  "allowed_absence_behavior": [
+    "NOT_APPLICABLE",
+    "ABSENCE_NOT_ESTABLISHED",
+    "ABSENCE_ESTABLISHED"
+  ],
+  "allowed_risk": [
+    "LOW",
+    "MODERATE",
+    "HIGH",
+    "CRITICAL"
+  ],
+  "allowed_escalation": [
+    "AUTO_RESPONSE",
+    "ANALYST_REVIEW",
+    "DOMAIN_EXPERT",
+    "SENIOR_AUTHORITY"
+  ]
+}

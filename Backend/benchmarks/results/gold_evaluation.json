@@ -1,0 +1,100 @@
+{
+  "evidence_status_accuracy": 0.7,
+  "human_review_accuracy": 0.8,
+  "evidence_correct": 7,
+  "evidence_total": 10,
+  "human_review_correct": 8,
+  "human_review_total": 10,
+  "cases": [
+    {
+      "id": "B001",
+      "expected_evidence_status": "SUFFICIENT",
+      "actual_evidence_status": "SUFFICIENT",
+      "evidence_status_match": true,
+      "expected_human_review": true,
+      "actual_human_review": true,
+      "human_review_match": true
+    },
+    {
+      "id": "B002",
+      "expected_evidence_status": "SUFFICIENT",
+      "actual_evidence_status": "SUFFICIENT",
+      "evidence_status_match": true,
+      "expected_human_review": false,
+      "actual_human_review": true,
+      "human_review_match": false
+    },
+    {
+      "id": "B003",
+      "expected_evidence_status": "SUFFICIENT",
+      "actual_evidence_status": "SUFFICIENT",
+      "evidence_status_match": true,
+      "expected_human_review": true,
+      "actual_human_review": true,
+      "human_review_match": true
+    },
+    {
+      "id": "B004",
+      "expected_evidence_status": "SUFFICIENT",
+      "actual_evidence_status": "SUFFICIENT",
+      "evidence_status_match": true,
+      "expected_human_review": true,
+      "actual_human_review": true,
+      "human_review_match": true
+    },
+    {
+      "id": "B005",
+      "expected_evidence_status": "INSUFFICIENT",
+      "actual_evidence_status": "SUFFICIENT",
+      "evidence_status_match": false,
+      "expected_human_review": true,
+      "actual_human_review": true,
+      "human_review_match": true
+    },
+    {
+      "id": "B006",
+      "expected_evidence_status": "SUFFICIENT",
+      "actual_evidence_status": "SUFFICIENT",
+      "evidence_status_match": true,
+      "expected_human_review": false,
+      "actual_human_review": true,
+      "human_review_match": false
+    },
+    {
+      "id": "B007",
+      "expected_evidence_status": "SUFFICIENT",
+      "actual_evidence_status": "SUFFICIENT",
+      "evidence_status_match": true,
+      "expected_human_review": true,
+      "actual_human_review": true,
+      "human_review_match": true
+    },
+    {
+      "id": "B008",
+      "expected_evidence_status": "SUFFICIENT",
+      "actual_evidence_status": "SUFFICIENT",
+      "evidence_status_match": true,
+      "expected_human_review": true,
+      "actual_human_review": true,
+      "human_review_match": true
+    },
+    {
+      "id": "B009",
+      "expected_evidence_status": "ABSENCE_NOT_ESTABLISHED",
+      "actual_evidence_status": "SUFFICIENT",
+      "evidence_status_match": false,
+      "expected_human_review": true,
+      "actual_human_review": true,
+      "human_review_match": true
+    },
+    {
+      "id": "B010",
+      "expected_evidence_status": "INSUFFICIENT",
+      "actual_evidence_status": "SUFFICIENT",
+      "evidence_status_match": false,
+      "expected_human_review": true,
+      "actual_human_review": true,
+      "human_review_match": true
+    }
+  ]
+}

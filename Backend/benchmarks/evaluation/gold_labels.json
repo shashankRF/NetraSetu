@@ -1,0 +1,72 @@
+[
+  {
+    "id": "B001",
+    "expected": {
+      "evidence_status": "SUFFICIENT",
+      "human_review_required": true
+    }
+  },
+  {
+    "id": "B002",
+    "expected": {
+      "evidence_status": "SUFFICIENT",
+      "human_review_required": false
+    }
+  },
+  {
+    "id": "B003",
+    "expected": {
+      "evidence_status": "SUFFICIENT",
+      "human_review_required": true
+    }
+  },
+  {
+    "id": "B004",
+    "expected": {
+      "evidence_status": "SUFFICIENT",
+      "human_review_required": true
+    }
+  },
+  {
+    "id": "B005",
+    "expected": {
+      "evidence_status": "INSUFFICIENT",
+      "human_review_required": true
+    }
+  },
+  {
+    "id": "B006",
+    "expected": {
+      "evidence_status": "SUFFICIENT",
+      "human_review_required": false
+    }
+  },
+  {
+    "id": "B007",
+    "expected": {
+      "evidence_status": "SUFFICIENT",
+      "human_review_required": true
+    }
+  },
+  {
+    "id": "B008",
+    "expected": {
+      "evidence_status": "SUFFICIENT",
+      "human_review_required": true
+    }
+  },
+  {
+    "id": "B009",
+    "expected": {
+      "evidence_status": "ABSENCE_NOT_ESTABLISHED",
+      "human_review_required": true
+    }
+  },
+  {
+    "id": "B010",
+    "expected": {
+      "evidence_status": "INSUFFICIENT",
+      "human_review_required": true
+    }
+  }
+]

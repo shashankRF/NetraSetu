@@ -1,0 +1,412 @@
+{
+  "total_claims": 20,
+  "grounded_claims": 20,
+  "unsupported_claims": 0,
+  "invalid_evidence_claims": 0,
+  "grounding_rate": 1.0,
+  "unsupported_claim_rate": 0.0,
+  "invalid_evidence_reference_rate": 0.0,
+  "cases": [
+    {
+      "case_id": "B001",
+      "total_claims": 5,
+      "grounded_claims": 5,
+      "unsupported_claims": 0,
+      "invalid_evidence_claims": 0,
+      "valid_evidence_ids": [
+        "EV-001",
+        "EV-002",
+        "EV-003",
+        "EV-004",
+        "EV-005"
+      ],
+      "claims": [
+        {
+          "claim_id": "CLAIM-001",
+          "original_status": "SUPPORTED",
+          "validation_status": "GROUNDED",
+          "evidence_ids": [
+            "EV-003"
+          ],
+          "invalid_evidence_ids": [],
+          "grounded": true,
+          "confidence": 0.92
+        },
+        {
+          "claim_id": "CLAIM-002",
+          "original_status": "SUPPORTED",
+          "validation_status": "GROUNDED",
+          "evidence_ids": [
+            "EV-003"
+          ],
+          "invalid_evidence_ids": [],
+          "grounded": true,
+          "confidence": 0.9
+        },
+        {
+          "claim_id": "CLAIM-003",
+          "original_status": "SUPPORTED",
+          "validation_status": "GROUNDED",
+          "evidence_ids": [
+            "EV-004"
+          ],
+          "invalid_evidence_ids": [],
+          "grounded": true,
+          "confidence": 0.88
+        },
+        {
+          "claim_id": "CLAIM-004",
+          "original_status": "PARTIALLY_ESTABLISHED",
+          "validation_status": "GROUNDED",
+          "evidence_ids": [
+            "EV-005"
+          ],
+          "invalid_evidence_ids": [],
+          "grounded": true,
+          "confidence": 0.78
+        },
+        {
+          "claim_id": "CLAIM-005",
+          "original_status": "INSUFFICIENT",
+          "validation_status": "GROUNDED",
+          "evidence_ids": [
+            "EV-001",
+            "EV-002"
+          ],
+          "invalid_evidence_ids": [],
+          "grounded": true,
+          "confidence": 0.61
+        }
+      ]
+    },
+    {
+      "case_id": "B002",
+      "total_claims": 1,
+      "grounded_claims": 1,
+      "unsupported_claims": 0,
+      "invalid_evidence_claims": 0,
+      "valid_evidence_ids": [
+        "EV-001",
+        "EV-002",
+        "EV-003",
+        "EV-004",
+        "EV-005"
+      ],
+      "claims": [
+        {
+          "claim_id": "CLAIM-001",
+          "original_status": "SUPPORTED",
+          "validation_status": "GROUNDED",
+          "evidence_ids": [
+            "EV-001",
+            "EV-002"
+          ],
+          "invalid_evidence_ids": [],
+          "grounded": true,
+          "confidence": 0.84
+        }
+      ]
+    },
+    {
+      "case_id": "B003",
+      "total_claims": 3,
+      "grounded_claims": 3,
+      "unsupported_claims": 0,
+      "invalid_evidence_claims": 0,
+      "valid_evidence_ids": [
+        "EV-001",
+        "EV-002",
+        "EV-003",
+        "EV-004",
+        "EV-005"
+      ],
+      "claims": [
+        {
+          "claim_id": "CLAIM-001",
+          "original_status": "SUPPORTED",
+          "validation_status": "GROUNDED",
+          "evidence_ids": [
+            "EV-005"
+          ],
+          "invalid_evidence_ids": [],
+          "grounded": true,
+          "confidence": 0.85
+        },
+        {
+          "claim_id": "CLAIM-002",
+          "original_status": "PARTIALLY_ESTABLISHED",
+          "validation_status": "GROUNDED",
+          "evidence_ids": [
+            "EV-001",
+            "EV-003"
+          ],
+          "invalid_evidence_ids": [],
+          "grounded": true,
+          "confidence": 0.78
+        },
+        {
+          "claim_id": "CLAIM-003",
+          "original_status": "PARTIALLY_ESTABLISHED",
+          "validation_status": "GROUNDED",
+          "evidence_ids": [
+            "EV-004"
+          ],
+          "invalid_evidence_ids": [],
+          "grounded": true,
+          "confidence": 0.65
+        }
+      ]
+    },
+    {
+      "case_id": "B004",
+      "total_claims": 5,
+      "grounded_claims": 5,
+      "unsupported_claims": 0,
+      "invalid_evidence_claims": 0,
+      "valid_evidence_ids": [
+        "EV-001",
+        "EV-002",
+        "EV-003",
+        "EV-004",
+        "EV-005"
+      ],
+      "claims": [
+        {
+          "claim_id": "CLAIM-001",
+          "original_status": "SUPPORTED",
+          "validation_status": "GROUNDED",
+          "evidence_ids": [
+            "EV-002"
+          ],
+          "invalid_evidence_ids": [],
+          "grounded": true,
+          "confidence": 0.88
+        },
+        {
+          "claim_id": "CLAIM-002",
+          "original_status": "SUPPORTED",
+          "validation_status": "GROUNDED",
+          "evidence_ids": [
+            "EV-001"
+          ],
+          "invalid_evidence_ids": [],
+          "grounded": true,
+          "confidence": 0.92
+        },
+        {
+          "claim_id": "CLAIM-003",
+          "original_status": "SUPPORTED",
+          "validation_status": "GROUNDED",
+          "evidence_ids": [
+            "EV-005"
+          ],
+          "invalid_evidence_ids": [],
+          "grounded": true,
+          "confidence": 0.85
+        },
+        {
+          "claim_id": "CLAIM-004",
+          "original_status": "PARTIALLY_ESTABLISHED",
+          "validation_status": "GROUNDED",
+          "evidence_ids": [
+            "EV-003"
+          ],
+          "invalid_evidence_ids": [],
+          "grounded": true,
+          "confidence": 0.7
+        },
+        {
+          "claim_id": "CLAIM-005",
+          "original_status": "AMBIGUOUS",
+          "validation_status": "GROUNDED",
+          "evidence_ids": [
+            "EV-004"
+          ],
+          "invalid_evidence_ids": [],
+          "grounded": true,
+          "confidence": 0.8
+        }
+      ]
+    },
+    {
+      "case_id": "B005",
+      "total_claims": 1,
+      "grounded_claims": 1,
+      "unsupported_claims": 0,
+      "invalid_evidence_claims": 0,
+      "valid_evidence_ids": [
+        "EV-001",
+        "EV-002",
+        "EV-003",
+        "EV-004",
+        "EV-005"
+      ],
+      "claims": [
+        {
+          "claim_id": "CLAIM-001",
+          "original_status": "CONTRADICTED",
+          "validation_status": "GROUNDED",
+          "evidence_ids": [
+            "EV-003"
+          ],
+          "invalid_evidence_ids": [],
+          "grounded": true,
+          "confidence": 0.91
+        }
+      ]
+    },
+    {
+      "case_id": "B006",
+      "total_claims": 1,
+      "grounded_claims": 1,
+      "unsupported_claims": 0,
+      "invalid_evidence_claims": 0,
+      "valid_evidence_ids": [
+        "EV-001",
+        "EV-002",
+        "EV-003",
+        "EV-004",
+        "EV-005"
+      ],
+      "claims": [
+        {
+          "claim_id": "CLAIM-001",
+          "original_status": "SUPPORTED",
+          "validation_status": "GROUNDED",
+          "evidence_ids": [
+            "EV-001",
+            "EV-002",
+            "EV-003",
+            "EV-004",
+            "EV-005"
+          ],
+          "invalid_evidence_ids": [],
+          "grounded": true,
+          "confidence": 0.9
+        }
+      ]
+    },
+    {
+      "case_id": "B007",
+      "total_claims": 1,
+      "grounded_claims": 1,
+      "unsupported_claims": 0,
+      "invalid_evidence_claims": 0,
+      "valid_evidence_ids": [
+        "EV-001",
+        "EV-002",
+        "EV-003",
+        "EV-004",
+        "EV-005"
+      ],
+      "claims": [
+        {
+          "claim_id": "CLAIM-001",
+          "original_status": "SUPPORTED",
+          "validation_status": "GROUNDED",
+          "evidence_ids": [
+            "EV-001",
+            "EV-002",
+            "EV-003",
+            "EV-004",
+            "EV-005"
+          ],
+          "invalid_evidence_ids": [],
+          "grounded": true,
+          "confidence": 0.818
+        }
+      ]
+    },
+    {
+      "case_id": "B008",
+      "total_claims": 1,
+      "grounded_claims": 1,
+      "unsupported_claims": 0,
+      "invalid_evidence_claims": 0,
+      "valid_evidence_ids": [
+        "EV-001",
+        "EV-002",
+        "EV-003",
+        "EV-004",
+        "EV-005"
+      ],
+      "claims": [
+        {
+          "claim_id": "CLAIM-001",
+          "original_status": "SUPPORTED",
+          "validation_status": "GROUNDED",
+          "evidence_ids": [
+            "EV-001",
+            "EV-002",
+            "EV-003",
+            "EV-004",
+            "EV-005"
+          ],
+          "invalid_evidence_ids": [],
+          "grounded": true,
+          "confidence": 0.94
+        }
+      ]
+    },
+    {
+      "case_id": "B009",
+      "total_claims": 1,
+      "grounded_claims": 1,
+      "unsupported_claims": 0,
+      "invalid_evidence_claims": 0,
+      "valid_evidence_ids": [
+        "EV-001",
+        "EV-002",
+        "EV-003",
+        "EV-004",
+        "EV-005"
+      ],
+      "claims": [
+        {
+          "claim_id": "CLAIM-001",
+          "original_status": "INSUFFICIENT",
+          "validation_status": "GROUNDED",
+          "evidence_ids": [
+            "EV-001",
+            "EV-002",
+            "EV-003",
+            "EV-004",
+            "EV-005"
+          ],
+          "invalid_evidence_ids": [],
+          "grounded": true,
+          "confidence": 0.6
+        }
+      ]
+    },
+    {
+      "case_id": "B010",
+      "total_claims": 1,
+      "grounded_claims": 1,
+      "unsupported_claims": 0,
+      "invalid_evidence_claims": 0,
+      "valid_evidence_ids": [
+        "EV-001",
+        "EV-002",
+        "EV-003",
+        "EV-004",
+        "EV-005"
+      ],
+      "claims": [
+        {
+          "claim_id": "CLAIM-001",
+          "original_status": "CONTRADICTED",
+          "validation_status": "GROUNDED",
+          "evidence_ids": [
+            "EV-002",
+            "EV-004",
+            "EV-005"
+          ],
+          "invalid_evidence_ids": [],
+          "grounded": true,
+          "confidence": 0.78
+        }
+      ]
+    }
+  ]
+}

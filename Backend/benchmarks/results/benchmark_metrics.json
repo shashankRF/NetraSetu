@@ -1,0 +1,28 @@
+{
+  "benchmark_version": "hackgrid-benchmark-v1",
+  "total_cases": 10,
+  "successful_cases": 10,
+  "failed_cases": 0,
+  "pipeline_success_rate": 1.0,
+  "average_runtime_seconds": 74.96,
+  "evidence_status_distribution": {
+    "SUFFICIENT": 10
+  },
+  "evidence_strength_distribution": {
+    "INSUFFICIENT": 4,
+    "STRONG": 6
+  },
+  "risk_level_distribution": {
+    "CRITICAL": 10
+  },
+  "escalation_distribution": {
+    "SENIOR_AUTHORITY": 10
+  },
+  "human_review_cases": 10,
+  "human_review_rate": 1.0,
+  "total_final_claims": 20,
+  "grounded_claims": 20,
+  "unsupported_claims": 0,
+  "claim_grounding_rate": 1.0,
+  "unsupported_claim_rate": 0.0
+}

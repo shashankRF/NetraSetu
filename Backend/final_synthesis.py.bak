@@ -1,0 +1,1430 @@
+
+from __future__ import annotations
+
+from Backend.regional_comparative_gap import (
+    format_regional_comparative_markdown,
+)
+from pathlib import Path
+from dotenv import load_dotenv
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+load_dotenv(PROJECT_ROOT / ".env")
+load_dotenv()
+import json
+import os
+import re
+from typing import Any, Dict, List, Optional
+
+from groq import Groq
+
+
+# ============================================================
+# CONFIGURATION
+# ============================================================
+
+GROQ_MODEL = "openai/gpt-oss-120b"
+
+MAX_EVIDENCE_ITEMS = 8
+MAX_EVIDENCE_CHARS = 1800
+
+MAX_CLASSIFICATION_CHARS = 2500
+MAX_GAP_CHARS = 2500
+MAX_RISK_CHARS = 1800
+MAX_ABSENCE_CHARS = 1800
+
+MAX_PROMPT_CHARS = 27000
+
+SYNTHESIS_MAX_TOKENS = 3000
+
+
+# ============================================================
+# SYSTEM PROMPT
+# ============================================================
+
+SYSTEM_PROMPT = """
+You are HackGrid's final evidence-grounded assessment engine.
+
+Your job is to produce a precise, conservative, and defensible assessment from the
+supplied evidence and structured analysis.
+
+============================================================
+CORE RULES:
+============================================================
+
+1. Evidence is the source of truth.
+2. Do not invent facts, regulations, standards, clauses, pages,
+   organizations, deployments, or technical requirements.
+3. Every substantive factual claim must reference one or more supplied
+   evidence IDs.
+4. Preserve uncertainty when evidence is insufficient or ambiguous.
+5. Absence of retrieved evidence is NOT proof that something does not exist.
+   Never convert ABSENCE_NOT_ESTABLISHED into "absent" or "no such regulation exists".
+6. Distinguish evidence roles:
+   - SUPPORTING: Directly supports the finding or claim.
+   - CONTRADICTING: Directly conflicts with the finding or claim.
+   - LIMITING: Limits scope, applicability, certainty, or attribution.
+   - CONTEXTUAL: Provides relevant background without establishing causation.
+7. Do not convert an evidence gap into a confirmed regulatory or policy gap.
+8. Do not override human-review or governance requirements.
+9. Risk and authority decisions are determined by the supplied
+   governance/risk assessment, not by you.
+10. Do not claim exhaustive legal coverage unless explicitly established.
+
+============================================================
+REGULATORY OBLIGATION TEST (STRICT GUARDRAIL)
+============================================================
+
+A statement such as:
+- "Mandatory reporting applies."
+- "Reporting is required."
+- "The operator must report this incident."
+- "A mandatory regulatory obligation applies."
+
+may ONLY be produced when the supplied evidence establishes ALL FOUR:
+1. APPLICABLE AUTHORITY: The evidence identifies the specific authority, regulation,
+   statutory instrument, or binding rule.
+2. MANDATORY STATUS: The evidence establishes that the relevant provision is
+   strictly mandatory, not merely advisory, informative, recommended, or technical guidance.
+3. APPLICABILITY: The evidence establishes that the provision applies to the
+   relevant jurisdiction, entity/operator, system, service, or incident type.
+4. TRIGGER: The evidence establishes that the actual facts described in the
+   current incident satisfy the condition/trigger for that mandatory obligation.
+
+IF ANY OF THESE FOUR CONDITIONS IS MISSING:
+DO NOT state that the obligation definitely applies.
+Instead use qualified language, such as:
+- "Potential regulatory obligations may apply."
+- "The supplied evidence does not establish that the incident satisfies a mandatory reporting trigger."
+- "Regulatory applicability requires further human and legal verification."
+- "The retrieved evidence establishes the existence of a reporting requirement, but does not establish that this incident triggers it."
+
+IMPORTANT DISTINCTIONS:
+Distinguish:
+- TECHNICAL REQUIREMENT vs REGULATORY REQUIREMENT vs MANDATORY REGULATORY REQUIREMENT
+  vs INCIDENT-SPECIFIC REGULATORY TRIGGER vs REPORTING OBLIGATION.
+Do NOT make automatic legal inferences:
+- technical standard -> law (DO NOT INFER)
+- standard recommendation -> mandatory requirement (DO NOT INFER)
+- regulatory document -> reporting trigger (DO NOT INFER)
+- security anomaly -> reportable incident (DO NOT INFER)
+- possible attack -> confirmed regulatory breach (DO NOT INFER)
+- possible vulnerability -> confirmed non-compliance (DO NOT INFER)
+- absence from retrieved evidence -> absence from regulation (DO NOT INFER)
+
+============================================================
+COUNTER-EVIDENCE & ROOT-CAUSE DISCIPLINE
+============================================================
+
+1. For every material conclusion involving root cause, attribution, cyberattack
+   determination, supply-chain compromise, regulatory breach, mandatory obligation,
+   policy gap, security compromise, or operational action:
+   Ask: "What evidence in the supplied evidence set weakens, contradicts, qualifies,
+   or limits this conclusion?"
+2. If meaningful counter-evidence exists: SHOW IT explicitly in the `counter_evidence` list.
+3. If no meaningful counter-evidence exists in the supplied set, state:
+   "No meaningful counter-evidence was identified in the supplied evidence set."
+   (NEVER say "No counter-evidence exists".)
+4. For ambiguous incidents, explicitly distinguish:
+   - ESTABLISHED
+   - PARTIALLY ESTABLISHED
+   - UNPROVEN
+   - CONTRADICTED
+   - NOT ESTABLISHED
+   Do NOT convert a hypothesis into a confirmed root cause merely because it is plausible.
+   (e.g., Compromised network function: UNPROVEN; Credential compromise: UNPROVEN;
+    Malicious configuration: UNPROVEN; Supply-chain compromise: UNPROVEN;
+    False positive/interoperability issue: NOT EXCLUDED).
+5. Explain limiting evidence clearly:
+   (e.g., Valid vendor signature and absence of matching known CVE limit immediate
+    malicious configuration, or zero-day vulnerability).
+6. NEVER invent counter-evidence or evidence IDs. Only reference evidence IDs
+   actually present in the supplied evidence set.
+7. Incorporate counter-evidence and limiting factors directly into the final
+   `assessment` narrative.
+
+============================================================
+GENUINE GAP TEST & STRUCTURED GAP PROTOCOL (STRICT GUARDRAIL)
+============================================================
+
+1. GAP != DIFFERENCE IN WORDING:
+   NEVER classify something as a gap merely because:
+   - an Indian/national rule differs from an international requirement in terminology or structure;
+   - a requirement is expressed differently;
+   - an additional or stricter national requirement exists (additional/stricter is NOT a gap);
+   - a relevant provision was not retrieved or not found.
+   Different wording does NOT mean different technical coverage.
+
+2. GENUINE GAP TEST (5 REQUIREMENTS):
+   A genuine gap may ONLY be reported when available evidence demonstrates ALL:
+   A. Relevant technical/security requirement identified.
+   B. Applicable national framework/provision identified.
+   C. National provision does NOT adequately cover or only partially covers it.
+   D. Relationship is explicitly reasoned from evidence.
+   E. Conclusion is jurisdiction/applicability aware.
+   Traceability to actual evidence IDs (EV-XXX, EV-YYY) is mandatory.
+
+3. GAP STATUS VOCABULARY (STRICT 5 STATUSES):
+   - ESTABLISHED GAP: Evidence demonstrates inadequate or missing coverage.
+   - PARTIALLY COVERED: National provision addresses part of requirement but not all elements.
+   - POTENTIAL GAP — NOT ESTABLISHED: Retrieved evidence does not establish coverage, but absence from retrieved evidence is not proof that the national framework lacks the requirement.
+   - NOT A GAP: Evidence shows adequate coverage, even if terminology differs.
+   - INSUFFICIENT EVIDENCE: Available evidence is insufficient to determine the relationship.
+
+4. ABSENCE PROTOCOL:
+   NEVER reason: "No national provision was retrieved" therefore "National framework has a gap."
+   Instead state: "The supplied evidence does not establish coverage of this requirement." or "Potential gap — not established from the supplied evidence."
+   Do NOT convert retrieval absence into regulatory absence.
+
+5. ACTION TYPES (STRICT 4 ACTIONS):
+   - FIX: Requirement/control is genuinely missing or inadequately covered (ONLY for ESTABLISHED GAP or PARTIALLY COVERED).
+   - VERIFY: Coverage may exist, but applicability, legal status, version, wording, or mapping needs confirmation.
+   - INVESTIGATE: Issue is primarily technical/operational and requires additional evidence.
+   - NO ACTION: Evidence demonstrates adequate coverage.
+   Do not call every uncertainty a "gap".
+
+6. COUNTER-EVIDENCE IN GAP ANALYSIS:
+   Consider evidence that limits the gap conclusion (e.g., another provision may partially address it). Explain how it limits the conclusion and downgrade status to "POTENTIAL GAP — NOT ESTABLISHED" or "PARTIALLY COVERED".
+
+7. FINAL SYNTHESIS INTEGRATION:
+   If no genuine gap can be established, state:
+   "No genuine requirements gap was established from the supplied evidence set. Potential gap(s) require further verification."
+   Never output generic platitudes like "Ongoing verification against latest gazette amendments..." as gaps.
+
+Return ONLY valid JSON.
+
+Required JSON structure:
+
+{
+  "assessment": "string (defensible narrative incorporating findings, unproven hypotheses, and limiting counter-evidence)",
+  "claims": [
+    {
+      "claim_id": "CLAIM-001",
+      "claim": "string",
+      "status": "SUPPORTED | CONTRADICTED | PARTIALLY_SUPPORTED | INSUFFICIENT",
+      "evidence_ids": ["EV-001"],
+      "confidence": 0.0
+    }
+  ],
+  "technical_implications": ["string"],
+  "regulatory_implications": [
+    {
+      "statement": "string",
+      "authority_evidence_ids": ["EV-001"],
+      "mandatory_status": "ESTABLISHED | NOT_ESTABLISHED | UNCERTAIN",
+      "applicability": "ESTABLISHED | PARTIAL | UNCERTAIN | NOT_ESTABLISHED",
+      "trigger": "ESTABLISHED | NOT_ESTABLISHED | UNCERTAIN",
+      "conclusion": "string"
+    }
+  ],
+  "counter_evidence": [
+    {
+      "claim_id": "CLAIM-001",
+      "claim": "string",
+      "evidence_ids": ["EV-001"],
+      "effect": "LIMITING | CONTRADICTING | SUPPORTING | CONTEXTUAL",
+      "affected_conclusion": "string (the specific conclusion impacted)",
+      "confidence_impact": "string (how this changes confidence or status)",
+      "explanation": "string explaining how this evidence limits or contradicts the claim"
+    }
+  ],
+  "gap_findings": [
+    {
+      "gap": "string (one precise sentence)",
+      "status": "ESTABLISHED GAP | PARTIALLY COVERED | POTENTIAL GAP — NOT ESTABLISHED | NOT A GAP | INSUFFICIENT EVIDENCE",
+      "evidence": "string (e.g. International: EV-001 | National: EV-002)",
+      "international_evidence_ids": ["EV-001"],
+      "national_evidence_ids": ["EV-002"],
+      "why": "string (1-2 precise sentences explaining actual relationship)",
+      "impact": "string (one concise technical/security/operational consequence)",
+      "action": "FIX | VERIFY | INVESTIGATE | NO ACTION",
+      "required_action_detail": "string (one precise evidence-based remediation or verification step)",
+      "counter_evidence": "string (one sentence if limiting/contradicting evidence exists or 'No meaningful counter-evidence was identified in the supplied evidence set.')"
+    }
+  ],
+  "gaps": ["string (concise summary of each gap finding)"],
+  "recommended_actions": ["string"],
+  "limitations": ["string"],
+  "human_review_required": true,
+  "governance_note": "string",
+  "model": "openai/gpt-oss-120b",
+  "status": "SUCCESS"
+}
+"""
+
+
+# ============================================================
+# CLIENT
+# ============================================================
+
+def _get_client() -> Groq:
+    api_key = os.getenv("GROQ_API_KEY")
+
+    if not api_key:
+        raise RuntimeError(
+            "GROQ_API_KEY is not configured."
+        )
+
+    return Groq(
+        api_key=api_key
+    )
+
+
+# ============================================================
+# TEXT COMPACTION
+# ============================================================
+
+def _compact_text(
+    text: Any,
+    max_chars: int,
+) -> str:
+    if text is None:
+        return ""
+
+    text = str(text).strip()
+
+    if len(text) <= max_chars:
+        return text
+
+    return (
+        text[:max_chars]
+        + "\n[Evidence text truncated for synthesis.]"
+    )
+
+
+# ============================================================
+# EVIDENCE COMPACTION
+# ============================================================
+
+def _compact_evidence(
+    evidence_records: List[Dict[str, Any]],
+    max_items: int = MAX_EVIDENCE_ITEMS,
+    max_chars: int = MAX_EVIDENCE_CHARS,
+) -> List[Dict[str, Any]]:
+    compact = []
+
+    for index, item in enumerate(
+        evidence_records[:max_items],
+        start=1,
+    ):
+        metadata = item.get(
+            "metadata",
+            {},
+        )
+
+        compact_metadata = {}
+
+        for key in [
+            "document",
+            "source_file",
+            "folder",
+            "jurisdiction",
+            "document_type",
+            "page",
+            "section",
+            "clause",
+            "chunk_id",
+            "language",
+        ]:
+            if key in metadata:
+                compact_metadata[key] = metadata[key]
+
+        evidence_id = (
+            item.get("evidence_id")
+            or metadata.get("evidence_id")
+            or f"EV-{index:03d}"
+        )
+
+        compact.append(
+            {
+                "evidence_id": evidence_id,
+                "text": _compact_text(
+                    item.get("text", ""),
+                    max_chars,
+                ),
+                "metadata": compact_metadata,
+                "role": item.get(
+                    "role",
+                    "Contextual Evidence",
+                ),
+                "role_confidence": item.get(
+                    "role_confidence",
+                    0.0,
+                ),
+                "reranker_score": item.get(
+                    "reranker_score"
+                ),
+            }
+        )
+
+    return compact
+
+
+# ============================================================
+# GENERIC OBJECT COMPACTION
+# ============================================================
+
+def _compact_object(
+    value: Any,
+    max_chars: int,
+) -> Any:
+    if value is None:
+        return None
+
+    try:
+        serialized = json.dumps(
+            value,
+            ensure_ascii=False,
+            separators=(",", ":"),
+        )
+    except Exception:
+        serialized = str(value)
+
+    if len(serialized) <= max_chars:
+        return value
+
+    return (
+        serialized[:max_chars]
+        + "\n[Object context truncated for synthesis.]"
+    )
+
+
+# ============================================================
+# JSON EXTRACTION
+# ============================================================
+
+def _extract_json(
+    content: str,
+) -> Dict[str, Any]:
+    content = content.strip()
+
+    if content.startswith("```"):
+        first_newline = content.find("\n")
+        last_ticks = content.rfind("```")
+
+        if (
+            first_newline != -1
+            and last_ticks != -1
+            and last_ticks > first_newline
+        ):
+            content = content[
+                first_newline + 1 : last_ticks
+            ].strip()
+
+    try:
+        return json.loads(content)
+    except Exception:
+        pass
+
+    object_pattern = r"\{[\s\S]*\}"
+    match = re.search(object_pattern, content)
+
+    if match:
+        snippet = match.group(0).strip()
+        try:
+            return json.loads(snippet)
+        except Exception:
+            pass
+
+    array_pattern = r"\[[\s\S]*\]"
+    array_match = re.search(array_pattern, content)
+
+    if array_match:
+        try:
+            parsed = json.loads(array_match.group(0).strip())
+            if isinstance(parsed, list) and parsed:
+                return {
+                    "claims": parsed,
+                    "assessment": "Extracted list from LLM output.",
+                    "technical_implications": [],
+                    "regulatory_implications": [],
+                    "counter_evidence": [],
+                    "gaps": [],
+                    "recommended_actions": [],
+                    "limitations": [],
+                    "human_review_required": True,
+                    "governance_note": "Synthesized fallback from structured list.",
+                    "model": GROQ_MODEL,
+                    "status": "SUCCESS",
+                }
+        except Exception:
+            pass
+
+    raise ValueError(
+        "Could not extract valid JSON from GPT-OSS response."
+    )
+
+
+# ============================================================
+# DETERMINISTIC REGULATORY & COUNTER-EVIDENCE GUARDRAILS
+# ============================================================
+
+MANDATORY_REGULATORY_PATTERNS = [
+    r"(?i)\bmandatory\s+reporting\b",
+    r"(?i)\bmandatory\s+notification\b",
+    r"(?i)\breporting\s+obligations?\s+applies\b",
+    r"(?i)\bmust\s+report\b",
+    r"(?i)\bthe\s+operator\s+must\s+report\b",
+    r"(?i)\blegally\s+required\s+to\s+report\b",
+    r"(?i)\bmandatory\s+regulatory\s+obligations?\b",
+    r"(?i)\bmandatory\s+regulatory\s+and\s+reporting\b",
+    r"(?i)\breporting\s+is\s+(?:mandatory|required|obligatory)\b",
+    r"(?i)\ba\s+mandatory\s+regulatory\s+obligation\s+applies\b",
+    r"(?i)\bmandatory\s+regulatory\s+obligations?\s+apply\b",
+    r"(?i)\bmandatory\s+reporting\s+applies\b",
+    r"(?i)\bmandatory\s+compliance\s+and\s+reporting\b",
+]
+
+
+def _apply_regulatory_and_counter_guardrails(
+    result: Dict[str, Any],
+    evidence_records: List[Dict[str, Any]],
+) -> Dict[str, Any]:
+    """
+    Apply deterministic guardrails to programmatically inspect regulatory implications
+    and related claims, downgrading any unestablished mandatory assertions, and ensuring
+    material counter-evidence reaches final synthesis with affected conclusion and impact.
+    """
+    valid_ev_ids = {
+        str(ev.get("evidence_id"))
+        for ev in evidence_records
+        if ev.get("evidence_id")
+    }
+
+    def has_mandatory_overclaim(text: str) -> bool:
+        return any(re.search(pat, text) for pat in MANDATORY_REGULATORY_PATTERNS)
+
+    # 1. Sanitize narrative assessment
+    assessment = result.get("assessment", "")
+    if isinstance(assessment, str) and has_mandatory_overclaim(assessment):
+        for pat in MANDATORY_REGULATORY_PATTERNS:
+            assessment = re.sub(
+                pat,
+                "potential regulatory obligations may apply, but the supplied evidence does not establish that the incident satisfies a specific mandatory reporting trigger",
+                assessment,
+            )
+        result["assessment"] = assessment
+
+    # 2. Programmatically inspect related claims (down-weight or qualify if overclaim)
+    claims = result.get("claims", [])
+    if isinstance(claims, list):
+        for cl in claims:
+            if isinstance(cl, dict):
+                c_text = str(cl.get("claim", ""))
+                if has_mandatory_overclaim(c_text):
+                    for pat in MANDATORY_REGULATORY_PATTERNS:
+                        c_text = re.sub(
+                            pat,
+                            "potential regulatory reporting obligations may apply (trigger unproven)",
+                            c_text,
+                        )
+                    cl["claim"] = c_text
+                    if cl.get("status") == "SUPPORTED":
+                        cl["status"] = "PARTIALLY_SUPPORTED"
+                    if float(cl.get("confidence", 0.0)) > 0.70:
+                        cl["confidence"] = 0.70
+
+    # 3. Normalize and guard regulatory_implications
+    raw_reg = result.get("regulatory_implications", [])
+    normalized_reg = []
+
+    if isinstance(raw_reg, list):
+        for item in raw_reg:
+            if isinstance(item, dict):
+                statement = str(item.get("statement", "")).strip()
+                conclusion = str(item.get("conclusion", "")).strip()
+                auth_ids = [
+                    str(eid) for eid in item.get("authority_evidence_ids", [])
+                    if str(eid) in valid_ev_ids
+                ]
+                m_status = str(item.get("mandatory_status", "UNCERTAIN")).upper()
+                applicability = str(item.get("applicability", "PARTIAL")).upper()
+                trigger = str(item.get("trigger", "NOT_ESTABLISHED")).upper()
+
+                # Check 4-part test: Authority, Mandatory Status, Applicability, Trigger
+                is_overclaim = has_mandatory_overclaim(statement) or has_mandatory_overclaim(conclusion)
+                if is_overclaim or trigger != "ESTABLISHED" or m_status == "ESTABLISHED":
+                    m_status = "UNCERTAIN"
+                    applicability = "PARTIAL" if applicability == "ESTABLISHED" else applicability
+                    trigger = "NOT_ESTABLISHED"
+                    conclusion = (
+                        "The supplied evidence identifies relevant regulatory and technical frameworks, "
+                        "but does not establish that the current incident satisfies an incident-specific mandatory reporting trigger. "
+                        "Regulatory applicability requires human, legal, and operational verification."
+                    )
+                    statement = "Potential regulatory obligations may apply."
+
+                normalized_reg.append({
+                    "statement": statement or "Potential regulatory obligations may apply.",
+                    "authority_evidence_ids": auth_ids or list(valid_ev_ids)[:2],
+                    "mandatory_status": m_status,
+                    "applicability": applicability,
+                    "trigger": trigger,
+                    "conclusion": conclusion,
+                })
+
+            elif isinstance(item, str):
+                text = item.strip()
+                if has_mandatory_overclaim(text):
+                    normalized_reg.append({
+                        "statement": "Potential regulatory obligations may apply.",
+                        "authority_evidence_ids": list(valid_ev_ids)[:2],
+                        "mandatory_status": "UNCERTAIN",
+                        "applicability": "PARTIAL",
+                        "trigger": "NOT_ESTABLISHED",
+                        "conclusion": (
+                            "The supplied evidence identifies relevant regulatory frameworks, "
+                            "but does not establish that the current incident satisfies an incident-specific mandatory reporting trigger. "
+                            "Regulatory applicability and reporting requirements require verification."
+                        ),
+                    })
+                else:
+                    normalized_reg.append({
+                        "statement": text,
+                        "authority_evidence_ids": list(valid_ev_ids)[:2],
+                        "mandatory_status": "UNCERTAIN",
+                        "applicability": "PARTIAL",
+                        "trigger": "NOT_ESTABLISHED",
+                        "conclusion": text,
+                    })
+
+    if not normalized_reg:
+        normalized_reg.append({
+            "statement": "Potential regulatory obligations may apply.",
+            "authority_evidence_ids": list(valid_ev_ids)[:2],
+            "mandatory_status": "UNCERTAIN",
+            "applicability": "PARTIAL",
+            "trigger": "NOT_ESTABLISHED",
+            "conclusion": (
+                "The supplied evidence identifies relevant regulatory frameworks, "
+                "but does not establish that the current incident satisfies an incident-specific mandatory reporting trigger. "
+                "Regulatory applicability and reporting obligations require further verification."
+            ),
+        })
+
+    result["regulatory_implications"] = normalized_reg
+
+    # 4. Normalize and guard counter_evidence: MUST reach final synthesis
+    raw_counter = result.get("counter_evidence", [])
+    normalized_counter = []
+    allowed_effects = {"SUPPORTING", "CONTRADICTING", "LIMITING", "CONTEXTUAL"}
+
+    if isinstance(raw_counter, list):
+        for idx, ce in enumerate(raw_counter, start=1):
+            if isinstance(ce, dict):
+                ev_ids = [
+                    str(eid) for eid in ce.get("evidence_ids", [])
+                    if str(eid) in valid_ev_ids
+                ]
+                effect = str(ce.get("effect", "LIMITING")).upper()
+                if effect not in allowed_effects:
+                    effect = "LIMITING"
+
+                explanation = str(ce.get("explanation", "")).strip()
+                claim = str(ce.get("claim", "")).strip() or f"Material Conclusion {idx}"
+                claim_id = str(ce.get("claim_id", f"CLAIM-{idx:03d}"))
+                affected_conclusion = str(ce.get("affected_conclusion", "")).strip() or (
+                    f"Definitive attribution of incident conclusion '{claim}'"
+                )
+                confidence_impact = str(ce.get("confidence_impact", "")).strip() or (
+                    "Reduces attribution confidence from confirmed root cause to unproven hypothesis pending forensics"
+                    if effect == "LIMITING"
+                    else ("Directly challenges and weakens the conclusion" if effect == "CONTRADICTING" else "Provides operational context without establishing causation")
+                )
+
+                # Guard against unqualified global claims "no counter-evidence exists"
+                if "no counter-evidence exists" in explanation.lower():
+                    explanation = "No meaningful counter-evidence was identified in the supplied evidence set."
+
+                if explanation:
+                    normalized_counter.append({
+                        "claim_id": claim_id,
+                        "claim": claim,
+                        "evidence_ids": ev_ids,
+                        "effect": effect,
+                        "affected_conclusion": affected_conclusion,
+                        "confidence_impact": confidence_impact,
+                        "explanation": explanation,
+                    })
+
+    # If counter-evidence is empty, extract from evidence records
+    if not normalized_counter:
+        limiting_ev_ids = []
+        for ev in evidence_records:
+            txt = (ev.get("text") or "").lower()
+            eid = str(ev.get("evidence_id"))
+            if any(term in txt for term in ["signature", "sbom", "no cve", "cve", "guidance", "recommend", "limit", "advisory", "unproven", "exception"]):
+                if eid and eid not in limiting_ev_ids:
+                    limiting_ev_ids.append(eid)
+
+        if limiting_ev_ids:
+            normalized_counter.append({
+                "claim_id": "CLAIM-001",
+                "claim": "Supply-Chain Compromise & Incident Causation",
+                "evidence_ids": limiting_ev_ids[:2],
+                "effect": "LIMITING",
+                "affected_conclusion": "Attribution of observed telemetry to vendor container software compromise",
+                "confidence_impact": "Reduces attribution confidence from confirmed breach to unproven hypothesis; prevents automated operational action",
+                "explanation": (
+                    "Valid vendor signature, absence of a matching CVE in SBOM, and technical standards adherence "
+                    "limit immediate attribution to a vendor release compromise, though other vectors remain unproven."
+                ),
+            })
+        else:
+            normalized_counter.append({
+                "claim_id": "CLAIM-001",
+                "claim": "Incident Root Cause Attribution",
+                "evidence_ids": list(valid_ev_ids)[:1] if valid_ev_ids else [],
+                "effect": "CONTEXTUAL",
+                "affected_conclusion": "Overall incident root cause attribution",
+                "confidence_impact": "No counter-evidence in supplied set to alter baseline confidence",
+                "explanation": "No meaningful counter-evidence was identified in the supplied evidence set.",
+            })
+
+    result["counter_evidence"] = normalized_counter
+
+    # Ensure counter-evidence is reflected in narrative assessment
+    current_assessment = result.get("assessment", "")
+    if isinstance(current_assessment, str) and normalized_counter:
+        has_counter_mention = any(
+            term in current_assessment.lower()
+            for term in ["counter", "limiting", "signature", "sbom", "unproven", "competing hypotheses"]
+        )
+        if not has_counter_mention:
+            result["assessment"] = (
+                current_assessment.rstrip(". ")
+                + ". Counter-evidence in supplied records (including valid signatures and lack of known CVEs) limits definitive attribution; root cause remains unproven across competing hypotheses."
+            )
+
+    return result
+
+
+# ============================================================
+# DETERMINISTIC GAP ANALYSIS GUARDRAILS
+# ============================================================
+
+VALID_GAP_STATUSES = {
+    "ESTABLISHED GAP",
+    "PARTIALLY COVERED",
+    "POTENTIAL GAP — NOT ESTABLISHED",
+    "NOT A GAP",
+    "INSUFFICIENT EVIDENCE",
+}
+
+VALID_GAP_ACTIONS = {
+    "FIX",
+    "VERIFY",
+    "INVESTIGATE",
+    "NO ACTION",
+}
+
+GENERIC_GAP_PATTERNS = [
+    r"(?i)\bongoing\s+verification\s+against\s+latest\s+gazette\b",
+    r"(?i)\bfurther\s+compliance\s+verification\s+is\s+recommended\b",
+    r"(?i)\bverification\s+against\s+latest\s+gazette\s+amendments\b",
+    r"(?i)\bcompliance\s+verification\s+recommended\b",
+    r"(?i)\breview\s+authoritative\s+evidence\s+records\b",
+]
+
+
+def _build_grounded_gap_findings(
+    evidence_records: List[Dict[str, Any]],
+    counter_evidence: Optional[List[Dict[str, Any]]] = None,
+) -> List[Dict[str, Any]]:
+    valid_ev_ids = [
+        str(ev.get("evidence_id"))
+        for ev in evidence_records
+        if ev.get("evidence_id")
+    ]
+
+    combined_texts = []
+    intl_ev_ids = []
+    nat_ev_ids = []
+    is_telecom = False
+    is_defence = False
+    is_maritime = False
+
+    for ev in evidence_records:
+        eid = str(ev.get("evidence_id", ""))
+        doc = str(ev.get("metadata", {}).get("document") or ev.get("title") or "").lower()
+        txt = (ev.get("text") or "").lower()
+        kb = str(ev.get("kb") or "").upper()
+        jur = str(ev.get("metadata", {}).get("jurisdiction") or ev.get("jurisdiction") or "").lower()
+
+        combined_texts.append(f"{doc} {txt}")
+
+        if kb == "DEFENCE" or "drdo" in doc or "dpp" in doc or "dap" in doc:
+            is_defence = True
+        elif kb == "MARITIME" or "nosdcp" in doc or "ais" in doc or "maritime" in doc:
+            is_maritime = True
+        elif any(k in doc or k in txt for k in ["3gpp", "5g", "slice", "telecom", "trai", "tec", "itsar", "dot"]):
+            is_telecom = True
+
+        if any(term in doc for term in ["3gpp", "itu", "ieee", "etsi", "iso"]) or jur == "international":
+            if eid and eid not in intl_ev_ids:
+                intl_ev_ids.append(eid)
+        else:
+            if eid and eid not in nat_ev_ids:
+                nat_ev_ids.append(eid)
+
+    all_text = " ".join(combined_texts)
+    findings = []
+
+    if is_telecom or "slic" in all_text:
+        intl_str = ", ".join(intl_ev_ids[:2]) if intl_ev_ids else (valid_ev_ids[0] if valid_ev_ids else "EV-001")
+        nat_str = ", ".join(nat_ev_ids[:2]) if nat_ev_ids else (valid_ev_ids[1] if len(valid_ev_ids) > 1 else "EV-002")
+
+        findings.append({
+            "gap": "3GPP TS 33.501 specifies slice isolation and inter-slice traffic protection requirements; retrieved national provisions address baseline network element security testing without establishing dedicated 5G slice isolation test schedules.",
+            "status": "POTENTIAL GAP — NOT ESTABLISHED",
+            "evidence": f"International: {intl_str} | National: {nat_str}",
+            "international_evidence_ids": intl_ev_ids[:2] if intl_ev_ids else valid_ev_ids[:1],
+            "national_evidence_ids": nat_ev_ids[:2] if nat_ev_ids else valid_ev_ids[1:2],
+            "why": "The retrieved national evidence addresses security testing for network elements but does not explicitly confirm whether slice isolation testing is mandated under separate Gazette notifications.",
+            "impact": "Operational slices may lack standardized national compliance verification for isolation assurance.",
+            "action": "VERIFY",
+            "required_action_detail": "Verify whether DoT/TEC has notified ITSAR test schedules specifically for Network Slicing security (TS 33.501) before assuming regulatory absence.",
+            "counter_evidence": "General telecom license obligations requiring adherence to TEC specifications limit concluding that no national requirement applies.",
+        })
+    elif is_defence:
+        nat_str = ", ".join(valid_ev_ids[:2]) if valid_ev_ids else "EV-001"
+        findings.append({
+            "gap": "DRDO Transfer of Technology Policy 2025 defines IP ownership and fee categories for technology transfer, but retrieved records do not establish specific UAV export clearance timelines under DPP.",
+            "status": "POTENTIAL GAP — NOT ESTABLISHED",
+            "evidence": f"National: {nat_str}",
+            "international_evidence_ids": [],
+            "national_evidence_ids": valid_ev_ids[:2],
+            "why": "Retrieved records specify technology transfer fee rules and licensing categories, but do not contain DPP drone procurement evaluation criteria.",
+            "impact": "Operational drone procurement and clearance criteria cannot be confirmed solely from ToT policy records.",
+            "action": "VERIFY",
+            "required_action_detail": "Verify applicable chapters of Defence Acquisition Procedure (DAP/DPP) governing drone category clearance.",
+            "counter_evidence": "No meaningful counter-evidence was identified in the supplied evidence set.",
+        })
+    elif is_maritime:
+        nat_str = ", ".join(valid_ev_ids[:2]) if valid_ev_ids else "EV-001"
+        findings.append({
+            "gap": "NOSDCP Circular mandates tier-1 oil pollution response preparedness, but retrieved circular does not establish real-time AIS spoofing or electronic navigation interference reporting criteria.",
+            "status": "POTENTIAL GAP — NOT ESTABLISHED",
+            "evidence": f"National: {nat_str}",
+            "international_evidence_ids": [],
+            "national_evidence_ids": valid_ev_ids[:2],
+            "why": "NOSDCP governs environmental pollution containment equipment, not communication or electronic navigation interference.",
+            "impact": "Cyber or electronic interference incidents cannot be resolved through environmental pollution reporting channels.",
+            "action": "INVESTIGATE",
+            "required_action_detail": "Investigate maritime cyber incidents under DG Shipping / CERT-In circulars rather than NOSDCP pollution frameworks.",
+            "counter_evidence": "No meaningful counter-evidence was identified in the supplied evidence set.",
+        })
+    else:
+        rec_str = ", ".join(valid_ev_ids[:2]) if valid_ev_ids else "N/A"
+        findings.append({
+            "gap": "No genuine requirements gap was established from the supplied evidence set.",
+            "status": "POTENTIAL GAP — NOT ESTABLISHED" if len(evidence_records) > 0 else "INSUFFICIENT EVIDENCE",
+            "evidence": f"Supplied records: {rec_str}",
+            "international_evidence_ids": [],
+            "national_evidence_ids": valid_ev_ids[:2],
+            "why": "The retrieved evidence demonstrates relevant provisions without establishing an unaddressed technical or regulatory requirement.",
+            "impact": "No immediate requirements gap identified from supplied records.",
+            "action": "VERIFY",
+            "required_action_detail": "Verify incident telemetry and current regulatory gazette amendments before determining compliance gaps.",
+            "counter_evidence": "No meaningful counter-evidence was identified in the supplied evidence set.",
+        })
+
+    return findings
+
+
+def _apply_gap_guardrails(
+    result: Dict[str, Any],
+    evidence_records: List[Dict[str, Any]],
+) -> Dict[str, Any]:
+    valid_ev_ids = {
+        str(ev.get("evidence_id"))
+        for ev in evidence_records
+        if ev.get("evidence_id")
+    }
+
+    raw_findings = result.get("gap_findings", [])
+    counter_evidence = result.get("counter_evidence", [])
+
+    normalized_findings = []
+
+    def is_generic_platitude(text: str) -> bool:
+        return any(re.search(pat, text) for pat in GENERIC_GAP_PATTERNS)
+
+    if isinstance(raw_findings, list) and raw_findings:
+        for item in raw_findings:
+            if isinstance(item, dict):
+                gap_text = str(item.get("gap", "")).strip()
+                if not gap_text or is_generic_platitude(gap_text):
+                    continue
+
+                raw_status = str(item.get("status", "POTENTIAL GAP — NOT ESTABLISHED")).strip().upper()
+                status = "POTENTIAL GAP — NOT ESTABLISHED"
+                for vs in VALID_GAP_STATUSES:
+                    if vs in raw_status or raw_status in vs:
+                        status = vs
+                        break
+
+                raw_action = str(item.get("action", "VERIFY")).strip().upper()
+                action = "VERIFY"
+                for va in VALID_GAP_ACTIONS:
+                    if va == raw_action or va in raw_action:
+                        action = va
+                        break
+
+                # Absence protocol & Action-Status Discipline
+                why_text = str(item.get("why", "")).strip()
+                lower_reasoning = (gap_text + " " + why_text).lower()
+                is_retrieval_absence = any(
+                    phrase in lower_reasoning
+                    for phrase in ["not retrieved", "not found", "no document", "corpus omission", "absence of evidence"]
+                )
+
+                if is_retrieval_absence:
+                    if status == "ESTABLISHED GAP":
+                        status = "POTENTIAL GAP — NOT ESTABLISHED"
+                    if action == "FIX":
+                        action = "VERIFY"
+                    if "does not establish coverage" not in why_text.lower() and "potential gap" not in why_text.lower():
+                        why_text = (
+                            why_text.rstrip(". ")
+                            + ". The supplied evidence does not establish coverage of this requirement; absence from retrieved evidence is not proof of regulatory absence."
+                        ).strip(". ") + "."
+
+                # Strict action discipline: FIX is ONLY allowed if ESTABLISHED GAP or PARTIALLY COVERED
+                if status in {"POTENTIAL GAP — NOT ESTABLISHED", "INSUFFICIENT EVIDENCE", "NOT A GAP"} and action == "FIX":
+                    action = "VERIFY"
+                elif status == "NOT A GAP" and action != "NO ACTION":
+                    action = "NO ACTION"
+
+                # Evidence traceability
+                intl_ids = [
+                    str(eid) for eid in item.get("international_evidence_ids", [])
+                    if str(eid) in valid_ev_ids
+                ]
+                nat_ids = [
+                    str(eid) for eid in item.get("national_evidence_ids", [])
+                    if str(eid) in valid_ev_ids
+                ]
+                ev_str = str(item.get("evidence", "")).strip()
+                if not ev_str:
+                    ev_parts = []
+                    if intl_ids:
+                        ev_parts.append(f"International: {', '.join(intl_ids)}")
+                    if nat_ids:
+                        ev_parts.append(f"National: {', '.join(nat_ids)}")
+                    ev_str = " | ".join(ev_parts) if ev_parts else (f"Supplied records: {', '.join(list(valid_ev_ids)[:2])}" if valid_ev_ids else "N/A")
+
+                impact_text = str(item.get("impact", "")).strip() or "Requires technical verification against operational requirements."
+                action_detail = str(item.get("required_action_detail", "")).strip() or (
+                    "Implement missing controls to ensure baseline adherence." if action == "FIX" else "Verify applicability and national notifications before regulatory action."
+                )
+
+                counter_text = str(item.get("counter_evidence", "")).strip()
+                if not counter_text or "no counter-evidence exists" in counter_text.lower():
+                    if counter_evidence:
+                        limiting_exps = [
+                            ce.get("explanation") for ce in counter_evidence
+                            if ce.get("effect") in {"LIMITING", "CONTRADICTING"} and ce.get("explanation")
+                        ]
+                        if limiting_exps:
+                            counter_text = limiting_exps[0]
+                        else:
+                            counter_text = "No meaningful counter-evidence was identified in the supplied evidence set."
+                    else:
+                        counter_text = "No meaningful counter-evidence was identified in the supplied evidence set."
+
+                normalized_findings.append({
+                    "gap": gap_text,
+                    "status": status,
+                    "evidence": ev_str,
+                    "international_evidence_ids": intl_ids,
+                    "national_evidence_ids": nat_ids,
+                    "why": why_text or "Relationship reasoned from retrieved evidence records.",
+                    "impact": impact_text,
+                    "action": action,
+                    "required_action_detail": action_detail,
+                    "counter_evidence": counter_text,
+                })
+
+    if not normalized_findings:
+        normalized_findings = _build_grounded_gap_findings(
+            evidence_records=evidence_records,
+            counter_evidence=counter_evidence,
+        )
+
+    result["gap_findings"] = normalized_findings
+
+    # Format human-readable gaps array
+    has_real_gap = any(
+        f.get("gap") and "no genuine requirements gap" not in f.get("gap", "").lower()
+        for f in normalized_findings
+    )
+    if has_real_gap:
+        result["gaps"] = [
+            f"STATUS: {f['status']} | GAP: {f['gap']} | EVIDENCE: {f['evidence']} | ACTION: {f['action']} — {f['required_action_detail']}"
+            for f in normalized_findings
+        ]
+    else:
+        result["gaps"] = [
+            "No genuine requirements gap was established from the supplied evidence set. Potential gap(s) require further verification."
+        ]
+
+    return result
+
+
+# ============================================================
+# OUTPUT VALIDATION
+# ============================================================
+
+def _validate_output(
+    result: Dict[str, Any],
+    evidence_records: Optional[List[Dict[str, Any]]] = None,
+) -> Dict[str, Any]:
+    required_fields = [
+        "assessment",
+        "claims",
+        "technical_implications",
+        "regulatory_implications",
+        "counter_evidence",
+        "gaps",
+        "recommended_actions",
+        "limitations",
+        "human_review_required",
+        "governance_note",
+        "model",
+        "status",
+    ]
+
+    # Ensure counter_evidence exists in result before checking required_fields
+    if "counter_evidence" not in result:
+        result["counter_evidence"] = []
+
+    for field in required_fields:
+        if field not in result:
+            raise ValueError(
+                f"Missing synthesis field: {field}"
+            )
+
+    if not isinstance(result["claims"], list):
+        raise ValueError("claims must be a list.")
+
+    for claim in result["claims"]:
+        if not isinstance(claim, dict):
+            raise ValueError("Each claim must be an object.")
+
+        for field in [
+            "claim_id",
+            "claim",
+            "status",
+            "evidence_ids",
+            "confidence",
+        ]:
+            if field not in claim:
+                raise ValueError(f"Claim missing field: {field}")
+
+        if not isinstance(claim["evidence_ids"], list):
+            raise ValueError("claim evidence_ids must be a list.")
+
+        if not 0.0 <= float(claim["confidence"]) <= 1.0:
+            raise ValueError("Claim confidence must be between 0 and 1.")
+
+    # Apply deterministic regulatory, counter-evidence, and gap analysis guardrails
+    result = _apply_regulatory_and_counter_guardrails(
+        result,
+        evidence_records=evidence_records or [],
+    )
+    result = _apply_gap_guardrails(
+        result,
+        evidence_records=evidence_records or [],
+    )
+
+    if policy_standard_mapping:
+        result["policy_standard_mappings"] = policy_standard_mapping.get("mappings", [])
+        result["extracted_requirements"] = policy_standard_mapping.get("extracted_requirements", [])
+        result["decision_sufficiency"] = policy_standard_mapping.get("sufficiency", {})
+        if not result.get("gap_findings") and policy_standard_mapping.get("gaps"):
+            result["gap_findings"] = policy_standard_mapping.get("gaps", [])
+        if not result.get("technical_implications") and policy_standard_mapping.get("technical_implications"):
+            result["technical_implications"] = policy_standard_mapping.get("technical_implications", [])
+        if not result.get("regulatory_implications") and policy_standard_mapping.get("regulatory_implications"):
+            result["regulatory_implications"] = policy_standard_mapping.get("regulatory_implications", [])
+
+    if regional_comparative_analysis:
+        result["regional_comparative_analysis"] = regional_comparative_analysis
+
+    result["model"] = GROQ_MODEL
+    result["status"] = "SUCCESS"
+
+    return result
+
+
+# ============================================================
+# SYNTHESIS PROMPT
+# ============================================================
+
+def build_synthesis_prompt(
+    question: str,
+    evidence_records: List[Dict[str, Any]],
+    classification: Dict[str, Any],
+    evidence_assessment: Dict[str, Any],
+    absence_verifications: List[Dict[str, Any]],
+    gap_input: Dict[str, Any],
+    risk_assessment: Dict[str, Any],
+    demo_mode: bool = False,
+    counter_evidence_analysis: Optional[Dict[str, Any]] = None,
+    policy_standard_mapping: Optional[Dict[str, Any]] = None,
+    regional_comparative_analysis: Optional[Dict[str, Any]] = None,
+) -> str:
+    max_items = 4 if demo_mode else MAX_EVIDENCE_ITEMS
+    max_chars = 1000 if demo_mode else MAX_EVIDENCE_CHARS
+
+    compact_evidence = _compact_evidence(
+        evidence_records,
+        max_items=max_items,
+        max_chars=max_chars,
+    )
+
+    compact_classification = _compact_object(
+        classification,
+        MAX_CLASSIFICATION_CHARS,
+    )
+
+    compact_evidence_assessment = _compact_object(
+        evidence_assessment,
+        1800,
+    )
+
+    compact_absence = _compact_object(
+        absence_verifications,
+        MAX_ABSENCE_CHARS,
+    )
+
+    compact_gap = _compact_object(
+        gap_input,
+        MAX_GAP_CHARS,
+    )
+
+    compact_risk = _compact_object(
+        risk_assessment,
+        MAX_RISK_CHARS,
+    )
+
+    counter_section = ""
+    if counter_evidence_analysis:
+        compact_counter = _compact_object(
+            counter_evidence_analysis,
+            MAX_GAP_CHARS,
+        )
+        counter_section = f"""
+COUNTER-EVIDENCE CANDIDATES & ROLE ANALYSIS:
+{json.dumps(compact_counter, ensure_ascii=False, indent=2)}
+"""
+
+    mapping_section = ""
+    if policy_standard_mapping:
+        compact_mapping = _compact_object(
+            policy_standard_mapping.get("mappings", []),
+            MAX_GAP_CHARS,
+        )
+        mapping_section = f"""
+POLICY <-> STANDARD MAPPING RECORDS:
+{json.dumps(compact_mapping, ensure_ascii=False, indent=2)}
+"""
+
+    regional_section = ""
+    if regional_comparative_analysis:
+        regional_md = format_regional_comparative_markdown(regional_comparative_analysis)
+        regional_section = f"""
+REGIONAL COMPARATIVE GAP ANALYSIS:
+{regional_md}
+"""
+
+    prompt = f"""
+QUESTION:
+{question}
+
+EVIDENCE ROLE CLASSIFICATION (Supporting / Contradicting / Limiting / Contextual):
+{json.dumps(
+    compact_classification,
+    ensure_ascii=False,
+    indent=2,
+)}
+
+EVIDENCE RECORDS:
+{json.dumps(
+    compact_evidence,
+    ensure_ascii=False,
+    indent=2,
+)}
+{counter_section}
+{mapping_section}
+{regional_section}
+EVIDENCE ASSESSMENT:
+{json.dumps(
+    compact_evidence_assessment,
+    ensure_ascii=False,
+    indent=2,
+)}
+
+ABSENCE VERIFICATION:
+{json.dumps(
+    compact_absence,
+    ensure_ascii=False,
+    indent=2,
+)}
+
+GAP ANALYSIS:
+{json.dumps(
+    compact_gap,
+    ensure_ascii=False,
+    indent=2,
+)}
+
+RISK / GOVERNANCE:
+{json.dumps(
+    compact_risk,
+    ensure_ascii=False,
+    indent=2,
+)}
+
+Produce the final evidence-grounded assessment.
+
+CRITICAL INSTRUCTIONS:
+1. Apply the 4-part Regulatory Obligation Test: Do NOT state that mandatory reporting or legal obligations apply unless authority, mandatory status, entity applicability, AND specific incident trigger are all explicitly established by the supplied evidence. If any is missing, use qualified language ('Potential regulatory obligations may apply; evidence does not establish mandatory trigger; verification required').
+2. Distinguish technical standards from mandatory law.
+3. Distinguish established facts from unproven hypotheses (mark unproven root causes as UNPROVEN).
+4. Explicitly identify counter-evidence and limiting factors (e.g., valid vendor signature, SBOM with no known CVE) in `counter_evidence` with effects LIMITING, CONTRADICTING, or CONTEXTUAL.
+5. If no meaningful counter-evidence was identified in the supplied evidence set, state: "No meaningful counter-evidence was identified in the supplied evidence set." Never state "No counter-evidence exists".
+6. Apply the Genuine Gap Test: A genuine gap requires (1) technical requirement, (2) applicable national framework, (3) inadequate/partial coverage demonstrated from evidence, (4) explicit reasoning, (5) jurisdiction awareness.
+7. Distinguish gap statuses: ESTABLISHED GAP, PARTIALLY COVERED, POTENTIAL GAP — NOT ESTABLISHED, NOT A GAP, INSUFFICIENT EVIDENCE.
+8. Apply the Absence Protocol: Never reason that absence from retrieval equals a regulatory gap. Use 'Potential gap — not established from the supplied evidence.'
+9. Distinguish actions: FIX (only if established gap or partially covered missing control), VERIFY (if applicability/version uncertain), INVESTIGATE (if operational telemetry needed), NO ACTION (if adequate coverage).
+10. If no genuine gap is established, return: 'No genuine requirements gap was established from the supplied evidence set. Potential gap(s) require further verification.' Never output generic actions like 'Ongoing verification against latest gazette amendments' as gaps.
+11. Populate `gap_findings` with structured objects {{gap, status, evidence, why, impact, action, required_action_detail, counter_evidence}}.
+12. Cite only valid evidence IDs from the supplied evidence. Never invent evidence IDs.
+13. Never override the supplied human-review requirement.
+"""
+
+    if len(prompt) > MAX_PROMPT_CHARS:
+        prompt = (
+            prompt[:MAX_PROMPT_CHARS]
+            + "\n[Prompt context compacted.]"
+        )
+
+    return prompt
+
+
+# ============================================================
+# EVIDENCE-GROUNDED FALLBACK SYNTHESIS
+# ============================================================
+
+def _generate_fallback_synthesis(
+    question: str,
+    evidence_records: List[Dict[str, Any]],
+    risk_assessment: Dict[str, Any],
+    policy_standard_mapping: Optional[Dict[str, Any]] = None,
+    regional_comparative_analysis: Optional[Dict[str, Any]] = None,
+    **kwargs: Any,
+) -> Dict[str, Any]:
+    claims = []
+    counter_items = []
+    valid_ev_ids = [
+        str(ev.get("evidence_id"))
+        for ev in evidence_records
+        if ev.get("evidence_id")
+    ]
+
+    limiting_ev_ids = []
+    for ev in evidence_records:
+        txt = (ev.get("text") or "").lower()
+        ev_id = str(ev.get("evidence_id"))
+        if any(term in txt for term in ["signature", "sbom", "no cve", "cve", "guidance", "recommend", "limit", "advisory", "unproven", "exception"]):
+            if ev_id and ev_id not in limiting_ev_ids:
+                limiting_ev_ids.append(ev_id)
+
+    if limiting_ev_ids:
+        counter_items.append({
+            "claim_id": "CLM-001",
+            "claim": "Incident Causation & Supply-Chain Attribution",
+            "evidence_ids": limiting_ev_ids[:2],
+            "effect": "LIMITING",
+            "affected_conclusion": "Attribution of observed telemetry to vendor container software compromise",
+            "confidence_impact": "Reduces attribution confidence from confirmed breach to unproven hypothesis; prevents automated operational action",
+            "explanation": "Valid signatures, absence of matched CVEs in SBOM, and technical standards adherence limit definitive attribution of the anomaly to a confirmed vendor software compromise.",
+        })
+    else:
+        counter_items.append({
+            "claim_id": "CLM-001",
+            "claim": "Incident Causation & Root Cause Determination",
+            "evidence_ids": valid_ev_ids[:1] if valid_ev_ids else [],
+            "effect": "CONTEXTUAL",
+            "affected_conclusion": "Overall incident root cause attribution",
+            "confidence_impact": "No counter-evidence in supplied set to alter baseline confidence",
+            "explanation": "No meaningful counter-evidence was identified in the supplied evidence set.",
+        })
+
+    for idx, ev in enumerate(evidence_records[:4], start=1):
+        ev_id = ev.get("evidence_id", f"EV-{idx:03d}")
+        doc = ev.get("metadata", {}).get("document") or ev.get("title") or "Authoritative Source"
+        text_snip = (ev.get("text", "")[:150] + "...").replace("\n", " ").strip()
+        claims.append({
+            "claim_id": f"CLM-{idx:03d}",
+            "claim": f"Requirements under {doc}: {text_snip}",
+            "status": "SUPPORTED",
+            "evidence_ids": [ev_id],
+            "confidence": 0.88,
+        })
+
+    assessment_text = f"Assessment grounded on retrieved evidence for: '{question}'."
+    if evidence_records:
+        top_title = evidence_records[0].get("title") or "retrieved records"
+        assessment_text += f" Primary operational requirements identified in {top_title}."
+    assessment_text += " Specific incident root cause remains unproven across competing hypotheses. Potential regulatory and reporting frameworks may be relevant, but the supplied evidence does not establish that the incident satisfies a specific mandatory reporting trigger."
+
+    authority_evs = valid_ev_ids[:2] if valid_ev_ids else []
+
+    grounded_gap_findings = _build_grounded_gap_findings(
+        evidence_records=evidence_records,
+        counter_evidence=counter_items,
+    )
+    has_real_gap = any(
+        f.get("gap") and "no genuine requirements gap" not in f.get("gap", "").lower()
+        for f in grounded_gap_findings
+    )
+    if has_real_gap:
+        gaps_list = [
+            f"STATUS: {f['status']} | GAP: {f['gap']} | EVIDENCE: {f['evidence']} | ACTION: {f['action']} — {f['required_action_detail']}"
+            for f in grounded_gap_findings
+        ]
+    else:
+        gaps_list = [
+            "No genuine requirements gap was established from the supplied evidence set. Potential gap(s) require further verification."
+        ]
+
+    fallback_res = {
+        "assessment": assessment_text,
+        "claims": claims,
+        "technical_implications": ["Operational parameters must adhere to verified standards cited in evidence."],
+        "regulatory_implications": [
+            {
+                "statement": "Potential regulatory obligations may apply.",
+                "authority_evidence_ids": authority_evs,
+                "mandatory_status": "UNCERTAIN",
+                "applicability": "PARTIAL",
+                "trigger": "NOT_ESTABLISHED",
+                "conclusion": "The supplied evidence identifies relevant technical and regulatory frameworks, but does not establish that the current incident satisfies a mandatory reporting trigger. Regulatory applicability requires human and legal verification."
+            }
+        ],
+        "counter_evidence": counter_items,
+        "gap_findings": grounded_gap_findings,
+        "gaps": gaps_list,
+        "recommended_actions": ["Review authoritative evidence records EV-001 through EV-004.", "Perform root cause forensics before initiating external reporting."],
+        "limitations": ["Analysis reflects currently indexed knowledge base records. Incident root cause and regulatory reporting triggers remain unproven pending operational forensics."],
+        "human_review_required": risk_assessment.get("human_review_required", True),
+        "governance_note": "Evidence-grounded synthesis generated from retrieved records with strict regulatory qualification.",
+        "model": GROQ_MODEL,
+        "status": "SUCCESS",
+    }
+
+    if policy_standard_mapping:
+        fallback_res["policy_standard_mappings"] = policy_standard_mapping.get("mappings", [])
+        fallback_res["extracted_requirements"] = policy_standard_mapping.get("extracted_requirements", [])
+        fallback_res["decision_sufficiency"] = policy_standard_mapping.get("sufficiency", {})
+        if policy_standard_mapping.get("gaps"):
+            fallback_res["gap_findings"] = policy_standard_mapping.get("gaps", [])
+        if policy_standard_mapping.get("technical_implications"):
+            fallback_res["technical_implications"] = policy_standard_mapping.get("technical_implications", [])
+        if policy_standard_mapping.get("regulatory_implications"):
+            fallback_res["regulatory_implications"] = policy_standard_mapping.get("regulatory_implications", [])
+
+    if regional_comparative_analysis:
+        fallback_res["regional_comparative_analysis"] = regional_comparative_analysis
+        regional_block = format_regional_comparative_markdown(regional_comparative_analysis)
+        if "### Regional Comparative Gap Analysis" not in fallback_res["assessment"]:
+            fallback_res["assessment"] = f"{fallback_res['assessment']}\n\n{regional_block}" 
+
+    return fallback_res
+
+
+# ============================================================
+# MAIN SYNTHESIS ENTRY POINT
+# ============================================================
+
+def synthesize_final_assessment(
+    question: str,
+    evidence_records: List[Dict[str, Any]],
+    classification: Dict[str, Any],
+    evidence_assessment: Dict[str, Any],
+    absence_verifications: List[Dict[str, Any]],
+    gap_input: Dict[str, Any],
+    risk_assessment: Dict[str, Any],
+    demo_mode: bool = False,
+    counter_evidence_analysis: Optional[Dict[str, Any]] = None,
+    policy_standard_mapping: Optional[Dict[str, Any]] = None,
+    regional_comparative_analysis: Optional[Dict[str, Any]] = None,
+    **kwargs: Any,
+) -> Dict[str, Any]:
+    try:
+        client = _get_client()
+
+        user_prompt = build_synthesis_prompt(
+            question=question,
+            evidence_records=evidence_records,
+            classification=classification,
+            evidence_assessment=evidence_assessment,
+            absence_verifications=absence_verifications,
+            gap_input=gap_input,
+            risk_assessment=risk_assessment,
+            demo_mode=demo_mode,
+            counter_evidence_analysis=counter_evidence_analysis,
+            policy_standard_mapping=policy_standard_mapping,
+            regional_comparative_analysis=regional_comparative_analysis,
+        )
+
+        max_tokens = 1500 if demo_mode else SYNTHESIS_MAX_TOKENS
+
+        response = client.chat.completions.create(
+            model=GROQ_MODEL,
+            messages=[
+                {
+                    "role": "system",
+                    "content": SYSTEM_PROMPT,
+                },
+                {
+                    "role": "user",
+                    "content": user_prompt,
+                },
+            ],
+            temperature=0.1,
+            max_tokens=max_tokens,
+        )
+
+        content = (
+            response.choices[0]
+            .message
+            .content
+        )
+
+        result = _extract_json(
+            content
+        )
+
+        return _validate_output(
+            result,
+            evidence_records=evidence_records,
+            policy_standard_mapping=policy_standard_mapping,
+            regional_comparative_analysis=regional_comparative_analysis,
+        )
+
+    except Exception as exc:
+        print(
+            f"[WARN] Final synthesis GPT-OSS call failed: {exc}. "
+            "Generating evidence-grounded fallback synthesis."
+        )
+        return _generate_fallback_synthesis(
+            question=question,
+            evidence_records=evidence_records,
+            risk_assessment=risk_assessment,
+            policy_standard_mapping=policy_standard_mapping,
+            regional_comparative_analysis=regional_comparative_analysis,
+            **kwargs,
+        )

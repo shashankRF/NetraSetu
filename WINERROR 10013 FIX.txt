@@ -1,0 +1,36 @@
+1. Kill whatever is listening on 8000
+
+Get-NetTCPConnection -LocalPort 8000 -State Listen -ErrorAction SilentlyContinue |
+Select-Object -ExpandProperty OwningProcess -Unique |
+ForEach-Object { Stop-Process -Id $_ -Force }
+
+2. Confirm it's free
+netstat -ano | findstr :8000
+
+If nothing appears → ✅.
+3. Start HackGrid from the project root
+
+cd "C:\Users\Shashank Kotnala\OneDrive\Documents\HackGrid_new"
+
+python -m uvicorn Backend.server:app --host 127.0.0.1 --port 8000 --reload
+
+4. Verify
+In another terminal:
+
+Invoke-RestMethod http://127.0.0.1:8000/api/health
+
+start backend:
+python -m uvicorn Backend.server:app --host 127.0.0.1 --port 8000 --reload
+
+
+At last start frontend:
+
+python -m http.server 5500
+
+
+
+
+
+
+Invoke-WebRequest http://127.0.0.1:8000/docs -UseBasicParsing
+for testing connection 
