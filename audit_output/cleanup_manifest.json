@@ -1,0 +1,1491 @@
+{
+  "audit_type": "DRY_RUN_ONLY",
+  "created_date": "2026-10-21",
+  "moves_or_deletions_performed": false,
+  "scope": "Knowledge-base PDFs/OCR caches and retrieval/index data; application source code and runtime audit/benchmark records were not changed or classified as removable.",
+  "summary": {
+    "files_audited": 129,
+    "decisions": {
+      "ARCHIVE": 102,
+      "KEEP": 27
+    },
+    "knowledge_base_pdfs": 94,
+    "knowledge_base_pdf_keep": 21,
+    "knowledge_base_pdf_archive": 73,
+    "categories": {
+      "General telecom regulation or technical standards": 32,
+      "Non-disaster cyber, privacy, or AI material": 20,
+      "Emergency public-warning telecommunications": 2,
+      "General or unrelated source material": 18,
+      "International emergency-telecom rules": 1,
+      "5G Core technical standard": 1,
+      "Telecom regulatory legislation": 1,
+      "Disaster-management commencement notification": 2,
+      "Disaster-management committee notification": 1,
+      "Disaster-management committee rules": 1,
+      "Disaster-management legislation": 4,
+      "Civil-defence preparedness legislation": 1,
+      "Civil-defence preparedness rules": 1,
+      "DoT disaster communications guidance": 2,
+      "Emergency-response legislation": 2,
+      "Disaster-management plan": 1,
+      "Disaster-management policy": 1,
+      "Administrative order under disaster legislation": 1,
+      "International disaster/emergency telecommunications standard": 2,
+      "Knowledge-base inventory and source metadata": 1,
+      "OCR extraction support for knowledge_base/DoT National Disaster/2025-04-08-1617.pdf": 1,
+      "OCR extraction support for knowledge_base/DoT National Disaster/2025-04-30-1893.pdf": 2,
+      "OCR extraction support for knowledge_base/DoT National Disaster/2025-07-23-446.pdf": 2,
+      "Orphan OCR cache": 1,
+      "OCR extraction support for knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf": 17,
+      "Mixed legacy main chunk metadata": 1,
+      "Mixed legacy main vector index": 1,
+      "Mixed legacy main embeddings": 1,
+      "Defence retrieval bundle": 3,
+      "Maritime retrieval bundle": 3,
+      "Non-disaster BHASHINI/GeM source data": 2
+    }
+  },
+  "active_retrieval_audit": {
+    "main_index": "rag/faiss_new.index",
+    "main_chunks": "rag/chunks_new.json",
+    "main_embeddings": "rag/embeddings_new.npy",
+    "main_chunk_count": 14143,
+    "main_unique_source_files": 72,
+    "main_chunks_missing_repo_pdf": 0,
+    "main_unresolved_source_files": [],
+    "main_ambiguous_source_files": [],
+    "main_chunks_with_invalid_pdf_page": 0,
+    "main_invalid_page_examples": [],
+    "domain_indices": {
+      "defence": {
+        "chunk_count": 397,
+        "unique_source_files": 3,
+        "source_files_missing_pdf": [
+          "DEFENCE\\DRDO_ToT_Policy2025.pdf",
+          "DEFENCE\\Drone Rules 2021.pdf",
+          "DEFENCE\\UAS_CONEMP NATO.pdf"
+        ],
+        "chunks_missing_pdf": 397
+      },
+      "maritime": {
+        "chunk_count": 273,
+        "unique_source_files": 4,
+        "source_files_missing_pdf": [
+          "MARITIME\\A.1106(29) 2015.pdf",
+          "MARITIME\\MSC.570(109) IMO.pdf",
+          "MARITIME\\MSC.74(69).pdf",
+          "MARITIME\\NOSDCP Circular 01 - 2025 INDIA.pdf"
+        ],
+        "chunks_missing_pdf": 273
+      }
+    },
+    "inventory_report_summary": {
+      "total_documents_discovered": 94,
+      "present_and_indexed": 72,
+      "present_not_indexed": 22,
+      "registered_in_legacy_registry": 10,
+      "indexed_sources_missing": 0,
+      "total_active_chunks": 14143
+    }
+  },
+  "constraints_and_findings": [
+    "The requested future index/config switch and website/registry update require changes to application source files (including rag/multi_kb_retriever.py, Backend/evidence_engine/document_registry.py, and Frontend/index.html). Those changes are outside this dry run and conflict with the explicit Do NOT touch application code rule.",
+    "The current Defence and Maritime retrievers contain chunks whose cited source PDFs are absent from the repository; they cannot meet source-page verification unless those source PDFs are supplied or those corpora are excluded.",
+    "The existing FAISS index and embeddings were not overwritten."
+  ],
+  "files": [
+    {
+      "path": "knowledge_base/Documents main/3gpp/23 Version 3gpp.pdf",
+      "sha256": "32d642cde2b8c783c915179c5899578dc78c1dc809bb4a81c1c7c9b37cc95c69",
+      "size_bytes": 6692581,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 722,
+      "active_main_index_chunks": 3984,
+      "extracted_title": "TS 123 501 - V18.10.0 - 5G; System architecture for the 5G System (5GS)  (3GPP TS 23.501 version 18.10.0 Release 18)"
+    },
+    {
+      "path": "knowledge_base/Documents main/3gpp/ETSI 33.501 Rel 18.pdf",
+      "sha256": "cdbb0454fab7e794c069fa82d26bac7daf95d0daefea958c73f2d995891ae1d3",
+      "size_bytes": 3879068,
+      "category": "Non-disaster cyber, privacy, or AI material",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body concerns cyber, privacy, or AI requirements rather than disaster management or emergency telecommunications.",
+      "pdf_pages": 335,
+      "active_main_index_chunks": 1588,
+      "extracted_title": "TS 133 501 - V18.10.0 - 5G; Security architecture and procedures for 5G System  (3GPP TS 33.501 version 18.10.0 Release 18)"
+    },
+    {
+      "path": "knowledge_base/Documents main/3gpp/ETSI Rel 18 3gpp.pdf",
+      "sha256": "0c3da4cae6a59320a5911bd61de12b4fb8dae9c1f17c10d326fde0467e619760",
+      "size_bytes": 678953,
+      "category": "Emergency public-warning telecommunications",
+      "decision": "KEEP",
+      "reason": "The technical or statutory text specifies cell broadcast for disaster-alert/public-warning delivery.",
+      "pdf_pages": 104,
+      "active_main_index_chunks": 436,
+      "extracted_title": "TS 123 041 - V18.0.0 - Digital cellular telecommunications system (Phase 2+) (GSM); Universal Mobile Telecommunications System(UMTS); LTE; 5G; Technical realization of Cell Broadcast Service (CBS) (3GPP TS 23.041 version 18.0.0 Release 18)"
+    },
+    {
+      "path": "knowledge_base/Documents main/3gpp/ETSI Rel 19 3gpp 2.0.pdf",
+      "sha256": "60401555469a7b904cec238435764e558cc79c4320a84d3375df74d98f19f296",
+      "size_bytes": 98461,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 10,
+      "active_main_index_chunks": 24,
+      "extracted_title": "TS 129 279 - V19.0.0 - Universal Mobile Telecommunications System (UMTS); LTE; Mobile IPv4 (MIPv4) based mobility protocols; Stage 3  (3GPP TS 29.279 version 19.0.0 Release 19)"
+    },
+    {
+      "path": "knowledge_base/Documents main/Bharat 6G Vision.pdf",
+      "sha256": "a230e0ebb350bdcae5c4630d03ea51fafaf5fae8184aeb374a880842e9169e30",
+      "size_bytes": 40601650,
+      "category": "Non-disaster cyber, privacy, or AI material",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body concerns cyber, privacy, or AI requirements rather than disaster management or emergency telecommunications.",
+      "pdf_pages": 186,
+      "active_main_index_chunks": 610,
+      "extracted_title": "Scanned Image"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/Administration of Digital Bharat Nidhi Rules, 2024_0.pdf",
+      "sha256": "cf5aa15359d944eb7015e536e57acfe01dda1fb3b6e88692091acef18f0bfb3f",
+      "size_bytes": 1858611,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 8,
+      "active_main_index_chunks": 33,
+      "extracted_title": "Administration of Digital Bharat Nidhi Rules, 2024_0.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/amateur-services-rules-2024.pdf",
+      "sha256": "63d31e444b1fea70f719a526d85903cb2a2ed4dfc2388965018355f8beb85b85",
+      "size_bytes": 1980455,
+      "category": "General or unrelated source material",
+      "decision": "ARCHIVE",
+      "reason": "Extracted document title/content (amateur-services-rules-2024.pdf) is outside disaster management and international emergency-telecom standards.",
+      "pdf_pages": 15,
+      "active_main_index_chunks": 73,
+      "extracted_title": "amateur-services-rules-2024.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/BharatNet as Special Project under rule 12(1) of Telecommunications (Right of Way) Rules, 2024.pdf",
+      "sha256": "31619f895dfe35b6a5062805dbc617a372bf35e5dc9bcb1dfbe14c948d5a8c03",
+      "size_bytes": 1718608,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 2,
+      "active_main_index_chunks": 3,
+      "extracted_title": "BharatNet as Special Project under rule 12(1) of Telecommunications (Right of Way) Rules, 2024.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/captive-telecom-services-rules-2026.pdf",
+      "sha256": "4abb772a15cfbc0ad3a64e151602169d8cb82e727cc56d47ff7f09334739f9f4",
+      "size_bytes": 972832,
+      "category": "General or unrelated source material",
+      "decision": "ARCHIVE",
+      "reason": "Extracted document title/content (4658  GI/2026) is outside disaster management and international emergency-telecom standards.",
+      "pdf_pages": 52,
+      "active_main_index_chunks": 269,
+      "extracted_title": "4658  GI/2026"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/CBuD CG-DL-E-21032025-261799.pdf",
+      "sha256": "2436fdd24f4a208f558327760912251f4103a543439292ceec0a642a8ba204c5",
+      "size_bytes": 1709942,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 2,
+      "active_main_index_chunks": 2,
+      "extracted_title": "CBuD CG-DL-E-21032025-261799.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/commercial-radio-operator-certificate-of-proficiency-to-operate-global-maritime-distress-and-safety-system-rules-2024.pdf",
+      "sha256": "281b8e4e264efc236b53ed03eaf5ce1de27799a8b6a6cda45930dbc87ad2b340",
+      "size_bytes": 1905098,
+      "category": "International emergency-telecom rules",
+      "decision": "KEEP",
+      "reason": "The operative text governs the Global Maritime Distress and Safety System.",
+      "pdf_pages": 9,
+      "active_main_index_chunks": 50,
+      "extracted_title": "commercial-radio-operator-certificate-of-proficiency-to-operate-global-maritime-distress-and-safety-system-rules-2024.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/Critical Telecommunication Infrastructure Rules, 2024_0.pdf",
+      "sha256": "116466ec2799bb80750e9d810495fbfb1c0b041366dbb3625da03b2085199f4d",
+      "size_bytes": 1884476,
+      "category": "Non-disaster cyber, privacy, or AI material",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body concerns cyber, privacy, or AI requirements rather than disaster management or emergency telecommunications.",
+      "pdf_pages": 10,
+      "active_main_index_chunks": 45,
+      "extracted_title": "Critical Telecommunication Infrastructure Rules, 2024_0.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/downloaddocument_mtcte_standards-may25-1.pdf",
+      "sha256": "1cb4dff8a48c2b35857c1b9020093bef1d5440d16b2dfedf1963d40857402912",
+      "size_bytes": 1993616,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 9,
+      "active_main_index_chunks": 45,
+      "extracted_title": "downloaddocument_mtcte_standards-may25-1.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/flight-and-maritime-connectivity-amendment-rules-2022.pdf",
+      "sha256": "76dd6c343245a92e681d00a293dfe9be1f9ebf59d53f953c9959c34818455f69",
+      "size_bytes": 1514756,
+      "category": "General or unrelated source material",
+      "decision": "ARCHIVE",
+      "reason": "Extracted document title/content (flight-and-maritime-connectivity-amendment-rules-2022.pdf) is outside disaster management and international emergency-telecom standards.",
+      "pdf_pages": 3,
+      "active_main_index_chunks": 7,
+      "extracted_title": "flight-and-maritime-connectivity-amendment-rules-2022.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/Indian Telegraph (5th Amendment) Rules, 2022.pdf",
+      "sha256": "a9bb166d5e2ee74ba6d02373c35cfa24de7216cfa36a7f9d40453f6730fd79db",
+      "size_bytes": 1204009,
+      "category": "General or unrelated source material",
+      "decision": "ARCHIVE",
+      "reason": "Extracted document title/content (Indian Telegraph (5th Amendment) Rules, 2022.pdf) is outside disaster management and international emergency-telecom standards.",
+      "pdf_pages": 4,
+      "active_main_index_chunks": 19,
+      "extracted_title": "Indian Telegraph (5th Amendment) Rules, 2022.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/Indian Telegraph (Infrastructure Safety) Rules, 2022.pdf",
+      "sha256": "6756ebf5b34b638e1bd16e36bcb17fe924ef050d2c25bea348af69d57c5b04b1",
+      "size_bytes": 1493535,
+      "category": "General or unrelated source material",
+      "decision": "ARCHIVE",
+      "reason": "Extracted document title/content (Indian Telegraph (Infrastructure Safety) Rules, 2022.pdf) is outside disaster management and international emergency-telecom standards.",
+      "pdf_pages": 3,
+      "active_main_index_chunks": 11,
+      "extracted_title": "Indian Telegraph (Infrastructure Safety) Rules, 2022.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/Indian Telegraph Right of Way (Amendment) Rules, 2023.pdf",
+      "sha256": "0bd85bff6ce270cb07a4888b18491ce9745f0630cc3b054ed688f8c4ec5e6620",
+      "size_bytes": 1427432,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 6,
+      "active_main_index_chunks": 23,
+      "extracted_title": "Indian Telegraph Right of Way (Amendment) Rules, 2023.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/indian-telegraph-4th-amendment-rules-2022.pdf",
+      "sha256": "85630cbef95ab36b1b6e71d34c1991b396ebf2f6c27b51171ae83cfbe9fe460c",
+      "size_bytes": 1976050,
+      "category": "General or unrelated source material",
+      "decision": "ARCHIVE",
+      "reason": "Extracted document title/content (indian-telegraph-4th-amendment-rules-2022.pdf) is outside disaster management and international emergency-telecom standards.",
+      "pdf_pages": 3,
+      "active_main_index_chunks": 10,
+      "extracted_title": "indian-telegraph-4th-amendment-rules-2022.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/indian-telegraph-right-of-way-amendment-rules-2021.pdf",
+      "sha256": "ccb10e43df17bc94ae46daf32a1a62a3753a6e1bb7fb6806b968e141e0915efd",
+      "size_bytes": 1194291,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 3,
+      "active_main_index_chunks": 9,
+      "extracted_title": "indian-telegraph-right-of-way-amendment-rules-2021.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/indian-wireless-telegraphy-cell-broadcasting-service-for-disaster-alerts-amendment-rules-2024.pdf",
+      "sha256": "284f3307a5ea819afd41d76aef5e6fef5e3dd5c49863bf5114ec8d7b369e7ef3",
+      "size_bytes": 1849787,
+      "category": "Emergency public-warning telecommunications",
+      "decision": "KEEP",
+      "reason": "The technical or statutory text specifies cell broadcast for disaster-alert/public-warning delivery.",
+      "pdf_pages": 3,
+      "active_main_index_chunks": 10,
+      "extracted_title": "indian-wireless-telegraphy-cell-broadcasting-service-for-disaster-alerts-amendment-rules-2024.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/mandatory-testing-and-certification-of-telecommunication-equipment-mtcte.pdf",
+      "sha256": "33df0a16f6bf0825566ddecbcb7b77704063cf3a5e0c84417f37f85260d61db9",
+      "size_bytes": 1257982,
+      "category": "General or unrelated source material",
+      "decision": "ARCHIVE",
+      "reason": "Extracted document title/content (mandatory-testing-and-certification-of-telecommunication-equipment-mtcte.pdf) is outside disaster management and international emergency-telecom standards.",
+      "pdf_pages": 2,
+      "active_main_index_chunks": 4,
+      "extracted_title": "mandatory-testing-and-certification-of-telecommunication-equipment-mtcte.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/mh-udd2_giudelines_19122022.pdf",
+      "sha256": "34f73a9129d3b69bbba229ef182c2231ed68707a7b291bf78ab01c64481ca98a",
+      "size_bytes": 2003277,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 41,
+      "active_main_index_chunks": 154,
+      "extracted_title": "Maharashtra Telecom Infrastructure"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/migration-rules-2026.pdf",
+      "sha256": "96ff14161fe36a957cfeb725e6be4a9d43b19de9ccd5fd360931a133f20478e5",
+      "size_bytes": 663009,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 8,
+      "active_main_index_chunks": 38,
+      "extracted_title": "4656  GI/2026"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/misc-telecom-services-rules-2026.pdf",
+      "sha256": "65239e3403e89d0e4c58936630856381746e4e303af41d3e5b662ddc2a8b5d34",
+      "size_bytes": 1135768,
+      "category": "General or unrelated source material",
+      "decision": "ARCHIVE",
+      "reason": "Extracted document title/content (4660  GI/2026) is outside disaster management and international emergency-telecom standards.",
+      "pdf_pages": 73,
+      "active_main_index_chunks": 360,
+      "extracted_title": "4660  GI/2026"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/network-services-rules-july-2026.pdf",
+      "sha256": "95f7627a2d095ffefbafc724ec60d2f851c4e05f408615dc32331d9c4a0e7e67",
+      "size_bytes": 1317384,
+      "category": "General or unrelated source material",
+      "decision": "ARCHIVE",
+      "reason": "Extracted document title/content (5524  GI/2026) is outside disaster management and international emergency-telecom standards.",
+      "pdf_pages": 53,
+      "active_main_index_chunks": 257,
+      "extracted_title": "5524  GI/2026"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/new-telecom-Act-2023.pdf",
+      "sha256": "2cc91966898e03644d608a7b4f0d26bff0c68af5ad2049e7f8aff86a7a6cf73f",
+      "size_bytes": 206748,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 26,
+      "active_main_index_chunks": 112,
+      "extracted_title": "new-telecom-Act-2023.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/Notification for enforcement of sections of the Telecommunications Act 2023.pdf",
+      "sha256": "434212f46781b909fa1e1a9d0af71a15252f34d48755867043abaf489761bf5b",
+      "size_bytes": 536597,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 1,
+      "active_main_index_chunks": 3,
+      "extracted_title": "Notification for enforcement of sections of the Telecommunications Act 2023.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/Notification for enforcement of sections of the Telecommunications Act, 2023.pdf",
+      "sha256": "315caff5aa2c96def6e69b2baab7ab28861a34f361c91e521ec17f08e78865c5",
+      "size_bytes": 734786,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 1,
+      "active_main_index_chunks": 2,
+      "extracted_title": "Notification for enforcement of sections of the Telecommunications Act, 2023.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/notification-of-portal.pdf",
+      "sha256": "fbf0eb0956d21ce5714f38558b7453302461f44df9cf283510b8403d0c7bf405",
+      "size_bytes": 466052,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 2,
+      "active_main_index_chunks": 4,
+      "extracted_title": "4659  GI/2026"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/principal-telecom-services-rule-2026.pdf",
+      "sha256": "52608d4a74075233add8acfa9f75c880212916b8117bd085e2e76e8548d3d6c5",
+      "size_bytes": 1513464,
+      "category": "General or unrelated source material",
+      "decision": "ARCHIVE",
+      "reason": "Extracted document title/content (4664  GI/2026) is outside disaster management and international emergency-telecom standards.",
+      "pdf_pages": 133,
+      "active_main_index_chunks": 670,
+      "extracted_title": "4664  GI/2026"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/procedures-and-safeguards-for-lawful-interception-of-messages-rules-2024.pdf",
+      "sha256": "cd0a0f7d8e5deb8bd2c9338f3b7a3001594064176dc8db6544b8703a233557ea",
+      "size_bytes": 1892833,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 9,
+      "active_main_index_chunks": 38,
+      "extracted_title": "procedures-and-safeguards-for-lawful-interception-of-messages-rules-2024.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/publication-of-gazette-notification-for-amendment-in-flight-and-maritime-connectivity-rules-2018.pdf",
+      "sha256": "8dccca0a5036aede541a2a5de5b79c467c323ba5c01ffc8240ca9d33d1559d66",
+      "size_bytes": 1823769,
+      "category": "General or unrelated source material",
+      "decision": "ARCHIVE",
+      "reason": "Extracted document title/content (publication-of-gazette-notification-for-amendment-in-flight-and-maritime-connectivity-rules-2018.pdf) is outside disaster management and international emergency-telecom standards.",
+      "pdf_pages": 2,
+      "active_main_index_chunks": 5,
+      "extracted_title": "publication-of-gazette-notification-for-amendment-in-flight-and-maritime-connectivity-rules-2018.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/rtr-rules-2025.pdf",
+      "sha256": "eadafed30910817367cd54b32148475a7afde6d57d42ca75b13ecb9b295dd801",
+      "size_bytes": 953776,
+      "category": "General or unrelated source material",
+      "decision": "ARCHIVE",
+      "reason": "Extracted document title/content (rtr-rules-2025.pdf) is outside disaster management and international emergency-telecom standards.",
+      "pdf_pages": 17,
+      "active_main_index_chunks": 64,
+      "extracted_title": "rtr-rules-2025.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/Telecommunications Right of Way Rules 2024.pdf",
+      "sha256": "afd12206a2b8e6da729b5f424d43d4da9c06e0edbadcbeedf19fe749893ed3fe",
+      "size_bytes": 2114130,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 33,
+      "active_main_index_chunks": 162,
+      "extracted_title": "Telecommunications Right of Way Rules 2024.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/telecommunications-radio-equipment-possession-authorisation-rules-2026.pdf",
+      "sha256": "a1d3ebf0f61bce01ca7893a957d5e75e96645f7c612f1c813f132615b159a9e8",
+      "size_bytes": 1284078,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 12,
+      "active_main_index_chunks": 55,
+      "extracted_title": "5122  GI/2026"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/the-indian-telegraph-amendment-rules-1951.pdf",
+      "sha256": "da865d30e8cfea9d61703a2fdeb944c9c92b702670c12039b092bdbe7293f013",
+      "size_bytes": 1314022,
+      "category": "General or unrelated source material",
+      "decision": "ARCHIVE",
+      "reason": "Extracted document title/content (the-indian-telegraph-amendment-rules-1951.pdf) is outside disaster management and international emergency-telecom standards.",
+      "pdf_pages": 2,
+      "active_main_index_chunks": 7,
+      "extracted_title": "the-indian-telegraph-amendment-rules-1951.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/the-prevention-of-tampering-of-the-mobile-device-equipment-identification-number-amendment-rules-2022.pdf",
+      "sha256": "c08fcea2fbff3e94f5e6438032c0db7629b84cf0bbed85e170badada38d56e5e",
+      "size_bytes": 1059163,
+      "category": "General or unrelated source material",
+      "decision": "ARCHIVE",
+      "reason": "Extracted document title/content (the-prevention-of-tampering-of-the-mobile-device-equipment-identification-number-amendment-rules-2022.pdf) is outside disaster management and international emergency-telecom standards.",
+      "pdf_pages": 2,
+      "active_main_index_chunks": 7,
+      "extracted_title": "the-prevention-of-tampering-of-the-mobile-device-equipment-identification-number-amendment-rules-2022.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/theindiantelegraph2ndamendmentrules2022nw_repaired_0.pdf",
+      "sha256": "bf45a9cd2987fbe704e4369222fd3232e6b0bbbfd160508f842ceac653a8e63d",
+      "size_bytes": 1026283,
+      "category": "General or unrelated source material",
+      "decision": "ARCHIVE",
+      "reason": "Extracted document title/content (theindiantelegraph2ndamendmentrules2022nw_repaired_0.pdf) is outside disaster management and international emergency-telecom standards.",
+      "pdf_pages": 2,
+      "active_main_index_chunks": 5,
+      "extracted_title": "theindiantelegraph2ndamendmentrules2022nw_repaired_0.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/DoT_Rules/use-of-low-power-and-very-low-power-short-range-radio-frequency-devices-exemption-from-licensing-requirement-amendment-rules-2024.pdf",
+      "sha256": "b0746eea30e24618c7463d22551bd7d542b406ec1e8e5fb4a7c772ecb7989165",
+      "size_bytes": 742543,
+      "category": "General or unrelated source material",
+      "decision": "ARCHIVE",
+      "reason": "Extracted document title/content (use-of-low-power-and-very-low-power-short-range-radio-frequency-devices-exemption-from-licensing-requirement-amendment-r) is outside disaster management and international emergency-telecom standards.",
+      "pdf_pages": 2,
+      "active_main_index_chunks": 5,
+      "extracted_title": "use-of-low-power-and-very-low-power-short-range-radio-frequency-devices-exemption-from-licensing-requirement-amendment-rules-2024.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/DPDP Acts/DPDP 2025.pdf",
+      "sha256": "047206c88ce111807baf60f476b8d7f15a7480a2727e76a8ad59e394f49852b4",
+      "size_bytes": 302936,
+      "category": "Non-disaster cyber, privacy, or AI material",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body concerns cyber, privacy, or AI requirements rather than disaster management or emergency telecommunications.",
+      "pdf_pages": 7,
+      "active_main_index_chunks": 22,
+      "extracted_title": "DPDP Rules, 2025 Notified"
+    },
+    {
+      "path": "knowledge_base/Documents main/DPDP Acts/DPDP Act_2023.pdf",
+      "sha256": "d8d9a3dda426b315a034ac84f4162020bb73520349bd49442d028ce8aef725db",
+      "size_bytes": 382467,
+      "category": "Non-disaster cyber, privacy, or AI material",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body concerns cyber, privacy, or AI requirements rather than disaster management or emergency telecommunications.",
+      "pdf_pages": 25,
+      "active_main_index_chunks": 105,
+      "extracted_title": "The Digital Personal Data Protection Act, 2023"
+    },
+    {
+      "path": "knowledge_base/Documents main/EU Rules/Artificial Intelligence Act EU.pdf",
+      "sha256": "1ccd38d1c78482cf2053b70110115adcc5080700acc8bd7bead8cb3579143ccf",
+      "size_bytes": 1309163,
+      "category": "Non-disaster cyber, privacy, or AI material",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body concerns cyber, privacy, or AI requirements rather than disaster management or emergency telecommunications.",
+      "pdf_pages": 151,
+      "active_main_index_chunks": 604,
+      "extracted_title": "CL2024R1689EN0010010.0001.3bi_cp 1..1"
+    },
+    {
+      "path": "knowledge_base/Documents main/EU Rules/Directive (EU) 2022 NIS2.pdf",
+      "sha256": "dd11e6e72dca6d3b8b9619a1fece379d48526022ddda6cb93496eeba67ac0248",
+      "size_bytes": 671325,
+      "category": "Non-disaster cyber, privacy, or AI material",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body concerns cyber, privacy, or AI requirements rather than disaster management or emergency telecommunications.",
+      "pdf_pages": 60,
+      "active_main_index_chunks": 226,
+      "extracted_title": "CL2022L2555EN0000040.0001_cp 1..1"
+    },
+    {
+      "path": "knowledge_base/Documents main/EU Rules/regulation GDPR EU.pdf",
+      "sha256": "bd84e63f5b622b739a83389afc3b30d240f792bb88d8eb03a816c9a82b0c2499",
+      "size_bytes": 982296,
+      "category": "Non-disaster cyber, privacy, or AI material",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body concerns cyber, privacy, or AI requirements rather than disaster management or emergency telecommunications.",
+      "pdf_pages": 88,
+      "active_main_index_chunks": 534,
+      "extracted_title": "REGULATION  (EU)  2016/  679  OF  THE  EUROPEAN  PARLIAMENT  AND  OF  THE  COUNCIL  -  of  27  April  2016  -  on  the  protection  of  natural  persons  with  regard  to  the  processing  of  personal  data  and  on  the  free  movement  of  such  data,  and  repealing  Directive 95/  46/  EC  (General  Data  Protection  Regulation)"
+    },
+    {
+      "path": "knowledge_base/Documents main/India AI Governance.pdf",
+      "sha256": "87f6faff2646faefe17a7b80015fca64b4e905f7bce42d3a0958e04da3e0162f",
+      "size_bytes": 2741662,
+      "category": "Non-disaster cyber, privacy, or AI material",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body concerns cyber, privacy, or AI requirements rather than disaster management or emergency telecommunications.",
+      "pdf_pages": 68,
+      "active_main_index_chunks": 181,
+      "extracted_title": "Final_Version_01"
+    },
+    {
+      "path": "knowledge_base/Documents main/Indian_Acts/CERT-In_Directions_70B_28.04.2022.pdf",
+      "sha256": "1002f70c4af9bd85d5b27598607a83cabc04aeb775ff11dcba0941850eae1703",
+      "size_bytes": 4271,
+      "category": "Non-disaster cyber, privacy, or AI material",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body concerns cyber, privacy, or AI requirements rather than disaster management or emergency telecommunications.",
+      "pdf_pages": 3,
+      "active_main_index_chunks": 0,
+      "extracted_title": "MINISTRY OF ELECTRONICS AND INFORMATION TECHNOLOGY"
+    },
+    {
+      "path": "knowledge_base/Documents main/Indian_Acts/IT-Act-Rules_2000_0.pdf",
+      "sha256": "412ebec190cd380085a0628edb94a90936d30dd16f55dd2bd7012223632f5fb0",
+      "size_bytes": 326031,
+      "category": "Non-disaster cyber, privacy, or AI material",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body concerns cyber, privacy, or AI requirements rather than disaster management or emergency telecommunications.",
+      "pdf_pages": 105,
+      "active_main_index_chunks": 312,
+      "extracted_title": "Information Technology Act, 2000 (21 of 2000)"
+    },
+    {
+      "path": "knowledge_base/Documents main/Indian_Acts/it_act_2000_updated.pdf",
+      "sha256": "e71725fa32e892f887308816046c42275fc855b5cbb4ee1063cdbd518f165140",
+      "size_bytes": 832355,
+      "category": "Non-disaster cyber, privacy, or AI material",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body concerns cyber, privacy, or AI requirements rather than disaster management or emergency telecommunications.",
+      "pdf_pages": 36,
+      "active_main_index_chunks": 186,
+      "extracted_title": "THE INFORMATION TECHNOLOGY ACT, 2000"
+    },
+    {
+      "path": "knowledge_base/Documents main/ITU_Rules_Framework/T-REC-Y.3172-201906-I!!PDF-E.pdf",
+      "sha256": "e42f9a3be3f951d3e19b9007f876f0b389c81b4693f0d8576e18185a1acfe67b",
+      "size_bytes": 1145173,
+      "category": "Non-disaster cyber, privacy, or AI material",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body concerns cyber, privacy, or AI requirements rather than disaster management or emergency telecommunications.",
+      "pdf_pages": 34,
+      "active_main_index_chunks": 110,
+      "extracted_title": "ITU-T Rec. Y.3172 (06/2019) Architectural framework for machine learning in future networks including IMT-2020"
+    },
+    {
+      "path": "knowledge_base/Documents main/ITU_Rules_Framework/T-REC-Y.3174-202002-I!!PDF-E.pdf",
+      "sha256": "9012d10bfafc8459b88e35f5c9775aa3e3cf706223fec65efe1f84f5e93c4020",
+      "size_bytes": 2076932,
+      "category": "Non-disaster cyber, privacy, or AI material",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body concerns cyber, privacy, or AI requirements rather than disaster management or emergency telecommunications.",
+      "pdf_pages": 36,
+      "active_main_index_chunks": 103,
+      "extracted_title": "ITU-T Rec. Y.3174 (02/2020) Framework for data handling to enable machine learning in future networks including IMT-2020"
+    },
+    {
+      "path": "knowledge_base/Documents main/ITU_Rules_Framework/T-REC-Y.3181-202209-I!!PDF-E.pdf",
+      "sha256": "2cfe5093db1c39ba1f34e75fe4a0fc86e030e441084ef1b5b6cab283918c5b2c",
+      "size_bytes": 1140428,
+      "category": "Non-disaster cyber, privacy, or AI material",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body concerns cyber, privacy, or AI requirements rather than disaster management or emergency telecommunications.",
+      "pdf_pages": 34,
+      "active_main_index_chunks": 109,
+      "extracted_title": "ITU-T Rec. Y.3181 (09/2022) Architectural framework for machine learning sandbox in future networks including IMT-2020"
+    },
+    {
+      "path": "knowledge_base/Documents main/MTCTE Regulations/downloadDocument_mtcte_tandc.pdf",
+      "sha256": "8ee445af6c3d51d500ea1c1f612b47c410d1796853630cc8d7b98869f085f8d5",
+      "size_bytes": 8385,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 2,
+      "active_main_index_chunks": 5,
+      "extracted_title": "downloadDocument_mtcte_tandc.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/MTCTE Regulations/Guidelines for Labs MTCTE.pdf",
+      "sha256": "8238c1fb4f928f80af1028f15e57003357ab95be48e653a656969a95e53c2e4d",
+      "size_bytes": 575857,
+      "category": "General or unrelated source material",
+      "decision": "ARCHIVE",
+      "reason": "Extracted document title/content (downloadDocument_20230719094056.pdf) is outside disaster management and international emergency-telecom standards.",
+      "pdf_pages": 4,
+      "active_main_index_chunks": 10,
+      "extracted_title": "downloadDocument_20230719094056.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/MTCTE Regulations/procedure 2 MTCTE.pdf",
+      "sha256": "c49ddbce3dc6f68a52051676851f0bc92be418319f5b50def381a0578bca0b38",
+      "size_bytes": 422401,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 51,
+      "active_main_index_chunks": 114,
+      "extracted_title": "mtcte_procedure_2021_compressed.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/MTCTE Regulations/Procedure MTCTE.pdf",
+      "sha256": "db1fcd4c591e6f35603aeb3c9f5095977af35f57f00490a0cff54385602ffd5c",
+      "size_bytes": 565566,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 40,
+      "active_main_index_chunks": 77,
+      "extracted_title": "downloadDocument_mtcte_procedure.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/MTCTE Regulations/Testing and Certification MTCTE.pdf",
+      "sha256": "6d25f2d1a1f1ceaef52d6d406611e7ab9daa0d944788cc776711897f577e65e0",
+      "size_bytes": 1610499,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 52,
+      "active_main_index_chunks": 121,
+      "extracted_title": "MTCTE_Procedure_V3.0_0.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/MTCTE Regulations/User Guidelines MTCTE.pdf",
+      "sha256": "b115401fa1893055767cdb8f31bc8b03680438858ec905952cb2648693f56f47",
+      "size_bytes": 4379254,
+      "category": "Non-disaster cyber, privacy, or AI material",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body concerns cyber, privacy, or AI requirements rather than disaster management or emergency telecommunications.",
+      "pdf_pages": 62,
+      "active_main_index_chunks": 125,
+      "extracted_title": "downloadDocument_20240403150023.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/Rules-Regulations-V1.0.0 TSDSI.pdf",
+      "sha256": "d9a0887380645016de2ee9181045dfb6a65254038e22a6700478242a925041e2",
+      "size_bytes": 681617,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 49,
+      "active_main_index_chunks": 124,
+      "extracted_title": "TELECOMMUNICATIONS STANDARDS"
+    },
+    {
+      "path": "knowledge_base/Documents main/TEC Guidelines/enb with 21070 2023 TEC.pdf",
+      "sha256": "5a54d94e833d29d3e0904ca3a2737bc30ce16c8bb471705ea402a7bec62be6b4",
+      "size_bytes": 1146919,
+      "category": "Non-disaster cyber, privacy, or AI material",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body concerns cyber, privacy, or AI requirements rather than disaster management or emergency telecommunications.",
+      "pdf_pages": 79,
+      "active_main_index_chunks": 136,
+      "extracted_title": "वर्गीय आवश्यकताओं के लिए मानक"
+    },
+    {
+      "path": "knowledge_base/Documents main/TEC Guidelines/GR of gNodeB TEC.pdf",
+      "sha256": "11ebc60ab0b342a4b0fee2943ef9f1a3b6eaf0c1599335401ff438ec3b1b4021",
+      "size_bytes": 869574,
+      "category": "Non-disaster cyber, privacy, or AI material",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body concerns cyber, privacy, or AI requirements rather than disaster management or emergency telecommunications.",
+      "pdf_pages": 58,
+      "active_main_index_chunks": 111,
+      "extracted_title": "वर्गीय आवश्यकताओं के लिए मानक"
+    },
+    {
+      "path": "knowledge_base/Documents main/TEC Guidelines/LAWFUL INTERCEPTION of MOBILE (GSMUMTSEPS5G) NETWORK after DCC TEC.pdf",
+      "sha256": "e96b5edc3ec12270c0959015c230fa85412af64a909a06be2b56637d5ec10633",
+      "size_bytes": 850907,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 78,
+      "active_main_index_chunks": 157,
+      "extracted_title": "Working"
+    },
+    {
+      "path": "knowledge_base/Documents main/TEC Guidelines/ORAN GR_after DCC-Final-26.06.2024 TEC.pdf",
+      "sha256": "2de6ca094fa1283653cd35d483c9c68c31de529be7f8e35df3e99056bba3c4fc",
+      "size_bytes": 754343,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 57,
+      "active_main_index_chunks": 121,
+      "extracted_title": "वर्गीय आवश्यकताओं के लिए मानक"
+    },
+    {
+      "path": "knowledge_base/Documents main/TEC Guidelines/Standard for GR of 5G Core_22160_2023 TEC.pdf",
+      "sha256": "c8d5098b2bd044d64b69d92eef44c93e2ef18e6e90374b09ed8256251cc96994",
+      "size_bytes": 1331026,
+      "category": "5G Core technical standard",
+      "decision": "ARCHIVE",
+      "reason": "The PDF cover and scope identify TEC Standard 22160:2023 for 5G Core; Cell Broadcast appears only as a cited external reference, not as the document subject.",
+      "pdf_pages": 70,
+      "active_main_index_chunks": 125,
+      "extracted_title": "वर्गीय आवश्यकताओं के लिए मानक"
+    },
+    {
+      "path": "knowledge_base/Documents main/TRAI_Act/Amendment_22092026.pdf",
+      "sha256": "5602450d9b0d902a1b11b1c757e5ec834684343bf8020f314334f9772e98ce84",
+      "size_bytes": 5393604,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 10,
+      "active_main_index_chunks": 46,
+      "extracted_title": "LILITIE"
+    },
+    {
+      "path": "knowledge_base/Documents main/TRAI_Act/ITSAR111102209.pdf",
+      "sha256": "51e6ef533b3efa6ff45ea6c6fb5fd0a0c40f6c98ad672bf2d0e33a90f85fe45b",
+      "size_bytes": 746542,
+      "category": "Non-disaster cyber, privacy, or AI material",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body concerns cyber, privacy, or AI requirements rather than disaster management or emergency telecommunications.",
+      "pdf_pages": 59,
+      "active_main_index_chunks": 151,
+      "extracted_title": "Indian Telecommunication Security Assurance Requirements (ITSAR)"
+    },
+    {
+      "path": "knowledge_base/Documents main/TRAI_Act/Regulation_14052026.pdf",
+      "sha256": "b0f40b4ecea3e1ccbc0ba3e519cd657136abf8acad157a0e97e7df7727e96325",
+      "size_bytes": 7599338,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 37,
+      "active_main_index_chunks": 111,
+      "extracted_title": "Regulation (Amendment) dated 13.05.2026 (1).pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/TRAI_Act/Regulation_18092026.pdf",
+      "sha256": "ea223d77aac46d6db574f0a7dc0dfa1d53d0fe091430173b32b6185ed095fd70",
+      "size_bytes": 16302942,
+      "category": "Non-disaster cyber, privacy, or AI material",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body concerns cyber, privacy, or AI requirements rather than disaster management or emergency telecommunications.",
+      "pdf_pages": 59,
+      "active_main_index_chunks": 365,
+      "extracted_title": "TO BE PUBLISHED IN THE GAZETTE OF INDIA, EXTRAORDINARY,"
+    },
+    {
+      "path": "knowledge_base/Documents main/TRAI_Act/Regulation_ASR_24032026.pdf",
+      "sha256": "1f86f5e2ed0b1e7b96911fc67ba7766ff0066a5303d24dcff3c66d17aec2145b",
+      "size_bytes": 176850,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 7,
+      "active_main_index_chunks": 33,
+      "extracted_title": "TO BE PUBLISHED IN THE GAZETTE OF INDIA,"
+    },
+    {
+      "path": "knowledge_base/Documents main/TRAI_Act/Regulation_TTO_24032026.pdf",
+      "sha256": "e93264a85efef71f9b6e493fb3983edf19d8c7152041c086156ee466b912974f",
+      "size_bytes": 210886,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 10,
+      "active_main_index_chunks": 42,
+      "extracted_title": "TO BE PUBLISHED IN THE GAZETTE OF INDIA,"
+    },
+    {
+      "path": "knowledge_base/Documents main/TRAI_Act/RegulationsMNPEng13122018.pdf",
+      "sha256": "2ebd9d618eab67e00d40dbc3eb71d677ea40d65acc32ea3b8a4778a9e29fa1a1",
+      "size_bytes": 436770,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 29,
+      "active_main_index_chunks": 112,
+      "extracted_title": "Ravinder"
+    },
+    {
+      "path": "knowledge_base/Documents main/TRAI_Act/Repealing_Regulation_10092026.pdf",
+      "sha256": "104586ab029eb14f9d011a22f8ceaa760e408fee4680965c8b38d6d00fe317b8",
+      "size_bytes": 3038050,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 5,
+      "active_main_index_chunks": 21,
+      "extracted_title": "Regulation.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/TRAI_Act/Revised_Std_guide_v_1_0_2.pdf",
+      "sha256": "59e8d13a144c557d08dc553ce2e1922ad6d8fb20f2b165cbfbf413a0c809e01c",
+      "size_bytes": 425983,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 20,
+      "active_main_index_chunks": 68,
+      "extracted_title": "Microsoft Word - Draft Standardisation guide_Version 1.0.2.docx"
+    },
+    {
+      "path": "knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf",
+      "sha256": "785d4f348e9e31a26c8b25801bfa3d5f94742f5bbd2c90d2fc80a226f9198bea",
+      "size_bytes": 12826378,
+      "category": "Telecom regulatory legislation",
+      "decision": "ARCHIVE",
+      "reason": "OCR text identifies the Telecom Regulatory Authority of India Act, 1997 and its Authority/appointment provisions; it is outside the retained disaster/emergency scope.",
+      "pdf_pages": 17,
+      "active_main_index_chunks": 0,
+      "extracted_title": "The_TRAI_Act_1997 Chapter 1.pdf"
+    },
+    {
+      "path": "knowledge_base/Documents main/TRAI_Act/TRAI TCCPR.pdf",
+      "sha256": "4e6ce54e76fc6970c96d9c9337bc6195bbedd98e268051c5dde87d600f79bce2",
+      "size_bytes": 1857609,
+      "category": "General telecom regulation or technical standards",
+      "decision": "ARCHIVE",
+      "reason": "The extracted title/body covers general telecom rules, network architecture, equipment, or standards outside disaster/emergency communications.",
+      "pdf_pages": 48,
+      "active_main_index_chunks": 273,
+      "extracted_title": "Microsoft Word - Final English TCCCPR Regulation_12.02.2025_2.00 pm"
+    },
+    {
+      "path": "knowledge_base/DoT National Disaster/2025-04-08-1617.pdf",
+      "sha256": "469190d1709b8165b861e814499e16cc138e5a6d26a163c586db1f6b3c25b873",
+      "size_bytes": 182422,
+      "category": "Disaster-management commencement notification",
+      "decision": "KEEP",
+      "reason": "OCR text identifies Home Affairs S.O. 1648(E), appointing 9 April 2025 as the commencement date for the Disaster Management (Amendment) Act, 2025.",
+      "pdf_pages": 1,
+      "active_main_index_chunks": 0,
+      "extracted_title": "2025-04-08-1617.pdf"
+    },
+    {
+      "path": "knowledge_base/DoT National Disaster/2025-04-30-1893.pdf",
+      "sha256": "c77c057e095b86b3bc2e000ed4cd73234739a4c0663bf036d6a7fe2650e161fd",
+      "size_bytes": 286531,
+      "category": "Disaster-management committee notification",
+      "decision": "KEEP",
+      "reason": "OCR text identifies Home Affairs S.O. 1936(E), constituting a High Level Committee under section 8B of the Disaster Management Act, 2005.",
+      "pdf_pages": 2,
+      "active_main_index_chunks": 0,
+      "extracted_title": "2025-04-30-1893.pdf"
+    },
+    {
+      "path": "knowledge_base/DoT National Disaster/2025-07-23-446.pdf",
+      "sha256": "f33e0044117d11baffe90acba0e852281e85a68390bd1e936bad67779f232643",
+      "size_bytes": 409099,
+      "category": "Disaster-management committee rules",
+      "decision": "KEEP",
+      "reason": "OCR text identifies the Disaster Management National Crisis Management Committee (Procedure) Rules, 2025.",
+      "pdf_pages": 2,
+      "active_main_index_chunks": 0,
+      "extracted_title": "2025-07-23-446.pdf"
+    },
+    {
+      "path": "knowledge_base/DoT National Disaster/262126.pdf",
+      "sha256": "06ffcab357c76fbfca4b0366372f311e439a7e54d38d87209702110cdca83e59",
+      "size_bytes": 590131,
+      "category": "Disaster-management legislation",
+      "decision": "KEEP",
+      "reason": "Legislative text amends the Disaster Management Act and sets disaster-management provisions or commencement.",
+      "pdf_pages": 14,
+      "active_main_index_chunks": 0,
+      "extracted_title": "REGISTERED NO. DL—(N)04/0007/2003—25"
+    },
+    {
+      "path": "knowledge_base/DoT National Disaster/262343.pdf",
+      "sha256": "8f4d2159d96cdbe974fbae2aec2856ab2880b5696511909dde6a51c28e99f645",
+      "size_bytes": 613700,
+      "category": "Disaster-management legislation",
+      "decision": "KEEP",
+      "reason": "Legislative text amends the Disaster Management Act and sets disaster-management provisions or commencement.",
+      "pdf_pages": 1,
+      "active_main_index_chunks": 0,
+      "extracted_title": "2418 GI/2025"
+    },
+    {
+      "path": "knowledge_base/DoT National Disaster/CDAct1968_29052020.pdf",
+      "sha256": "d864fbadafba5cfac2aadba40c48a5bcd3acf61328bab2a25772ae04aed855cd",
+      "size_bytes": 985208,
+      "category": "Civil-defence preparedness legislation",
+      "decision": "KEEP",
+      "reason": "The PDF title and opening text identify the Civil Defence Act, 1968, which provides for civil defence and related preparedness.",
+      "pdf_pages": 9,
+      "active_main_index_chunks": 0,
+      "extracted_title": "THE CIVIL DEFENCE ACT, 1968"
+    },
+    {
+      "path": "knowledge_base/DoT National Disaster/CDRules1968_29052020.pdf",
+      "sha256": "0a0fa60b8f29eda4a0256cb1e1ff4683fe28f59dee48538f1d2501d7e4479876",
+      "size_bytes": 114835,
+      "category": "Civil-defence preparedness rules",
+      "decision": "KEEP",
+      "reason": "The PDF opening text identifies the Civil Defence Rules made under the Civil Defence Act.",
+      "pdf_pages": 13,
+      "active_main_index_chunks": 0,
+      "extracted_title": "MINISTRY OF HOME AFFAIRS"
+    },
+    {
+      "path": "knowledge_base/DoT National Disaster/Compendium-on-5G-Use-Case-Lab.pdf",
+      "sha256": "5a16fa633d98233600b2ac9dc7e3d5282723dbf8b12a5f45442f63402b837726",
+      "size_bytes": 39056782,
+      "category": "General or unrelated source material",
+      "decision": "ARCHIVE",
+      "reason": "Extracted document title/content (COMPENDIUM ON) is outside disaster management and international emergency-telecom standards.",
+      "pdf_pages": 641,
+      "active_main_index_chunks": 0,
+      "extracted_title": "COMPENDIUM ON"
+    },
+    {
+      "path": "knowledge_base/DoT National Disaster/Compendium-on-Disaster-Management-in-Telecom-Network.pdf",
+      "sha256": "ed6f0ff9754357a10b86884bbbcc753bc11d8f5f0d54f92ab9b4fa0e61d26a29",
+      "size_bytes": 32402587,
+      "category": "DoT disaster communications guidance",
+      "decision": "KEEP",
+      "reason": "Document text identifies a DoT compendium specifically on disaster management in telecom networks.",
+      "pdf_pages": 159,
+      "active_main_index_chunks": 0,
+      "extracted_title": "INDIA TELECOM"
+    },
+    {
+      "path": "knowledge_base/DoT National Disaster/Compendium-on-Infrastructure-Providers-IP-1-under-DoT-guidelines.pdf",
+      "sha256": "afd8cef585f7565e3575d32d7bbb7de8e681e4339058ed100a8f73461ab8b48f",
+      "size_bytes": 32503683,
+      "category": "DoT disaster communications guidance",
+      "decision": "KEEP",
+      "reason": "Document body contains a dedicated IP-1 disaster-management section with emergency telecom-network resource sharing.",
+      "pdf_pages": 206,
+      "active_main_index_chunks": 0,
+      "extracted_title": "Compendium-on-Infrastructure-Providers-IP-1-under-DoT-guidelines.pdf"
+    },
+    {
+      "path": "knowledge_base/DoT National Disaster/DM-Act-2005.pdf",
+      "sha256": "e4dad905884fcf2c6342d4def886465b2b47db8acdf658b83351ad6784565295",
+      "size_bytes": 533354,
+      "category": "Disaster-management legislation",
+      "decision": "KEEP",
+      "reason": "The PDF text identifies the consolidated Disaster Management Act, 2005 and its amendments.",
+      "pdf_pages": 39,
+      "active_main_index_chunks": 0,
+      "extracted_title": "The Disaster Management Act, 2005"
+    },
+    {
+      "path": "knowledge_base/DoT National Disaster/FireLegislation.pdf",
+      "sha256": "362eca3d442e7b36059b08f5ed2d8e82e6a6caf900894a6757874ff775c1cd99",
+      "size_bytes": 313697,
+      "category": "Emergency-response legislation",
+      "decision": "KEEP",
+      "reason": "The operative text establishes a State fire force or fire-and-emergency service.",
+      "pdf_pages": 52,
+      "active_main_index_chunks": 0,
+      "extracted_title": "BILL TO PROVIDE FOR THE MAINTENANCE OF A FIRE FORCE FOR"
+    },
+    {
+      "path": "knowledge_base/DoT National Disaster/Jan-Vishwash-Act-2026.pdf",
+      "sha256": "bff88b5f143e2b47a5641f98d31fcdb6920f568d50a2cfc6f9f175cf03a17285",
+      "size_bytes": 664645,
+      "category": "Disaster-management commencement notification",
+      "decision": "KEEP",
+      "reason": "The Gazette text sets commencement dates for Jan Vishwas provisions relating to the Disaster Management Act, 2005 and Civil Defence Act, 1968.",
+      "pdf_pages": 5,
+      "active_main_index_chunks": 0,
+      "extracted_title": "3083  GI/2026"
+    },
+    {
+      "path": "knowledge_base/DoT National Disaster/National Disaster Management Plan May 2016.pdf",
+      "sha256": "d30ac28b2b59d7cbd39938606798462401693a7c396e6923310e2f8e2e02f626",
+      "size_bytes": 4682950,
+      "category": "Disaster-management plan",
+      "decision": "KEEP",
+      "reason": "The cover identifies the National Disaster Management Plan published by NDMA in May 2016.",
+      "pdf_pages": 192,
+      "active_main_index_chunks": 0,
+      "extracted_title": "National Disaster"
+    },
+    {
+      "path": "knowledge_base/DoT National Disaster/national-dm-policy2009.pdf",
+      "sha256": "83b8d6a8e5293ad941beebd2ec2d2ef381dfec956d72e36e7ebd928a2f4ffda2",
+      "size_bytes": 1448747,
+      "category": "Disaster-management policy",
+      "decision": "KEEP",
+      "reason": "The cover identifies the National Policy on Disaster Management, 2009.",
+      "pdf_pages": 56,
+      "active_main_index_chunks": 0,
+      "extracted_title": "NATIONAL POLICY"
+    },
+    {
+      "path": "knowledge_base/DoT National Disaster/Removal-of-Difficulties.pdf",
+      "sha256": "c714da30753c474dbcddbda9a3924fdce6ee4da31fa02fe8c2b6739476be6a45",
+      "size_bytes": 705115,
+      "category": "Administrative order under disaster legislation",
+      "decision": "ARCHIVE",
+      "reason": "The order text addresses NDMA staff salaries, allowances, remuneration, and service conditions rather than disaster response or emergency telecommunications.",
+      "pdf_pages": 3,
+      "active_main_index_chunks": 0,
+      "extracted_title": "1516  GI/2026"
+    },
+    {
+      "path": "knowledge_base/DoT National Disaster/Revised Model Fire Service Bill.pdf",
+      "sha256": "f61f5debb2457eedca75b1e69d162ecaba23eb80b782db0cdaa368e96cc8f22e",
+      "size_bytes": 342820,
+      "category": "Emergency-response legislation",
+      "decision": "KEEP",
+      "reason": "The operative text establishes a State fire force or fire-and-emergency service.",
+      "pdf_pages": 32,
+      "active_main_index_chunks": 0,
+      "extracted_title": "Model Bill to Provide for the"
+    },
+    {
+      "path": "knowledge_base/DoT National Disaster/The Disaster Management Act, 2005.pdf",
+      "sha256": "aba52057cf0ac4853499f9766baf8c79dac395d6ea469c33e503b102604850fd",
+      "size_bytes": 390528,
+      "category": "Disaster-management legislation",
+      "decision": "KEEP",
+      "reason": "The PDF title and operative sections identify the Disaster Management Act, 2005.",
+      "pdf_pages": 29,
+      "active_main_index_chunks": 0,
+      "extracted_title": "THE DISASTER MANAGEMENT ACT, 2005"
+    },
+    {
+      "path": "knowledge_base/ITU Disaster guidelines.pdf",
+      "sha256": "4c765c9c919dd5f092a9421f155806a1e630c1b32962f66b5f83854f7396a12c",
+      "size_bytes": 3734737,
+      "category": "International disaster/emergency telecommunications standard",
+      "decision": "KEEP",
+      "reason": "Document text identifies ITU guidance for emergency telecommunication planning or disaster network resilience and recovery.",
+      "pdf_pages": 106,
+      "active_main_index_chunks": 0,
+      "extracted_title": "ITU Guidelines for national emergency telecommunication plans ${field:Subtitle report}"
+    },
+    {
+      "path": "knowledge_base/T-REC-L.Sup35-201706-I!!PDF-E.pdf",
+      "sha256": "0d996470e6b67babb003b5e73b99af3aefdf7b404729522ff9baeaec73044457",
+      "size_bytes": 1759841,
+      "category": "International disaster/emergency telecommunications standard",
+      "decision": "KEEP",
+      "reason": "Document text identifies ITU guidance for emergency telecommunication planning or disaster network resilience and recovery.",
+      "pdf_pages": 32,
+      "active_main_index_chunks": 0,
+      "extracted_title": "I n t e r n a t i o n a l T e l e c o m m u n i c a t i o n U n i o n"
+    },
+    {
+      "path": "knowledge_base/kb_inventory_report.json",
+      "sha256": "f3b235d6557d5be7c3dd27857a826f718337506bd11d34c9bb9dbdb6df9343bd",
+      "size_bytes": 91768,
+      "category": "Knowledge-base inventory and source metadata",
+      "decision": "KEEP",
+      "reason": "Inventory records current PDF hashes, extracted titles, and source/index linkage for the audit and retained-corpus rebuild.",
+      "documents_count": 94
+    },
+    {
+      "path": "knowledge_base/.ocr_cache/2025-04-08-1617_38574cd2/page_1.json",
+      "sha256": "2d1e5b5959e23dbaf9dfef50dd975b4bbda3c9276c9f627fdc5bf7eb9cbab45d",
+      "size_bytes": 7292,
+      "category": "OCR extraction support for knowledge_base/DoT National Disaster/2025-04-08-1617.pdf",
+      "decision": "KEEP",
+      "reason": "OCR text/coordinates support extraction and page evidence for the retained source PDF; OCR content was reviewed.",
+      "source_pdf": "knowledge_base/DoT National Disaster/2025-04-08-1617.pdf"
+    },
+    {
+      "path": "knowledge_base/.ocr_cache/2025-04-30-1893_49edb17d/page_1.json",
+      "sha256": "220d1bdfeb0e40eae15fb3093f0d1757ae7826e6741be03f6acfc25d9f12fccf",
+      "size_bytes": 5539,
+      "category": "OCR extraction support for knowledge_base/DoT National Disaster/2025-04-30-1893.pdf",
+      "decision": "KEEP",
+      "reason": "OCR text/coordinates support extraction and page evidence for the retained source PDF; OCR content was reviewed.",
+      "source_pdf": "knowledge_base/DoT National Disaster/2025-04-30-1893.pdf"
+    },
+    {
+      "path": "knowledge_base/.ocr_cache/2025-04-30-1893_49edb17d/page_2.json",
+      "sha256": "55b79fdc66ed72f64d2e4d4cade0001e90496a1e2d4ea2d44fafbe6d1f9daa95",
+      "size_bytes": 6763,
+      "category": "OCR extraction support for knowledge_base/DoT National Disaster/2025-04-30-1893.pdf",
+      "decision": "KEEP",
+      "reason": "OCR text/coordinates support extraction and page evidence for the retained source PDF; OCR content was reviewed.",
+      "source_pdf": "knowledge_base/DoT National Disaster/2025-04-30-1893.pdf"
+    },
+    {
+      "path": "knowledge_base/.ocr_cache/2025-07-23-446_08d6c3ab/page_1.json",
+      "sha256": "67e5432c939149201e97dad44be9940a3b000f450a0e2d6f0d23bb95383f720e",
+      "size_bytes": 4608,
+      "category": "OCR extraction support for knowledge_base/DoT National Disaster/2025-07-23-446.pdf",
+      "decision": "KEEP",
+      "reason": "OCR text/coordinates support extraction and page evidence for the retained source PDF; OCR content was reviewed.",
+      "source_pdf": "knowledge_base/DoT National Disaster/2025-07-23-446.pdf"
+    },
+    {
+      "path": "knowledge_base/.ocr_cache/2025-07-23-446_08d6c3ab/page_2.json",
+      "sha256": "856df54abb15f0d6dabd2a096525b426936ed32c94bbd8d6e461a3f2948658c7",
+      "size_bytes": 11317,
+      "category": "OCR extraction support for knowledge_base/DoT National Disaster/2025-07-23-446.pdf",
+      "decision": "KEEP",
+      "reason": "OCR text/coordinates support extraction and page evidence for the retained source PDF; OCR content was reviewed.",
+      "source_pdf": "knowledge_base/DoT National Disaster/2025-07-23-446.pdf"
+    },
+    {
+      "path": "knowledge_base/.ocr_cache/DRDO_ToT_Policy2025_26937d07/page_4.json",
+      "sha256": "23a4686a8665b58079b7a838fe75f4df6a0ede5c1d7bf6a7065657b672182763",
+      "size_bytes": 6619,
+      "category": "Orphan OCR cache",
+      "decision": "ARCHIVE",
+      "reason": "Extracted text has no corresponding source PDF in the repository.",
+      "source_pdf": "no corresponding PDF in repository"
+    },
+    {
+      "path": "knowledge_base/.ocr_cache/The_TRAI_Act_1997_Chapter_1_8fab5112/page_1.json",
+      "sha256": "a348dd7ac68839c7b5c4a694e03f32efc4553349bd64850c616a1282247afb23",
+      "size_bytes": 12011,
+      "category": "OCR extraction support for knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf",
+      "decision": "ARCHIVE",
+      "reason": "OCR cache belongs to an out-of-scope source PDF and is not needed by the retained corpus.",
+      "source_pdf": "knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf"
+    },
+    {
+      "path": "knowledge_base/.ocr_cache/The_TRAI_Act_1997_Chapter_1_8fab5112/page_10.json",
+      "sha256": "1958a6297ab23be9201561dc19f528834b07a47e7cc7c2aca5d8ea33ea261e72",
+      "size_bytes": 15369,
+      "category": "OCR extraction support for knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf",
+      "decision": "ARCHIVE",
+      "reason": "OCR cache belongs to an out-of-scope source PDF and is not needed by the retained corpus.",
+      "source_pdf": "knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf"
+    },
+    {
+      "path": "knowledge_base/.ocr_cache/The_TRAI_Act_1997_Chapter_1_8fab5112/page_11.json",
+      "sha256": "608a26aa47495db7ea1f9fb597363edab9d3507350a92d7705a62a4e0569c059",
+      "size_bytes": 16657,
+      "category": "OCR extraction support for knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf",
+      "decision": "ARCHIVE",
+      "reason": "OCR cache belongs to an out-of-scope source PDF and is not needed by the retained corpus.",
+      "source_pdf": "knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf"
+    },
+    {
+      "path": "knowledge_base/.ocr_cache/The_TRAI_Act_1997_Chapter_1_8fab5112/page_12.json",
+      "sha256": "f0b6b97ceabfb561a76fca28c09a11d432b9971c0d472f2c2f1b6bb911209a54",
+      "size_bytes": 16375,
+      "category": "OCR extraction support for knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf",
+      "decision": "ARCHIVE",
+      "reason": "OCR cache belongs to an out-of-scope source PDF and is not needed by the retained corpus.",
+      "source_pdf": "knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf"
+    },
+    {
+      "path": "knowledge_base/.ocr_cache/The_TRAI_Act_1997_Chapter_1_8fab5112/page_13.json",
+      "sha256": "c738719f3634e61cb7c14bf4b5d61fc1170cc8a56e980fbf1f6554dd9ddf9f0e",
+      "size_bytes": 15547,
+      "category": "OCR extraction support for knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf",
+      "decision": "ARCHIVE",
+      "reason": "OCR cache belongs to an out-of-scope source PDF and is not needed by the retained corpus.",
+      "source_pdf": "knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf"
+    },
+    {
+      "path": "knowledge_base/.ocr_cache/The_TRAI_Act_1997_Chapter_1_8fab5112/page_14.json",
+      "sha256": "534695a7be6480d20499aae064e5a6d00c2c0fd851a37084cdda0e99c38fec7c",
+      "size_bytes": 16811,
+      "category": "OCR extraction support for knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf",
+      "decision": "ARCHIVE",
+      "reason": "OCR cache belongs to an out-of-scope source PDF and is not needed by the retained corpus.",
+      "source_pdf": "knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf"
+    },
+    {
+      "path": "knowledge_base/.ocr_cache/The_TRAI_Act_1997_Chapter_1_8fab5112/page_15.json",
+      "sha256": "aff03031db7d7a3124b68298b2f15bfc90e07393f9cca137edd394f698f80dc0",
+      "size_bytes": 15930,
+      "category": "OCR extraction support for knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf",
+      "decision": "ARCHIVE",
+      "reason": "OCR cache belongs to an out-of-scope source PDF and is not needed by the retained corpus.",
+      "source_pdf": "knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf"
+    },
+    {
+      "path": "knowledge_base/.ocr_cache/The_TRAI_Act_1997_Chapter_1_8fab5112/page_16.json",
+      "sha256": "946c950f8eedb25b8b534225585a5a7dad77c509b70877be97cdb892af25ddec",
+      "size_bytes": 15464,
+      "category": "OCR extraction support for knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf",
+      "decision": "ARCHIVE",
+      "reason": "OCR cache belongs to an out-of-scope source PDF and is not needed by the retained corpus.",
+      "source_pdf": "knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf"
+    },
+    {
+      "path": "knowledge_base/.ocr_cache/The_TRAI_Act_1997_Chapter_1_8fab5112/page_17.json",
+      "sha256": "fbfef18047a955b7776fb0259eab25b78cd1de2d77e1f189fe12862f88404638",
+      "size_bytes": 5877,
+      "category": "OCR extraction support for knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf",
+      "decision": "ARCHIVE",
+      "reason": "OCR cache belongs to an out-of-scope source PDF and is not needed by the retained corpus.",
+      "source_pdf": "knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf"
+    },
+    {
+      "path": "knowledge_base/.ocr_cache/The_TRAI_Act_1997_Chapter_1_8fab5112/page_2.json",
+      "sha256": "ad363cd016ac663e908623be4482abc461ffe6dd6b528fc15f502b672179b372",
+      "size_bytes": 6928,
+      "category": "OCR extraction support for knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf",
+      "decision": "ARCHIVE",
+      "reason": "OCR cache belongs to an out-of-scope source PDF and is not needed by the retained corpus.",
+      "source_pdf": "knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf"
+    },
+    {
+      "path": "knowledge_base/.ocr_cache/The_TRAI_Act_1997_Chapter_1_8fab5112/page_3.json",
+      "sha256": "9df0f79358437d7fd7c24caefd174066adaf82be1111a2c86952634626a91144",
+      "size_bytes": 12728,
+      "category": "OCR extraction support for knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf",
+      "decision": "ARCHIVE",
+      "reason": "OCR cache belongs to an out-of-scope source PDF and is not needed by the retained corpus.",
+      "source_pdf": "knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf"
+    },
+    {
+      "path": "knowledge_base/.ocr_cache/The_TRAI_Act_1997_Chapter_1_8fab5112/page_4.json",
+      "sha256": "5064bdec2381df5c023daf3a96aa3144bbe072001432279afa3959d63ddfc6fb",
+      "size_bytes": 17155,
+      "category": "OCR extraction support for knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf",
+      "decision": "ARCHIVE",
+      "reason": "OCR cache belongs to an out-of-scope source PDF and is not needed by the retained corpus.",
+      "source_pdf": "knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf"
+    },
+    {
+      "path": "knowledge_base/.ocr_cache/The_TRAI_Act_1997_Chapter_1_8fab5112/page_5.json",
+      "sha256": "a1c5fca9928dc2b3abd13f3708aca713f39873870646b631fa823cccda90d1a2",
+      "size_bytes": 14859,
+      "category": "OCR extraction support for knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf",
+      "decision": "ARCHIVE",
+      "reason": "OCR cache belongs to an out-of-scope source PDF and is not needed by the retained corpus.",
+      "source_pdf": "knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf"
+    },
+    {
+      "path": "knowledge_base/.ocr_cache/The_TRAI_Act_1997_Chapter_1_8fab5112/page_6.json",
+      "sha256": "2d2c93b03fc42b9271a22a8b6f869660e6d2f0e270656cee7f6d19fe94bb16c7",
+      "size_bytes": 15317,
+      "category": "OCR extraction support for knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf",
+      "decision": "ARCHIVE",
+      "reason": "OCR cache belongs to an out-of-scope source PDF and is not needed by the retained corpus.",
+      "source_pdf": "knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf"
+    },
+    {
+      "path": "knowledge_base/.ocr_cache/The_TRAI_Act_1997_Chapter_1_8fab5112/page_7.json",
+      "sha256": "a38c3851422029cdc84d1a76821272cbb4c238f32bec8cbbb3881ffa77e569c3",
+      "size_bytes": 16030,
+      "category": "OCR extraction support for knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf",
+      "decision": "ARCHIVE",
+      "reason": "OCR cache belongs to an out-of-scope source PDF and is not needed by the retained corpus.",
+      "source_pdf": "knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf"
+    },
+    {
+      "path": "knowledge_base/.ocr_cache/The_TRAI_Act_1997_Chapter_1_8fab5112/page_8.json",
+      "sha256": "e88ee0e8d6eab444fad48cb89f3a572b3e9e879e07e207aee974e44bab3e1d5b",
+      "size_bytes": 14006,
+      "category": "OCR extraction support for knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf",
+      "decision": "ARCHIVE",
+      "reason": "OCR cache belongs to an out-of-scope source PDF and is not needed by the retained corpus.",
+      "source_pdf": "knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf"
+    },
+    {
+      "path": "knowledge_base/.ocr_cache/The_TRAI_Act_1997_Chapter_1_8fab5112/page_9.json",
+      "sha256": "b6f5d6dd34546c1d367fd70c90477d19c55e3cd074171de781da894a235006d2",
+      "size_bytes": 16235,
+      "category": "OCR extraction support for knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf",
+      "decision": "ARCHIVE",
+      "reason": "OCR cache belongs to an out-of-scope source PDF and is not needed by the retained corpus.",
+      "source_pdf": "knowledge_base/Documents main/TRAI_Act/The_TRAI_Act_1997 Chapter 1.pdf"
+    },
+    {
+      "path": "rag/chunks_new.json",
+      "sha256": "0536460470cb9441d9b4c6454e2af8b8a7d9d70e8cf4a73e878b10ac940cd35f",
+      "size_bytes": 18147223,
+      "category": "Mixed legacy main chunk metadata",
+      "decision": "ARCHIVE",
+      "reason": "The 14,143 active chunks span in-scope disaster sources and general telecom rules/standards; preserve as legacy rollback metadata until a retained-only replacement is verified.",
+      "active_main_chunk_count": 14143,
+      "active_main_unique_sources": 72
+    },
+    {
+      "path": "rag/faiss_new.index",
+      "sha256": "b53f5fb3fb47b3f27c602351745e278e201741e3972f38cb9f182f9e7b760402",
+      "size_bytes": 57929773,
+      "category": "Mixed legacy main vector index",
+      "decision": "ARCHIVE",
+      "reason": "The existing FAISS index represents the broad corpus; preserve it unchanged until a separate retained-only index passes source/page validation.",
+      "active_main_chunk_count": 14143,
+      "active_main_unique_sources": 72
+    },
+    {
+      "path": "rag/embeddings_new.npy",
+      "sha256": "268b9db6c5da226843a974310014def80da4923519aa96beefef73ae8710a855",
+      "size_bytes": 57929856,
+      "category": "Mixed legacy main embeddings",
+      "decision": "ARCHIVE",
+      "reason": "The embedding matrix belongs to the broad legacy corpus; preserve it unchanged until a separate retained-only index passes validation.",
+      "active_main_chunk_count": 14143,
+      "active_main_unique_sources": 72
+    },
+    {
+      "path": "rag/DEFENCE CHUNKS/defence_chunks.json",
+      "sha256": "95a48ab6ed504b1adceea9c8ea8f18a7174d975ce74fc96172a6714aae3a0f11",
+      "size_bytes": 510505,
+      "category": "Defence retrieval bundle",
+      "decision": "ARCHIVE",
+      "reason": "Defence chunks/indexes are outside the retained emergency-telecom scope and their referenced source PDFs are absent from this repository, preventing verifiable page citations.",
+      "chunk_count": 397,
+      "source_file_count": 3,
+      "chunks_missing_repo_source_pdf": 397,
+      "source_files": [
+        "DEFENCE\\DRDO_ToT_Policy2025.pdf",
+        "DEFENCE\\Drone Rules 2021.pdf",
+        "DEFENCE\\UAS_CONEMP NATO.pdf"
+      ]
+    },
+    {
+      "path": "rag/DEFENCE CHUNKS/defence_embeddings.npy",
+      "sha256": "7ad148367b2256861ea339bfd41b31a7349a8722549620b5d1a5502055a60861",
+      "size_bytes": 1626240,
+      "category": "Defence retrieval bundle",
+      "decision": "ARCHIVE",
+      "reason": "Defence chunks/indexes are outside the retained emergency-telecom scope and their referenced source PDFs are absent from this repository, preventing verifiable page citations."
+    },
+    {
+      "path": "rag/DEFENCE CHUNKS/defence_faiss.index",
+      "sha256": "f8daab974027dcd43e9c2ae80299c7a072bf123855313c17346194aa88509e10",
+      "size_bytes": 1626157,
+      "category": "Defence retrieval bundle",
+      "decision": "ARCHIVE",
+      "reason": "Defence chunks/indexes are outside the retained emergency-telecom scope and their referenced source PDFs are absent from this repository, preventing verifiable page citations."
+    },
+    {
+      "path": "rag/MARITIME CHUNKS/maritime_chunks.json",
+      "sha256": "ae4d938b84386d9db91ba8afc73024a55964e6f1f818b08bdb8b52d8bc4814d2",
+      "size_bytes": 303517,
+      "category": "Maritime retrieval bundle",
+      "decision": "ARCHIVE",
+      "reason": "Maritime chunks/indexes are outside the retained emergency-telecom scope and their referenced source PDFs are absent from this repository, preventing verifiable page citations.",
+      "chunk_count": 273,
+      "source_file_count": 4,
+      "chunks_missing_repo_source_pdf": 273,
+      "source_files": [
+        "MARITIME\\A.1106(29) 2015.pdf",
+        "MARITIME\\MSC.570(109) IMO.pdf",
+        "MARITIME\\MSC.74(69).pdf",
+        "MARITIME\\NOSDCP Circular 01 - 2025 INDIA.pdf"
+      ]
+    },
+    {
+      "path": "rag/MARITIME CHUNKS/maritime_embeddings.npy",
+      "sha256": "a944d39c84d19cc932cdf2bec16dddb67117058b4a6ef74e7736f4b1af35c754",
+      "size_bytes": 1118336,
+      "category": "Maritime retrieval bundle",
+      "decision": "ARCHIVE",
+      "reason": "Maritime chunks/indexes are outside the retained emergency-telecom scope and their referenced source PDFs are absent from this repository, preventing verifiable page citations."
+    },
+    {
+      "path": "rag/MARITIME CHUNKS/maritime_faiss.index",
+      "sha256": "109db73e66987bcc95eb51be43438eb8d074e96f2a742e8981cbba718ad4668a",
+      "size_bytes": 1118253,
+      "category": "Maritime retrieval bundle",
+      "decision": "ARCHIVE",
+      "reason": "Maritime chunks/indexes are outside the retained emergency-telecom scope and their referenced source PDFs are absent from this repository, preventing verifiable page citations."
+    },
+    {
+      "path": "rag/bhashini_chunks.json",
+      "sha256": "dbb9cd5e3b8f136bc0008068b6722c466862f60010afb397dfd6605a0f3b329a",
+      "size_bytes": 892,
+      "category": "Non-disaster BHASHINI/GeM source data",
+      "decision": "ARCHIVE",
+      "reason": "Text/chunks describe multilingual public-procurement/GeM access, outside disaster management and international emergency-telecom standards."
+    },
+    {
+      "path": "rag/bhashini_source.txt",
+      "sha256": "be5a5cf8827d20a3371e07b23d6b7315b3283edce68e5860248bfc13e77507c8",
+      "size_bytes": 90595,
+      "category": "Non-disaster BHASHINI/GeM source data",
+      "decision": "ARCHIVE",
+      "reason": "Text/chunks describe multilingual public-procurement/GeM access, outside disaster management and international emergency-telecom standards."
+    }
+  ],
+  "execution": {
+    "approved_by_user": true,
+    "files_archived": 0,
+    "new_index_path": "rag/disaster_itu_v1/",
+    "new_index_build": "FAILED before embedding/index serialization",
+    "new_index_chunks_parsed": 2764,
+    "new_index_chunks_serialized": 0,
+    "index_validation": "NOT RUN: no index was created",
+    "production_index_switched": false,
+    "website_registry_updated": false,
+    "blocking_findings": [
+      "The active retriever/configuration references mixed legacy sources. Archiving active source PDFs or retrieval bundles before a configuration switch would leave stale retrieval/citation references.",
+      "The task prohibits application-code changes, while the requested production index switch and website/registry update require edits to application source files.",
+      "BGE-M3 embedding failed because the local Hugging Face model cache is incomplete and the model download ended with WinError 10054 (connection forcibly closed)."
+    ],
+    "process_check": "No cleanup, index-builder, package-install, or pytest process remains active. One python.exe process (PID 27956, command python -) predates this execution and was left untouched because its purpose is unknown.",
+    "post_approval_tests": {
+      "command": "python -m pytest -o pythonpath=. Backend/tests/ --ignore=Backend/tests/test_groq_quick.py",
+      "result": "6 failed, 101 passed, 3 warnings in 142.91 seconds",
+      "failing_tests": [
+        "Backend/tests/test_source_clause_verification.py::test_certin_valid_6hour_reporting",
+        "Backend/tests/test_source_clause_verification.py::test_certin_clause_mismatch_deliberate_test",
+        "Backend/tests/test_source_clause_verification.py::test_inaccessible_unindexed_source",
+        "Backend/tests/test_source_clause_verification.py::test_unsupported_claim",
+        "Backend/tests/test_source_clause_verification.py::test_verify_claim_endpoint",
+        "Backend/tests/test_source_clause_verification.py::test_multi_document_source_resolution"
+      ],
+      "same_failures_as_pre-approval_run": true
+    },
+    "test_side_effects_note": "Inspect append-only audit artifacts before cleanup; preserve pre-existing user edits and remove only run-generated entries if identifiable."
+  }
+}

@@ -4,6 +4,7 @@ from Backend.server import app
 
 
 client = TestClient(app)
+assert client.post("/api/auth/login", json={"username": "admin", "password": "admin123"}).status_code == 200
 
 
 def test_root():

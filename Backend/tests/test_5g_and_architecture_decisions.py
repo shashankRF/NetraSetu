@@ -176,6 +176,8 @@ def test_change_impact_engine_dependency_planning():
 
 def test_api_5g_and_change_impact_endpoints():
     client = TestClient(app)
+    auth = client.post("/api/auth/login", json={"username": "admin", "password": "admin123"})
+    assert auth.status_code == 200
 
     # 1. GET /api/5g/profiles
     r_prof = client.get("/api/5g/profiles")

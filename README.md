@@ -262,7 +262,7 @@ NetraSetu supports decision-making across complex mission-critical domains:
 
 The frontend console has been refreshed into a modern technical dashboard tailored for telecommunication research and national-level hackathon evaluation:
 
-1. **Overview Dashboard (`#/overview` / `#/dashboard`):** Real-time platform status (FastAPI Port 8000, FAISS 14,800+ vector chunks, BGE-M3 retriever, 10-document registry), core capability directory, 95/95 test benchmarks, and quick action launchpads.
+1. **Overview Dashboard (`#/overview` / `#/dashboard`):** Real-time platform status (FastAPI Port 8000, FAISS vector corpus, BGE-M3 retriever, searchable 94-PDF knowledge base registry), core capability directory, test benchmarks, and quick action launchpads.
 2. **Evidence Intelligence & RAG Workspace (`#/intelligence`):** Interactive query terminal with sample scenario queries, multi-jurisdiction selection, 9-stage governance pipeline visualizer, profile switcher (General, Telecom, Defence, Maritime), and clickable source citation verification.
 3. **Scenario Lab (`#/scenarios`):** Production laboratory featuring all 8 pre-configured operational test scenarios (UAV Tactical Datalink, Maritime AIS, 5G Network Slicing, Telecom OSS/BSS, O-RAN Conflict, EU 5G Function, Enterprise Conflicting Evidence, and CERT-In 6-Hour Reporting) with live step execution on `/api/scenarios/run`.
 4. **Change-Impact Analysis (`#/change-impact`):** Interactive Feature A prototype workbench demonstrating source revision diffing, affected requirement dependency tracking, and selective re-evaluation execution.
@@ -379,3 +379,17 @@ Open `http://127.0.0.1:5500` in your browser.
 ## License
 
 This project is licensed under the Apache License 2.0. See `LICENSE` for details.
+# Failure Combination Lab
+
+The Reliability Lab runs a bounded, reproducible comparison using the existing software simulator. It includes a no-failure baseline, selected impairment combinations, optional repeated trials, additive interaction deltas, and user-defined threshold checks. A limited search is marked `INCOMPLETE`; it is never presented as exhaustive. Results are appended to `Backend/audit/records/failure_combination_runs.jsonl` and can be retrieved through the API.
+
+Routes:
+
+- `GET /api/5g/failure-combinations/catalog`
+- `POST /api/5g/failure-combinations`
+- `GET /api/5g/failure-combinations?limit=20`
+- `GET /api/5g/failure-combinations/{run_id}`
+
+The simulator models five configured conditions: latency spike, packet loss, congestion, handover disruption, and link failure. It requires 66–500 samples because the current simulator injects impairments in samples 30–65. Maxima are 64 scenarios and 5 trials. User thresholds are labeled `USER_DEFINED`. This feature does not retrieve regulatory evidence, establish standards compliance, contact a live network, or execute recovery actions. A policy threshold exceedance is advisory and recommends human review.
+
+Run locally with `python -m uvicorn Backend.server:app --reload`. Run tests with `python -m pytest -o pythonpath=. Backend/tests/` (the live Groq smoke test is opt-in via `NETRASETU_RUN_LIVE_API_TESTS=1` and requires `GROQ_API_KEY`).

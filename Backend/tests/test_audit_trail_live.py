@@ -14,7 +14,10 @@ from Backend.audit_api import build_audit_excel_workbook, _sanitize_for_excel
 
 @pytest.fixture
 def client():
-    return TestClient(app)
+    test_client = TestClient(app)
+    response = test_client.post("/api/auth/login", json={"username": "admin", "password": "admin123"})
+    assert response.status_code == 200
+    return test_client
 
 
 def test_audit_list_endpoint(client):

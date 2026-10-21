@@ -51,14 +51,21 @@ class NetworkSimulator5G:
         current_time = time.time()
 
         for i in range(num_samples):
+            # Use a sample-local stream so paired baseline/failure runs with
+            # the same seed share identical nominal noise. Adding an
+            # impairment must not shift the random stream for later samples.
+            sample_rng = random.Random(self.seed + i)
+            latency_rng = random.Random(self.seed * 1000003 + i * 7 + 1)
+            loss_rng = random.Random(self.seed * 1000003 + i * 7 + 2)
+            congestion_rng = random.Random(self.seed * 1000003 + i * 7 + 3)
             t = current_time + (i * sample_interval_ms / 1000.0)
 
             # Baseline noise
-            lat = nominal_lat + self.random.gauss(0, nominal_jitter * 0.2)
-            jitter = nominal_jitter + self.random.uniform(-0.1, 0.1)
+            lat = nominal_lat + sample_rng.gauss(0, nominal_jitter * 0.2)
+            jitter = nominal_jitter + sample_rng.uniform(-0.1, 0.1)
             loss = nominal_loss
-            throughput = nominal_throughput + self.random.uniform(-1.0, 1.0)
-            queue_depth = max(5, int(self.random.gauss(15, 3)))
+            throughput = nominal_throughput + sample_rng.uniform(-1.0, 1.0)
+            queue_depth = max(5, int(sample_rng.gauss(15, 3)))
             rtt = lat * 2.0
 
             # Apply impairments to middle section of trace (samples 30 to 65)
@@ -67,17 +74,17 @@ class NetworkSimulator5G:
             if is_impaired_window:
                 if ImpairmentType.LATENCY_SPIKE in impairments:
                     # Significant latency spike (e.g., bufferbloat or scheduling delay)
-                    lat += self.random.uniform(15.0, 35.0)
-                    jitter += self.random.uniform(3.0, 8.0)
+                    lat += latency_rng.uniform(15.0, 35.0)
+                    jitter += latency_rng.uniform(3.0, 8.0)
                     rtt = lat * 2.1
 
                 if ImpairmentType.PACKET_LOSS in impairments:
                     # Burst packet loss (e.g., deep fading or shadow obstacle)
-                    loss = self.random.uniform(0.02, 0.08)
+                    loss = loss_rng.uniform(0.02, 0.08)
 
                 if ImpairmentType.CONGESTION in impairments:
                     # Cell queue congestion
-                    queue_depth += int(self.random.uniform(180, 320))
+                    queue_depth += int(congestion_rng.uniform(180, 320))
                     lat += (queue_depth / 20.0)
                     throughput = max(1.0, throughput * 0.3)
 

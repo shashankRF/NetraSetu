@@ -27,3 +27,8 @@ scratch/
 # Cache
 .ocr_cache/
 **/.ocr_cache/
+
+# Local authentication and generated operational records
+Backend/auth/profiles.json
+Backend/support/reports/
+Backend/audit/records/failure_combination_runs.jsonl
