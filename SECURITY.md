@@ -2,9 +2,9 @@
 
 ## Overview
 
-HackGrid is an evidence-grounded, jurisdiction-aware AI framework for technical, regulatory, security, and research analysis.
+NetraSetu is an evidence-grounded, jurisdiction-aware AI framework for technical, regulatory, security, and research analysis.
 
-Because HackGrid may process security-related and regulatory information, security, provenance, and responsible handling of information are important parts of the project.
+Because NetraSetu may process security-related and regulatory information, security, provenance, and responsible handling of information are important parts of the project.
 
 ## Supported Versions
 
@@ -31,7 +31,7 @@ Do not include API keys, passwords, authentication tokens, or other secrets in v
 
 ## Secrets and Credentials
 
-HackGrid uses environment-based configuration for sensitive credentials.
+NetraSetu uses environment-based configuration for sensitive credentials.
 
 API keys and secrets must:
 
@@ -45,7 +45,7 @@ The project's .env file is excluded from version control.
 
 ## Knowledge Base and Evidence Security
 
-HackGrid distinguishes between:
+NetraSetu distinguishes between:
 
 - Real knowledge-base evidence
 - Retrieved evidence
@@ -58,7 +58,7 @@ Retrieved evidence should retain appropriate provenance and source metadata wher
 
 ## AI and Governance
 
-HackGrid follows these principles:
+NetraSetu follows these principles:
 
 > AI recommends. Evidence supports. Risk Engine determines governance requirements. Human authority makes consequential decisions.
 
@@ -79,13 +79,13 @@ Security researchers are encouraged to report vulnerabilities privately so that 
 
 ## Scope
 
-This policy applies to the HackGrid source code and associated project infrastructure maintained in this repository.
+This policy applies to the NetraSetu source code and associated project infrastructure maintained in this repository.
 
-Third-party services used by HackGrid may have their own security and vulnerability-reporting policies.
+Third-party services used by NetraSetu may have their own security and vulnerability-reporting policies.
 
 ## Disclaimer
 
-HackGrid is an evolving research and prototype project.
+NetraSetu is an evolving research and prototype project.
 
 It should not be treated as a substitute for professional cybersecurity, regulatory, legal, safety, or operational decision-making.
 

@@ -42,13 +42,13 @@ SYNTHESIS_MAX_TOKENS = 3000
 # ============================================================
 
 
-DEMO_SYSTEM_PROMPT = """You are HackGrid's final evidence-grounded assessment engine.
+DEMO_SYSTEM_PROMPT = """You are NetraSetu's final evidence-grounded assessment engine.
 Produce a strict, conservative, and defensible assessment based ONLY on the supplied evidence.
 Output JSON only with keys: assessment, claims, technical_implications, regulatory_implications, counter_evidence, gap_findings, gaps, recommended_actions, limitations, human_review_required, governance_note.
 Never fabricate facts or cite ungrounded regulations. Output valid JSON only with no conversational text."""
 
 SYSTEM_PROMPT = """
-You are HackGrid's final evidence-grounded assessment engine.
+You are NetraSetu's final evidence-grounded assessment engine.
 
 Your job is to produce a precise, conservative, and defensible assessment from the
 supplied evidence and structured analysis.

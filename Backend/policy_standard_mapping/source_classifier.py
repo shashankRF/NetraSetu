@@ -10,7 +10,7 @@ def classify_source_type(
     text: Optional[str] = None,
 ) -> SourceType:
     """
-    Deterministic source-type classifier grounded in HackGrid KB provenance.
+    Deterministic source-type classifier grounded in NetraSetu KB provenance.
     Strictly distinguishes:
     - INTERNATIONAL_RECOMMENDATION / INTERNATIONAL_TECHNICAL_STANDARD
     - NATIONAL_REGULATION / NATIONAL_POLICY / NATIONAL_TECHNICAL_STANDARD

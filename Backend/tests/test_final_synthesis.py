@@ -8,7 +8,7 @@ from Backend.final_synthesis import synthesize_final_assessment
 def main():
 
     print("=" * 80)
-    print("HACKGRID — MISSION 11")
+    print("NETRASETU — MISSION 11")
     print("FINAL GPT-OSS SYNTHESIS")
     print("=" * 80)
 

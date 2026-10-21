@@ -4,7 +4,7 @@ setlocal
 cd /d "%~dp0"
 
 echo ==========================================
-echo               NETRASETU
+echo       NETRASETU DEVELOPMENT MODE
 echo ==========================================
 echo.
 
@@ -15,16 +15,16 @@ if not exist ".venv\Scripts\python.exe" (
 )
 
 echo Starting backend...
-start "HackGrid Backend" cmd /k "%CD%\.venv\Scripts\python.exe -m uvicorn Backend.server:app --host 127.0.0.1 --port 8000"
+start "NetraSetu Backend" cmd /k "%CD%\.venv\Scripts\python.exe -m uvicorn Backend.server:app --host 127.0.0.1 --port 8000"
 
 echo Starting frontend...
-start "HackGrid Frontend" cmd /k "%CD%\.venv\Scripts\python.exe -m http.server 5500 --bind 127.0.0.1 --directory Frontend"
+start "NetraSetu Frontend" cmd /k "%CD%\.venv\Scripts\python.exe -m http.server 5500 --bind 127.0.0.1 --directory Frontend"
 
 timeout /t 3 /nobreak >nul
 
 start "" "http://127.0.0.1:5500"
 
 echo.
-echo HackGrid development environment started.
+echo NetraSetu development environment started.
 echo.
 pause

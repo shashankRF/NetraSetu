@@ -45,7 +45,7 @@ def main():
         )
 
     print("=" * 70)
-    print("HACKGRID — BENCHMARK COVERAGE")
+    print("NETRASETU — BENCHMARK COVERAGE")
     print("=" * 70)
 
     print("TOTAL QUESTIONS:", len(questions))

@@ -133,7 +133,7 @@ class AIAnalysis:
 @dataclass
 class DecisionContext:
 
-    # HackGrid domain
+    # NetraSetu domain
     domain: str
 
     # Consequence category

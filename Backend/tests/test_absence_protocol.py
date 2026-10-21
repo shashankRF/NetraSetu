@@ -27,7 +27,7 @@ QUESTION = (
 def main():
 
     print("=" * 80)
-    print("HACKGRID — ABSENCE VERIFICATION PROTOCOL")
+    print("NETRASETU — ABSENCE VERIFICATION PROTOCOL")
     print("=" * 80)
 
     # --------------------------------------------------------
@@ -77,7 +77,7 @@ def main():
         claim=QUESTION,
         evidence_records=evidence_records,
         search_scope=(
-            "HackGrid RAG knowledge base; "
+            "NetraSetu RAG knowledge base; "
             "top-5 semantic retrieval results"
         ),
         authoritative_jurisdictions=[

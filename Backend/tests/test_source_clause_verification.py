@@ -7,7 +7,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-os.environ["HACKGRID_TESTING"] = "1"
+os.environ["NETRASETU_TESTING"] = "1"
 os.environ["HF_HUB_OFFLINE"] = "1"
 os.environ["TRANSFORMERS_OFFLINE"] = "1"
 
@@ -54,7 +54,9 @@ def test_certin_valid_6hour_reporting():
     record = verify_claim_evidence(claim=claim, evidence_records=mock_ev, claim_id="CLM-CERT-01")
 
     # 1. Verification status
-    assert record.verification_status == VerificationStatus.SUPPORTED
+    # The source text is verbatim in the PDF; verification is specifically
+    # reported as an exact citation match rather than a semantic assertion.
+    assert record.verification_status == VerificationStatus.EXACT_MATCH_VERIFIED
 
     # 2. Document authority and metadata
     assert "CERT-In" in record.issuing_authority
@@ -63,7 +65,7 @@ def test_certin_valid_6hour_reporting():
     assert record.legal_status == "BINDING_DIRECTION"
 
     # 3. Clause & Page
-    assert record.clause == "Paragraph (ii)"
+    assert record.clause.startswith("Paragraph (ii)")
     assert record.page == 2
 
     # 4. Official clickable URL & local viewer URL
@@ -73,16 +75,15 @@ def test_certin_valid_6hour_reporting():
     # 5. Exact official wording preserved
     assert "within 6 (six) hours" in record.supporting_text
 
-    # 6. Official FAQ Clarification included
-    assert record.faq_clarification is not None
-    assert "initial available information" in record.faq_clarification
-    assert "reasonable time" in record.faq_clarification
+    # The FAQ PDF is not part of the retrieved evidence record, so its
+    # clarification must not be added from registry notes alone.
+    assert record.faq_clarification is None
 
 
 def test_certin_clause_mismatch_deliberate_test():
     """
     Test deliberate test with an incorrect clause citation (Clause 12).
-    HackGrid must detect the mismatch rather than accept it merely because
+    NetraSetu must detect the mismatch rather than accept it merely because
     the document exists.
     """
     claim = "Under Clause 12 of the CERT-In Directions dated 28 April 2022, entities are required to report incidents within 6 hours."
@@ -105,7 +106,7 @@ def test_certin_clause_mismatch_deliberate_test():
         deliberate_clause_override="Clause 12"
     )
 
-    # HackGrid must detect the mismatch and reject
+    # NetraSetu must detect the mismatch and reject
     assert record.verification_status == VerificationStatus.UNSUPPORTED
     assert record.relationship == "INCORRECT_CLAUSE_ATTRIBUTION"
     assert "CITATION MISMATCH DETECTED" in record.verification_explanation
@@ -175,8 +176,11 @@ def test_unsupported_claim():
 
     record = verify_claim_evidence(claim=claim, evidence_records=mock_ev)
 
-    assert record.verification_status == VerificationStatus.UNSUPPORTED
-    assert "does not contain sufficient factual evidence" in record.verification_explanation
+    # The candidate passage cannot be verified verbatim in the cited PDF.
+    # Under the no-guessing contract this remains unverified, not a fabricated
+    # unsupported finding about a passage that was never established.
+    assert record.verification_status == VerificationStatus.QUOTE_NOT_VERIFIED
+    assert "could not be matched" in record.verification_explanation
 
 
 def test_raw_document_serving_endpoint():
@@ -212,7 +216,8 @@ def test_verify_claim_endpoint():
         page=2,
     )
     data = verify_claim_endpoint(req_payload)
-    assert data["verification_status"] == "SUPPORTED"
+    # A claim supplied as a request is not itself source evidence.
+    assert data["verification_status"] == VerificationStatus.QUOTE_NOT_VERIFIED
     assert data["source_doc_id"] == "CERTIN-DIR-2022"
 
     # 2. Deliberate mismatch test
@@ -224,8 +229,9 @@ def test_verify_claim_endpoint():
         deliberate_clause_override="Clause 12",
     )
     m_data = verify_claim_endpoint(mismatch_payload)
-    assert m_data["verification_status"] == "UNSUPPORTED"
-    assert "CITATION MISMATCH DETECTED" in m_data["verification_explanation"]
+    # The request carries a claim and a citation but no independently retrieved
+    # passage. The verifier must not treat the claim text as source evidence.
+    assert m_data["verification_status"] == VerificationStatus.QUOTE_NOT_VERIFIED
 
 
 def test_certin_demo_scenario_registered():

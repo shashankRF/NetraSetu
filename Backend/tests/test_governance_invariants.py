@@ -1,5 +1,5 @@
 """
-HackGrid Governance Invariant Tests
+NetraSetu Governance Invariant Tests
 ====================================
 
 These tests are deterministic and DO NOT call GPT-OSS.

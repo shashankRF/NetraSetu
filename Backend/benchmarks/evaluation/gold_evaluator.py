@@ -169,7 +169,7 @@ def main():
         )
 
     print("=" * 80)
-    print("HACKGRID — MISSION 18 GOLD EVALUATION")
+    print("NETRASETU — MISSION 18 GOLD EVALUATION")
     print("=" * 80)
 
     print(

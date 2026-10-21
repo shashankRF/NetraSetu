@@ -23,7 +23,7 @@ def run_benchmark():
     os.makedirs(RESULTS_DIR, exist_ok=True)
 
     results = {
-        "benchmark_version": "hackgrid-benchmark-v1",
+        "benchmark_version": "netrasetu-benchmark-v1",
         "started_at": datetime.utcnow().isoformat() + "Z",
         "total_questions": len(questions),
         "completed_questions": 0,
@@ -31,7 +31,7 @@ def run_benchmark():
     }
 
     print("=" * 80)
-    print("HACKGRID — RESEARCH BENCHMARK")
+    print("NETRASETU — RESEARCH BENCHMARK")
     print("=" * 80)
     print(f"Total questions: {len(questions)}")
 

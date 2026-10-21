@@ -36,7 +36,7 @@ TOP_K = 5
 def main():
 
     print("=" * 80)
-    print("HACKGRID — REAL RAG EVIDENCE CLASSIFICATION")
+    print("NETRASETU — REAL RAG EVIDENCE CLASSIFICATION")
     print("=" * 80)
 
     print("\nQuestion:")

@@ -4,6 +4,11 @@ from Backend.server import app
 
 
 client = TestClient(app)
+assert client.post("/api/auth/login", json={"username": "admin", "password": "admin123"}).status_code == 200
+
+
+def csrf_headers():
+    return {"X-CSRF-Token": client.get("/api/auth/session").json()["csrf_token"]}
 
 
 def test_root():
@@ -14,7 +19,7 @@ def test_root():
     data = response.json()
 
     assert data["status"] == "online"
-    assert data["project"] == "HackGrid"
+    assert data["project"] == "NetraSetu"
 
 
 def test_health():
@@ -94,6 +99,7 @@ def test_query_rejects_invalid_jurisdiction():
             "question": "5G security",
             "jurisdiction": "United States",
         },
+        headers=csrf_headers(),
     )
 
     assert response.status_code == 400
@@ -108,6 +114,7 @@ def test_scenario_rejects_unknown_id():
             "scenario_id": "DOES-NOT-EXIST",
             "jurisdiction": "India",
         },
+        headers=csrf_headers(),
     )
 
     assert response.status_code == 404

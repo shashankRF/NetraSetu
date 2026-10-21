@@ -1,23 +1,32 @@
-﻿import os, time
-from groq import Groq
+from __future__ import annotations
+
+import os
+import time
+
+import pytest
 from dotenv import load_dotenv
 
 load_dotenv('.env')
-key = os.getenv('GROQ_API_KEY')
-print('API key present:', bool(key))
 
-client = Groq(api_key=key)
-print('Testing Groq openai/gpt-oss-120b with timeout=15.0...')
-t0 = time.perf_counter()
-try:
-    resp = client.chat.completions.create(
+# This is an opt-in live-provider smoke check. Ordinary CI/local test runs stay
+# offline and deterministic; the app's retrieval pipeline does not require Groq.
+pytestmark = pytest.mark.skipif(
+    os.getenv('NETRASETU_RUN_LIVE_API_TESTS') != '1' or not os.getenv('GROQ_API_KEY'),
+    reason='Set NETRASETU_RUN_LIVE_API_TESTS=1 and GROQ_API_KEY to run the live Groq check.',
+)
+
+
+def test_groq_live_smoke():
+    from groq import Groq
+
+    client = Groq(api_key=os.getenv('GROQ_API_KEY'))
+    started = time.perf_counter()
+    response = client.chat.completions.create(
         model='openai/gpt-oss-120b',
         messages=[{'role': 'user', 'content': 'Say "test" only.'}],
         max_tokens=10,
         timeout=15.0,
     )
-    t1 = time.perf_counter()
-    print(f'Success in {t1-t0:.2f}s: {resp.choices[0].message.content}')
-except Exception as e:
-    t1 = time.perf_counter()
-    print(f'Failed in {t1-t0:.2f}s: {type(e).__name__}: {e}')
+    elapsed = time.perf_counter() - started
+    assert response.choices[0].message.content
+    print(f'Groq smoke test succeeded in {elapsed:.2f}s.')

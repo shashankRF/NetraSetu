@@ -140,7 +140,7 @@ def main():
         )
 
     print("=" * 80)
-    print("HACKGRID — GROUNDING VALIDATION")
+    print("NETRASETU — GROUNDING VALIDATION")
     print("=" * 80)
     print(f"Total claims: {total_claims}")
     print(f"Grounded claims: {grounded_claims}")

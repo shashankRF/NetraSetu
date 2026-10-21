@@ -4,12 +4,14 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter, HTTPException
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 from pydantic import BaseModel
 
 from .evidence_engine.clause_verifier import (
     verify_claim_evidence,
     VerificationStatus,
+    PDFSourceMatcher,
+    LegalClauseParser,
 )
 from .evidence_engine.document_registry import (
     DOCUMENT_REGISTRY,
@@ -122,9 +124,12 @@ def resolve_document_file(doc_path: str) -> Optional[Path]:
 def get_document_file_info(
     doc_path: str,
     page: Optional[int] = None,
+    quote: Optional[str] = None,
+    q: Optional[str] = None,
 ):
     """
-    Check document availability and validate page navigation indices.
+    Check document availability, validate page navigation indices,
+    and resolve verbatim text matching, clause hierarchy, and bounding boxes.
     """
     resolved = resolve_document_file(doc_path)
     if not resolved:
@@ -134,13 +139,19 @@ def get_document_file_info(
         )
 
     total_pages = 1
-    if resolved.suffix.lower() == ".pdf":
+    is_pdf = resolved.suffix.lower() == ".pdf"
+    if is_pdf:
         try:
-            import pypdf
-            reader = pypdf.PdfReader(str(resolved))
-            total_pages = len(reader.pages)
+            import fitz
+            doc = fitz.open(str(resolved))
+            total_pages = len(doc)
         except Exception:
-            total_pages = 1
+            try:
+                import pypdf
+                reader = pypdf.PdfReader(str(resolved))
+                total_pages = len(reader.pages)
+            except Exception:
+                total_pages = 1
 
     valid_page = True
     page_error = None
@@ -152,6 +163,46 @@ def get_document_file_info(
             valid_page = False
             page_error = f"Invalid page number {page}. Document has {total_pages} total pages."
 
+    target_quote = quote or q or ""
+    viewer_page = page or 1
+    zero_page = max(0, viewer_page - 1)
+    printed_page = viewer_page
+    bounding_boxes = []
+    clause_hierarchy = {
+        "rule_number": None,
+        "rule_title": None,
+        "subrule_number": None,
+        "clause_number": None,
+        "subclause_letter": None,
+        "full_clause_hierarchy": "General Provision",
+    }
+
+
+    match_status = "SUPPORTED" if not target_quote else "QUOTE_NOT_VERIFIED"
+    exact_source_quote = ""
+
+    if is_pdf and (target_quote or page is not None):
+        try:
+            import fitz
+            doc = fitz.open(str(resolved))
+            if target_quote:
+                match_res = PDFSourceMatcher.match_quote_in_pdf(resolved, target_quote, preferred_page=page)
+                if match_res["matched"]:
+                    viewer_page = match_res["viewer_page_number"]
+                    zero_page = match_res["zero_based_pdf_page_index"]
+                    printed_page = match_res["printed_page_number"]
+                    bounding_boxes = match_res["bounding_boxes"]
+                    clause_hierarchy = match_res["clause_hierarchy"]
+                    match_status = match_res["match_type"]
+                    exact_source_quote = match_res["exact_source_quote"]
+            elif 0 <= zero_page < len(doc):
+                p_text = doc[zero_page].get_text()
+                printed_page = LegalClauseParser.extract_printed_page(p_text, viewer_page)
+                clause_hierarchy = LegalClauseParser.parse_clause_hierarchy(doc, zero_page)
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+
     return {
         "status": "AVAILABLE",
         "document_name": resolved.name,
@@ -160,8 +211,51 @@ def get_document_file_info(
         "requested_page": page,
         "valid_page": valid_page,
         "page_error": page_error,
+        "viewer_page_number": viewer_page,
+        "zero_based_pdf_page_index": zero_page,
+        "printed_page_number": printed_page,
+        "exact_source_quote": exact_source_quote,
+        "bounding_boxes": bounding_boxes,
+        "source_line_numbers": match_res.get("source_line_numbers", []) if target_quote and "match_res" in locals() else [],
+        "clause_hierarchy": clause_hierarchy,
+        "verification_status": match_status,
     }
 
+
+@router.get("/api/documents/preview")
+def get_document_page_preview(
+    doc_path: str,
+    page: int = 1,
+    quote: Optional[str] = None,
+):
+    """Render one PDF page and highlight an exact, source-matched passage."""
+    resolved = resolve_document_file(doc_path)
+    if not resolved or resolved.suffix.lower() != ".pdf":
+        raise HTTPException(status_code=404, detail="PDF source was not retrieved.")
+    try:
+        import fitz
+        doc = fitz.open(str(resolved))
+        if page < 1 or page > len(doc):
+            raise HTTPException(status_code=404, detail="Requested PDF page is unavailable.")
+        pdf_page = doc[page - 1]
+        if quote:
+            match = PDFSourceMatcher.match_quote_in_pdf(resolved, quote, preferred_page=page)
+            if match.get("matched") and match.get("viewer_page_number") == page:
+                shape = pdf_page.new_shape()
+                for rect in match.get("bounding_boxes", []):
+                    shape.draw_rect(fitz.Rect(rect["x0"], rect["y0"], rect["x1"], rect["y1"]))
+                shape.finish(color=(0.95, 0.18, 0.22), fill=(1.0, 0.25, 0.28), fill_opacity=0.22, width=1.8)
+                shape.commit(overlay=True)
+        pixmap = pdf_page.get_pixmap(matrix=fitz.Matrix(1.55, 1.55), alpha=False)
+        return Response(
+            content=pixmap.tobytes("png"),
+            media_type="image/png",
+            headers={"Cache-Control": "no-store"},
+        )
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Could not render source PDF page: {exc}")
 
 @router.get("/api/documents/raw/{doc_path:path}")
 def get_raw_document(

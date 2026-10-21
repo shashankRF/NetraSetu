@@ -14,7 +14,14 @@ from Backend.audit_api import build_audit_excel_workbook, _sanitize_for_excel
 
 @pytest.fixture
 def client():
-    return TestClient(app)
+    test_client = TestClient(app)
+    response = test_client.post("/api/auth/login", json={"username": "admin", "password": "admin123"})
+    assert response.status_code == 200
+    return test_client
+
+
+def csrf_headers(client):
+    return {"X-CSRF-Token": client.get("/api/auth/session").json()["csrf_token"]}
 
 
 def test_audit_list_endpoint(client):
@@ -42,8 +49,8 @@ def test_excel_export_endpoint(client):
 
     # Verify genuine Excel workbook structure
     wb = openpyxl.load_workbook(BytesIO(res.content))
-    assert "HackGrid Audit Trail" in wb.sheetnames
-    ws = wb["HackGrid Audit Trail"]
+    assert "NetraSetu Audit Trail" in wb.sheetnames
+    ws = wb["NetraSetu Audit Trail"]
     headers = [cell.value for cell in ws[1]]
     assert "Audit ID" in headers
     assert "Execution / Run ID" in headers
@@ -56,7 +63,7 @@ def test_empty_log_excel_export_graceful():
     empty_bytes = build_audit_excel_workbook([])
     wb = openpyxl.load_workbook(BytesIO(empty_bytes))
     ws = wb.active
-    assert ws.title == "HackGrid Audit Trail"
+    assert ws.title == "NetraSetu Audit Trail"
     assert ws.cell(row=1, column=1).value == "Audit ID"
     note_val = ws.cell(row=2, column=1).value
     assert "No audit events recorded yet" in str(note_val)
@@ -82,7 +89,7 @@ def test_formula_injection_sanitization():
 
 def test_query_execution_creates_audit_record(client):
     q_text = "What is the primary role of CERT-In under Indian cybersecurity regulations?"
-    res = client.post("/api/query", json={"question": q_text, "jurisdiction": "India", "demo_mode": True})
+    res = client.post("/api/query", json={"question": q_text, "jurisdiction": "India", "demo_mode": True}, headers=csrf_headers(client))
     assert res.status_code == 200
     res_data = res.json()
     audit_id = res_data.get("audit_id")
@@ -103,7 +110,7 @@ def test_query_execution_creates_audit_record(client):
 
 def test_failed_query_creates_failure_audit_record(client):
     records_before = len(load_audit_records())
-    res = client.post("/api/query", json={"question": "Valid query text?", "jurisdiction": "Atlantis"})
+    res = client.post("/api/query", json={"question": "Valid query text?", "jurisdiction": "Atlantis"}, headers=csrf_headers(client))
     assert res.status_code == 400
 
     records_after = load_audit_records()
@@ -115,7 +122,7 @@ def test_failed_query_creates_failure_audit_record(client):
 
 
 def test_scenario_execution_audit_record(client):
-    res = client.post("/api/scenarios/run", json={"scenario_id": "HG-5G-003", "step_id": "T1", "jurisdiction": "India"})
+    res = client.post("/api/scenarios/run", json={"scenario_id": "HG-5G-003", "step_id": "T1", "jurisdiction": "India"}, headers=csrf_headers(client))
     assert res.status_code == 200
     data = res.json()
     pipe_res = data.get("pipeline_result", {})
@@ -144,6 +151,7 @@ def test_governance_decision_creates_linked_audit_record(client):
     review_res = client.post(
         f"/api/audits/{audit_id}/review",
         json={"action": "APPROVED", "reviewer": "Senior Authority Officer"},
+        headers=csrf_headers(client),
     )
     assert review_res.status_code == 200
     rev_data = review_res.json()

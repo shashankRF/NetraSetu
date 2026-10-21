@@ -1,5 +1,5 @@
 """
-HackGrid Multi-KB Retrieval Engine
+NetraSetu Multi-KB Retrieval Engine
 
 Unified multi-domain retrieval supporting:
     1. MAIN KB (14,143 chunks - BAAI/bge-m3, FAISS, always searched)
@@ -69,12 +69,12 @@ JURISDICTION_PROFILES = {
 
 class MultiKBRetriever:
     """
-    Unified multi-domain retriever for HackGrid.
+    Unified multi-domain retriever for NetraSetu.
     """
 
     def __init__(self):
         print("=" * 70)
-        print("HACKGRID MULTI-KB RETRIEVER INITIALIZING")
+        print("NETRASETU MULTI-KB RETRIEVER INITIALIZING")
         print("=" * 70)
 
         print(f"Loading shared {MODEL_NAME} model on CPU...")

@@ -27,7 +27,7 @@ def policy_agent(question):
     )
 
     system_prompt = """
-You are the Policy Analysis Agent in HackGrid.
+You are the Policy Analysis Agent in NetraSetu.
 
 Analyze policy, strategy, framework and
 standardization coverage.

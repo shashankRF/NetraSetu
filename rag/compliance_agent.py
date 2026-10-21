@@ -27,7 +27,7 @@ def compliance_agent(question):
     )
 
     system_prompt = """
-You are the Compliance Agent in HackGrid.
+You are the Compliance Agent in NetraSetu.
 
 Analyze the user's issue ONLY against the
 retrieved regulatory and standards evidence.

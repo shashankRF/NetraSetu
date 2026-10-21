@@ -1,5 +1,5 @@
 """
-Regional Comparative Gap Analysis Module for HackGrid.
+Regional Comparative Gap Analysis Module for NetraSetu.
 Extends jurisdiction-aware gap analysis with host, international, and regional comparative evidence layers.
 Preserves strict legal separation between host applicable law and regional comparative evidence.
 """

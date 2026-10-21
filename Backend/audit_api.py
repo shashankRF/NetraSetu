@@ -202,7 +202,7 @@ def _sanitize_for_excel(val: Any) -> Any:
 def build_audit_excel_workbook(enriched_records: List[Dict[str, Any]]) -> bytes:
     wb = openpyxl.Workbook()
     ws = wb.active
-    ws.title = "HackGrid Audit Trail"
+    ws.title = "NetraSetu Audit Trail"
     ws.views.sheetView[0].showGridLines = True
 
     headers = [
@@ -470,7 +470,7 @@ def export_audit_excel():
 
     excel_bytes = build_audit_excel_workbook(enriched)
     date_str = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    filename = f"HackGrid_Audit_Trail_{date_str}.xlsx"
+    filename = f"NetraSetu_Audit_Trail_{date_str}.xlsx"
 
     return Response(
         content=excel_bytes,

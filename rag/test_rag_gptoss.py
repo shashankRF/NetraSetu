@@ -721,7 +721,7 @@ List the most relevant documents and page numbers.
 if __name__ == "__main__":
 
     print("\n" + "=" * 80)
-    print("HACKGRID GPT-OSS RAG SYSTEM READY")
+    print("NETRASETU GPT-OSS RAG SYSTEM READY")
     print("=" * 80)
 
     print("\nKnowledge Base:")
@@ -845,7 +845,7 @@ Evidence:
 
 
         standalone_prompt = f"""
-You are HackGrid, an evidence-grounded AI system
+You are NetraSetu, an evidence-grounded AI system
 for 5G/6G telecommunications, regulation,
 policy and standards analysis.
 
@@ -935,7 +935,7 @@ Relevant source documents and pages.
                     {
                         "role": "system",
                         "content": (
-                            "You are HackGrid, an evidence-grounded "
+                            "You are NetraSetu, an evidence-grounded "
                             "5G/6G regulatory and technical analysis "
                             "assistant."
                         )

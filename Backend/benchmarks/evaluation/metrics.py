@@ -188,7 +188,7 @@ def main():
         )
 
     print("=" * 80)
-    print("HACKGRID — MISSION 16 METRICS")
+    print("NETRASETU — MISSION 16 METRICS")
     print("=" * 80)
 
     for key, value in metrics.items():

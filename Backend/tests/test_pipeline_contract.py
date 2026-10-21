@@ -21,7 +21,7 @@ REQUIRED_KEYS = {
 def main():
 
     print("=" * 70)
-    print("HACKGRID — PIPELINE CONTRACT TEST")
+    print("NETRASETU — PIPELINE CONTRACT TEST")
     print("=" * 70)
 
     result = run_pipeline(

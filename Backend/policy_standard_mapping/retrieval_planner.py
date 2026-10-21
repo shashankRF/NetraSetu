@@ -51,7 +51,7 @@ def plan_and_retrieve_evidence(
     domains: Optional[List[str]] = None,
 ) -> List[Dict[str, Any]]:
     """
-    Intent-aware multi-sided retrieval for HackGrid.
+    Intent-aware multi-sided retrieval for NetraSetu.
     Ensures that comparison/mapping queries retrieve BOTH international technical standards
     and applicable national provisions from the Knowledge Base.
     """

@@ -16,7 +16,7 @@ AUDIT_DIR = (
 AUDIT_FILE = AUDIT_DIR / "audit.jsonl"
 REVIEW_EVENTS_FILE = AUDIT_DIR / "review_events.jsonl"
 
-PIPELINE_VERSION = "hackgrid-evidence-pipeline-v1"
+PIPELINE_VERSION = "netrasetu-evidence-pipeline-v1"
 
 
 def _canonical_json(data: Dict[str, Any]) -> str:

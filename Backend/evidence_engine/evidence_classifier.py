@@ -12,7 +12,7 @@ from .models import (
 
 
 SYSTEM_PROMPT = """
-You are HackGrid's Evidence Classification Engine.
+You are NetraSetu's Evidence Classification Engine.
 
 Your job is ONLY to classify supplied evidence.
 

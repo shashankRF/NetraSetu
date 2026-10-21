@@ -176,6 +176,8 @@ def test_change_impact_engine_dependency_planning():
 
 def test_api_5g_and_change_impact_endpoints():
     client = TestClient(app)
+    auth = client.post("/api/auth/login", json={"username": "admin", "password": "admin123"})
+    assert auth.status_code == 200
 
     # 1. GET /api/5g/profiles
     r_prof = client.get("/api/5g/profiles")
@@ -191,7 +193,7 @@ def test_api_5g_and_change_impact_endpoints():
         "profile": "URLLC",
         "impairments": ["LATENCY_SPIKE", "PACKET_LOSS"],
         "num_samples": 60,
-    })
+    }, headers={"X-CSRF-Token": client.get("/api/auth/session").json()["csrf_token"]})
     assert r_test.status_code == 200
     res_data = r_test.json()
     assert res_data["profile"] == "URLLC"
@@ -206,7 +208,7 @@ def test_api_5g_and_change_impact_endpoints():
     assert len(r_rev.json()) >= 3
 
     # 4. POST /api/change_impact/plan
-    r_plan = client.post("/api/change_impact/plan", json={"revision_id": "REV-TELECOM-2023"})
+    r_plan = client.post("/api/change_impact/plan", json={"revision_id": "REV-TELECOM-2023"}, headers={"X-CSRF-Token": client.get("/api/auth/session").json()["csrf_token"]})
     assert r_plan.status_code == 200
     plan_data = r_plan.json()
     assert plan_data["plan_id"] == "PLAN-REV-TELECOM-2023"

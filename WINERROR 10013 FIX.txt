@@ -8,9 +8,9 @@ ForEach-Object { Stop-Process -Id $_ -Force }
 netstat -ano | findstr :8000
 
 If nothing appears → ✅.
-3. Start HackGrid from the project root
+3. Start NetraSetu from the project root
 
-cd "C:\Users\Shashank Kotnala\OneDrive\Documents\HackGrid_new"
+cd "C:\Users\Shashank Kotnala\OneDrive\Documents\NetraSetu"
 
 python -m uvicorn Backend.server:app --host 127.0.0.1 --port 8000 --reload
 

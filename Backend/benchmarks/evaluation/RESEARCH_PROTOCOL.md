@@ -1,8 +1,8 @@
-# HackGrid Research Evaluation Protocol
+# NetraSetu Research Evaluation Protocol
 
 ## Objective
 
-Evaluate whether HackGrid can produce evidence-grounded,
+Evaluate whether NetraSetu can produce evidence-grounded,
 uncertainty-aware, risk-aware assessments from a regulatory and
 technical knowledge base.
 
@@ -10,12 +10,12 @@ technical knowledge base.
 
 ### RQ1 — Retrieval
 
-Can HackGrid retrieve evidence relevant to a technical or
+Can NetraSetu retrieve evidence relevant to a technical or
 regulatory question?
 
 ### RQ2 — Evidence
 
-Can HackGrid distinguish sufficient, insufficient, conflicting,
+Can NetraSetu distinguish sufficient, insufficient, conflicting,
 limiting, and contextual evidence?
 
 ### RQ3 — Grounding
@@ -24,21 +24,21 @@ Can substantive claims be mapped to retrieved evidence?
 
 ### RQ4 — Absence
 
-Can HackGrid avoid interpreting retrieval failure as proof
+Can NetraSetu avoid interpreting retrieval failure as proof
 of regulatory or policy absence?
 
 ### RQ5 — Gap Analysis
 
-Can HackGrid distinguish a genuine gap from insufficient evidence?
+Can NetraSetu distinguish a genuine gap from insufficient evidence?
 
 ### RQ6 — Risk
 
-Can HackGrid account for consequence and evidence quality when
+Can NetraSetu account for consequence and evidence quality when
 assessing decision risk?
 
 ### RQ7 — Human Oversight
 
-Can HackGrid prevent high-impact regulatory or security decisions
+Can NetraSetu prevent high-impact regulatory or security decisions
 from being automatically finalized?
 
 ### RQ8 — Auditability

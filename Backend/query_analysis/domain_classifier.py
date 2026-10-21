@@ -711,7 +711,7 @@ def classify_query(query: str) -> QueryClassification:
 
 def classify(query: str) -> dict:
     """
-    Public API for the rest of HackGrid.
+    Public API for the rest of NetraSetu.
 
     Returns a JSON-serializable dictionary.
     """

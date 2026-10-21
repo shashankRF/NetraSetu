@@ -26,7 +26,7 @@ from .policy import (
 class RiskEngine:
 
     """
-    HackGrid Risk & Governance Engine.
+    NetraSetu Risk & Governance Engine.
 
     IMPORTANT:
 

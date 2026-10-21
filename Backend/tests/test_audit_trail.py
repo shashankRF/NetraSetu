@@ -10,7 +10,7 @@ from Backend.audit.recorder import (
 def main():
 
     print("=" * 80)
-    print("HACKGRID — MISSION 12")
+    print("NETRASETU — MISSION 12")
     print("AUDIT TRAIL")
     print("=" * 80)
 

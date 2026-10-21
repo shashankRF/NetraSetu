@@ -1,5 +1,5 @@
 """
-HackGrid False-Gap Prevention Test Suite
+NetraSetu False-Gap Prevention Test Suite
 ========================================
 
 Automated regression suite verifying that the gap analysis pipeline does not
