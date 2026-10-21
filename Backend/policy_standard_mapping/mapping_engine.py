@@ -92,7 +92,7 @@ ADDITIONAL_SOVEREIGN_TERMS = [
 
 class PolicyStandardMappingEngine:
     """
-    Core Policy ↔ Standard Mapping Engine for HackGrid.
+    Core Policy ↔ Standard Mapping Engine for NetraSetu.
     Enforces strict requirement-level comparison between international technical
     standards/recommendations (e.g. ITU-T Y.3172, 3GPP) and national provisions (e.g. Indian DoT/TEC/Acts).
     

@@ -35,9 +35,9 @@ if not logger.handlers:
 # ============================================================
 
 FINAL_SYNTHESIS_PROMPT = """
-You are the final decision-intelligence synthesizer for HackGrid.
+You are the final decision-intelligence synthesizer for NetraSetu.
 
-HackGrid is an evidence-first AI system. You MUST distinguish:
+NetraSetu is an evidence-first AI system. You MUST distinguish:
 
 1. Verified facts directly supported by retrieved evidence.
 2. Evidence-supported inferences.
@@ -123,7 +123,7 @@ def _run_agent(
     Runs one specialist agent safely.
 
     A failure in one specialist agent should NOT crash the
-    complete HackGrid pipeline.
+    complete NetraSetu pipeline.
     """
 
     start_time = time.perf_counter()
@@ -571,7 +571,7 @@ def run_governance(
 
 def orchestrate(question: str) -> Dict[str, Any]:
     """
-    Complete HackGrid decision-intelligence pipeline.
+    Complete NetraSetu decision-intelligence pipeline.
 
     Pipeline:
 
@@ -600,7 +600,7 @@ def orchestrate(question: str) -> Dict[str, Any]:
     pipeline_start = time.perf_counter()
 
     logger.info("=" * 70)
-    logger.info("[HACKGRID] Pipeline started")
+    logger.info("[NETRASETU] Pipeline started")
     logger.info("[QUERY] %s", question)
     logger.info("=" * 70)
 
@@ -697,7 +697,7 @@ def orchestrate(question: str) -> Dict[str, Any]:
 
     logger.info("=" * 70)
     logger.info(
-        "[HACKGRID] Pipeline completed in %.2fs",
+        "[NETRASETU] Pipeline completed in %.2fs",
         total_elapsed
     )
     logger.info("=" * 70)
@@ -815,7 +815,7 @@ if __name__ == "__main__":
 
     print("\n")
     print("=" * 70)
-    print("FINAL HACKGRID RESULT")
+    print("FINAL NETRASETU RESULT")
     print("=" * 70)
 
     print(

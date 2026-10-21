@@ -1,8 +1,8 @@
-# HackGrid Benchmark Evaluation
+# NetraSetu Benchmark Evaluation
 
 ## Purpose
 
-This evaluation framework measures the reliability of the HackGrid
+This evaluation framework measures the reliability of the NetraSetu
 evidence-aware decision pipeline.
 
 ## Evaluation Dimensions

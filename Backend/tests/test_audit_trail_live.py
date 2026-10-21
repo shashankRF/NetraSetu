@@ -42,8 +42,8 @@ def test_excel_export_endpoint(client):
 
     # Verify genuine Excel workbook structure
     wb = openpyxl.load_workbook(BytesIO(res.content))
-    assert "HackGrid Audit Trail" in wb.sheetnames
-    ws = wb["HackGrid Audit Trail"]
+    assert "NetraSetu Audit Trail" in wb.sheetnames
+    ws = wb["NetraSetu Audit Trail"]
     headers = [cell.value for cell in ws[1]]
     assert "Audit ID" in headers
     assert "Execution / Run ID" in headers
@@ -56,7 +56,7 @@ def test_empty_log_excel_export_graceful():
     empty_bytes = build_audit_excel_workbook([])
     wb = openpyxl.load_workbook(BytesIO(empty_bytes))
     ws = wb.active
-    assert ws.title == "HackGrid Audit Trail"
+    assert ws.title == "NetraSetu Audit Trail"
     assert ws.cell(row=1, column=1).value == "Audit ID"
     note_val = ws.cell(row=2, column=1).value
     assert "No audit events recorded yet" in str(note_val)

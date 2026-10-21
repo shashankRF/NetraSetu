@@ -26,7 +26,7 @@ def gap_analysis_agent(
     )
 
     system_prompt = """
-You are the Gap Analysis Agent in HackGrid.
+You are the Gap Analysis Agent in NetraSetu.
 
 Determine whether the available evidence
 supports a policy or standards gap.

@@ -178,7 +178,7 @@ def build_claim_assessment(
 def main():
 
     print("=" * 80)
-    print("HACKGRID — EVIDENCE ENGINE INTEGRATION")
+    print("NETRASETU — EVIDENCE ENGINE INTEGRATION")
     print("=" * 80)
 
     print("\n[1/5] RAG retrieval...")

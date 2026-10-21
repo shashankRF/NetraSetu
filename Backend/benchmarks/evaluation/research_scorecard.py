@@ -273,7 +273,7 @@ def calculate_research_score(
 def main() -> None:
 
     print("=" * 70)
-    print("HACKGRID — RESEARCH SCORECARD")
+    print("NETRASETU — RESEARCH SCORECARD")
     print("=" * 70)
 
     benchmark = load_json(BENCHMARK_FILE)
@@ -301,7 +301,7 @@ def main() -> None:
     )
 
     report = {
-        "benchmark": "HackGrid Evidence-Aware Pipeline",
+        "benchmark": "NetraSetu Evidence-Aware Pipeline",
         "evaluation_version": "research-scorecard-v1",
         "pipeline": pipeline_metrics,
         "grounding": grounding_metrics,

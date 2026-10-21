@@ -1,18 +1,18 @@
-# HackGrid Evidence Analysis, Regulatory Mapping & False-Gap Prevention
+# NetraSetu Evidence Analysis, Regulatory Mapping & False-Gap Prevention
 **Architecture Specification, Operational Verification, and Governance Standards**
 
 *Document Version:* 2.0.0  
-*Applicable Scope:* HackGrid Multi-Agent Autonomous Telecom Regulatory & Policy Intelligence Platform  
-*Target File Location:* `docs/HACKGRID_EVIDENCE_AND_AGENT_WORKFLOWS.md`  
+*Applicable Scope:* NetraSetu Multi-Agent Autonomous Telecom Regulatory & Policy Intelligence Platform  
+*Target File Location:* `docs/NETRASETU_EVIDENCE_AND_AGENT_WORKFLOWS.md`  
 *Verification Mode:* Code-Verified Architecture & Explicitly Labeled Safeguards  
 
 ---
 
 ## Executive Summary
 
-This specification provides the operational, analytical, and governance reference for evidence processing, international-to-national standards mapping, and comparative gap analysis within the HackGrid platform. 
+This specification provides the operational, analytical, and governance reference for evidence processing, international-to-national standards mapping, and comparative gap analysis within the NetraSetu platform. 
 
-HackGrid assesses telecommunications security and policy compliance by cross-referencing:
+NetraSetu assesses telecommunications security and policy compliance by cross-referencing:
 1. **International Technical Specifications** (e.g., 3GPP Technical Specifications, ITU-T Recommendations),
 2. **Indian Statutory & Regulatory Obligations** (e.g., Unified License Agreement Clauses, DoT Security Directions, CERT-In Directions 2022, Telecommunications Act 2023),
 3. **Indian Policy & Advisory Frameworks** (e.g., National Digital Communications Policy 2018, TSDSI Technical Reports), and
@@ -39,7 +39,7 @@ HackGrid assesses telecommunications security and policy compliance by cross-ref
 ## 1. Evidence Analysis: Exact Statuses and Decision Meanings
 
 ### 1.1 Verified Codebase Implementation
-In the HackGrid codebase, the primary evidence assessment engine is implemented in [`Backend/evidence_engine/engine.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/Backend/evidence_engine/engine.py), with core data models defined in [`Backend/evidence_engine/models.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/Backend/evidence_engine/models.py), claim verification in [`Backend/evidence_engine/claim_builder.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/Backend/evidence_engine/claim_builder.py), and missingness validation in [`Backend/evidence_engine/absence_protocol.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/Backend/evidence_engine/absence_protocol.py).
+In the NetraSetu codebase, the primary evidence assessment engine is implemented in [`Backend/evidence_engine/engine.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/Backend/evidence_engine/engine.py), with core data models defined in [`Backend/evidence_engine/models.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/Backend/evidence_engine/models.py), claim verification in [`Backend/evidence_engine/claim_builder.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/Backend/evidence_engine/claim_builder.py), and missingness validation in [`Backend/evidence_engine/absence_protocol.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/Backend/evidence_engine/absence_protocol.py).
 
 #### Exact Implemented Statuses (`EvidenceStatus` Enum in `models.py`)
 ```python
@@ -67,7 +67,7 @@ class EvidenceStatus(str, Enum):
     2. Groups evidence by role (`PRIMARY_SUPPORT` vs `COUNTER_EVIDENCE`).
     3. If counter-evidence exists and has strength >= `MODERATE`, sets `CONTRADICTORY`.
     4. Evaluates primary supporting weight; if score >= 0.75 and directly applicable, sets `SUFFICIENT`. If 0.40 <= score < 0.75, sets `PARTIALLY_SUFFICIENT`. Below 0.40 yields `INSUFFICIENT` or `INCONCLUSIVE`.
-  - *Downstream Effects:* Controls downstream synthesis in [`Backend/final_synthesis.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/Backend/final_synthesis.py) and feeds [`Backend/evidence_engine/gap_adapter.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/Backend/evidence_engine/gap_adapter.py) to prevent ungrounded assertions.
+  - *Downstream Effects:* Controls downstream synthesis in [`Backend/final_synthesis.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/Backend/final_synthesis.py) and feeds [`Backend/evidence_engine/gap_adapter.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/Backend/evidence_engine/gap_adapter.py) to prevent ungrounded assertions.
 - **`verify_absence(query: str, kb_results: List[Any], examined_scopes: List[str]) -> AbsenceResult`**
   - *Decision Rules:* Returns `ABSENCE_ESTABLISHED` only if exhaustive search across defined indices was executed with high recall. Otherwise, returns `ABSENCE_NOT_ESTABLISHED` to prevent assuming non-existence.
 
@@ -75,7 +75,7 @@ class EvidenceStatus(str, Enum):
 
 ### 1.2 Conceptual Outcomes Mapped to Code Implementations
 
-The following table documents the conceptual outcomes required for telecom policy intelligence and establishes their precise mapping to HackGrid's codebase:
+The following table documents the conceptual outcomes required for telecom policy intelligence and establishes their precise mapping to NetraSetu's codebase:
 
 | Conceptual Evidence Status | Exact Implemented Code Label | Operational Meaning | Permitted Interpretation | Next Action |
 |---|---|---|---|---|
@@ -92,7 +92,7 @@ The following table documents the conceptual outcomes required for telecom polic
 
 ### 1.3 The Five-Layer Analytical Distinction
 
-HackGrid strictly separates five distinct dimensions that are often erroneously conflated in generic LLM pipelines:
+NetraSetu strictly separates five distinct dimensions that are often erroneously conflated in generic LLM pipelines:
 
 ```
 +----------------------------------------------------------------------------------------------------+
@@ -192,7 +192,7 @@ HackGrid strictly separates five distinct dimensions that are often erroneously 
 
 ### 2.1 The Normative Hierarchy of Telecom Instruments
 
-HackGrid enforces a strict legal and technical hierarchy. Treating all ingested documents as legally equivalent is a catastrophic failure mode in automated regulatory intelligence. A 3GPP Technical Specification is an engineering consensus document, whereas an Indian Unified License Condition is a binding sovereign contract enforceable under penal statute.
+NetraSetu enforces a strict legal and technical hierarchy. Treating all ingested documents as legally equivalent is a catastrophic failure mode in automated regulatory intelligence. A 3GPP Technical Specification is an engineering consensus document, whereas an Indian Unified License Condition is a binding sovereign contract enforceable under penal statute.
 
 ```
 +-----------------------------------------------------------------------------------------------+
@@ -248,7 +248,7 @@ HackGrid enforces a strict legal and technical hierarchy. Treating all ingested 
 
 ### 2.2 Mandatory Ten-Field Requirement Verification
 
-For every requirement mapped between an international specification and an Indian instrument, HackGrid's mapping logic must verify and record the following ten fields:
+For every requirement mapped between an international specification and an Indian instrument, NetraSetu's mapping logic must verify and record the following ten fields:
 
 | Field Number | Field Name | Code Field Name | Purpose & Verification Standard |
 |---|---|---|---|
@@ -313,19 +313,19 @@ The following structured schema illustrates the verified mapping of a hypothetic
 
 ### 3.1 Trace of Actual Code Implementation
 
-In the active HackGrid repository, gap evaluation is executed across four tightly integrated components:
+In the active NetraSetu repository, gap evaluation is executed across four tightly integrated components:
 
-1. **Policy-Standard Mapping Engine ([`Backend/policy_standard_mapping/mapping_engine.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/Backend/policy_standard_mapping/mapping_engine.py)):**
+1. **Policy-Standard Mapping Engine ([`Backend/policy_standard_mapping/mapping_engine.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/Backend/policy_standard_mapping/mapping_engine.py)):**
    - Implements `PolicyStandardMappingEngine.map_requirement()`.
    - Defines outcomes in `MappingResult` enum: `COVERED`, `PARTIALLY_COVERED`, `ADDITIONAL_NATIONAL_REQUIREMENT`, `POTENTIAL_GAP_NOT_ESTABLISHED`.
    - Compares technical requirements against national instruments using semantic similarity, keyword verification, and rule-based validation.
-2. **Gap Analysis Adapter ([`Backend/evidence_engine/gap_adapter.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/Backend/evidence_engine/gap_adapter.py)):**
+2. **Gap Analysis Adapter ([`Backend/evidence_engine/gap_adapter.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/Backend/evidence_engine/gap_adapter.py)):**
    - Implements `build_gap_input()` and `_explicit_absence_claim()`.
    - Transforms `EvidenceEngineResult` into input structures for downstream policy engines, ensuring claims of "missing provisions" are validated against absence protocols.
-3. **Regional Comparative Gap Engine ([`Backend/regional_comparative_gap/engine.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/Backend/regional_comparative_gap/engine.py)):**
+3. **Regional Comparative Gap Engine ([`Backend/regional_comparative_gap/engine.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/Backend/regional_comparative_gap/engine.py)):**
    - Enforces jurisdictional boundaries: Host Country (`IN`), International Standards (`GLOBAL`), and Regional Comparative (`UK`, `SG`, `EU`).
    - Prevents foreign jurisdictions from being reported as host country obligations.
-4. **Governance Engine ([`Backend/governance.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/Backend/governance.py)):**
+4. **Governance Engine ([`Backend/governance.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/Backend/governance.py)):**
    - Implements `evaluate_governance()` which performs post-synthesis checks.
    - Flags assertions claiming a regulatory gap when evidence status is `INSUFFICIENT` or `CONTRADICTORY`.
 
@@ -333,7 +333,7 @@ In the active HackGrid repository, gap evaluation is executed across four tightl
 
 ### 3.2 Conceptual Gap Classifications Mapped to Codebase Labels
 
-The table below maps the required conceptual gap classifications to the exact labels in HackGrid's software:
+The table below maps the required conceptual gap classifications to the exact labels in NetraSetu's software:
 
 | Conceptual Mapping Result | Codebase Enum / Label | Detailed Definition | Is it a Confirmed Regulatory Gap? |
 |---|---|---|---|
@@ -351,7 +351,7 @@ The table below maps the required conceptual gap classifications to the exact la
 
 ### 3.3 Ten-Point Verification Protocol for a Defensible Gap Finding
 
-To declare a defensible gap finding, HackGrid requires the following ten checks:
+To declare a defensible gap finding, NetraSetu requires the following ten checks:
 
 ```
 [1. Comparable Scope] --------> [2. Regulatory Applicability] -----> [3. Authority Hierarchy]
@@ -405,13 +405,13 @@ To declare a defensible gap finding, HackGrid requires the following ten checks:
 > ### CORE PLATFORM INVARIANT: "DIFFERENT DOES NOT MEAN MISSING"
 > **A potential regulatory gap must never be declared merely because an Indian instrument and an international specification use different terminology, prescribe distinct technical mechanisms, or embody differing levels of abstraction.**
 > 
-> When a 3GPP specification prescribes Mechanism X (e.g., TLS 1.3 with specific ciphersuites) and an Indian regulatory circular or an operator's security posture mandates Mechanism Y (e.g., IPsec encapsulation with national cryptographic algorithms), HackGrid **must not** record this as a national regulatory policy gap without executing the full false-gap validation protocol.
+> When a 3GPP specification prescribes Mechanism X (e.g., TLS 1.3 with specific ciphersuites) and an Indian regulatory circular or an operator's security posture mandates Mechanism Y (e.g., IPsec encapsulation with national cryptographic algorithms), NetraSetu **must not** record this as a national regulatory policy gap without executing the full false-gap validation protocol.
 
 ---
 
 ### 4.1 The Seven-Step Pre-Gap Determination Protocol
 
-Before any gap classification can be accepted by the system, HackGrid must systematically answer the following seven questions:
+Before any gap classification can be accepted by the system, NetraSetu must systematically answer the following seven questions:
 
 1. **Security Objective Concordance:** Do the compared mechanisms seek to achieve the identical overarching objective (e.g., confidentiality of user traffic, mitigation of DDoS attacks on control plane)? If yes, technical divergence is likely an architectural alternative, not an omission.
 2. **Entity & Network Alignment:** Do both requirements govern the same operational entity (e.g., a Licensed Access Service Provider vs a private enterprise 5G network)? If scopes diverge, the difference is situational, not a national gap.
@@ -464,7 +464,7 @@ Before any gap classification can be accepted by the system, HackGrid must syste
 
 ### 4.3 Rigorous Taxonomy of Gap Types
 
-HackGrid strictly differentiates the following seven gap categories to prevent false equivalences:
+NetraSetu strictly differentiates the following seven gap categories to prevent false equivalences:
 
 | Gap Classification | Exact Definition | Operational Example | Remediation Owner |
 |---|---|---|---|
@@ -474,7 +474,7 @@ HackGrid strictly differentiates the following seven gap categories to prevent f
 | **4. Standards-to-Regulation Mapping Gap** | International specification exists, but national standards body has not formally transposed or localized it. | TEC has not yet published an ITSAR standard for 3GPP Rel-18 5G Advanced RedCap. | Telecommunication Engineering Centre (TEC) |
 | **5. Policy Coverage Gap** | National statutory policy is silent on an emerging technological paradigm, leaving a regulatory void. | Absence of defined licensing frameworks for private quantum key distribution (QKD) networks. | Department of Telecommunications (DoT) |
 | **6. Regulatory Compliance Gap** | An active, binding statutory rule is demonstrably breached or ignored by an operational entity. | Failure by a telecom licensee to report a core network outage to TSOC within 24 hours. | Regulatory Enforcement / Legal Counsel |
-| **7. Knowledge-Base Coverage Gap** | HackGrid's indexed corpus does not contain the relevant gazette notification or technical standard. | The latest 2024 spectrum auction guidelines were not ingested into the vector database. | HackGrid Data Ingestion Pipeline |
+| **7. Knowledge-Base Coverage Gap** | NetraSetu's indexed corpus does not contain the relevant gazette notification or technical standard. | The latest 2024 spectrum auction guidelines were not ingested into the vector database. | NetraSetu Data Ingestion Pipeline |
 
 > [!IMPORTANT]
 > **Operational Rule:** These seven terms **must never** be used interchangeably. A *Knowledge-Base Coverage Gap* must never be reported to the user as a *Policy Coverage Gap*. A *Security-Control Gap* must never be conflated with a *Regulatory Compliance Gap*.
@@ -486,7 +486,7 @@ HackGrid strictly differentiates the following seven gap categories to prevent f
 ### 5.1 Conceptual Evidence-to-Gap Decision Logic
 
 > [!NOTE]
-> **Implementation Status:** The decision flowchart below represents the **recommended governance framework**. Within HackGrid's codebase, steps `B`, `C`, `G`, and `K` are implemented in [`Backend/evidence_engine/`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/Backend/evidence_engine/) and [`Backend/policy_standard_mapping/`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/Backend/policy_standard_mapping/); automated hard-stopping gates at `H` and `L` are partially enforced via `governance.py` and remain `[PROPOSED SAFEGUARDS]` for full deterministic rejection.
+> **Implementation Status:** The decision flowchart below represents the **recommended governance framework**. Within NetraSetu's codebase, steps `B`, `C`, `G`, and `K` are implemented in [`Backend/evidence_engine/`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/Backend/evidence_engine/) and [`Backend/policy_standard_mapping/`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/Backend/policy_standard_mapping/); automated hard-stopping gates at `H` and `L` are partially enforced via `governance.py` and remain `[PROPOSED SAFEGUARDS]` for full deterministic rejection.
 
 ```mermaid
 flowchart TD
@@ -634,26 +634,26 @@ The following table documents the exact codebase components responsible for evid
 
 | Component Name | Code Location & Key Function | Primary Input & Output | Role in Decision Status | Advisory vs Enforced | Error & Uncertainty Handling | Implemented vs Proposed Safeguards |
 |---|---|---|---|---|---|---|
-| **Query & Domain Classifier** | [`Backend/query_analysis/classifier.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/Backend/query_analysis/classifier.py) <br>`classify_query()` | **In:** Raw user query string.<br>**Out:** Domain tag (e.g. `5G_SECURITY`, `LICENSING`), query intent, jurisdiction intent. | Contributes information (routes retrieval; does not set status). | **Enforced:** Determines which FAISS vector collections are queried. | Falls back to `GENERAL_TELECOM` with all KBs queried if ambiguity exceeds threshold. | `[IMPLEMENTED]` Domain routing active.<br>`[PROPOSED]` Temporal intent extractor. |
-| **Multi-KB Retriever** | [`rag/multi_kb_retriever.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/rag/multi_kb_retriever.py) <br>`MultiKBRetriever.retrieve()` | **In:** Normalized query, target domains, top-k.<br>**Out:** Raw retrieved text chunks with metadata (source, page, file). | Contributes information (gathers candidate evidence). | **Enforced:** Missing chunks cannot be analyzed downstream. | Returns empty list if indices unavailable; catches missing index errors without crash. | `[IMPLEMENTED]` Multi-index querying active.<br>`[PROPOSED]` Dynamic query expansion for Indian gazettes. |
-| **Context Reranker** | [`Backend/evidence_engine/reranker.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/Backend/evidence_engine/reranker.py) <br>`rerank_chunks()` | **In:** Candidate chunks, query text.<br>**Out:** Top-scored chunks with relevance score (>0.60). | Contributes information (filters low-relevance noise). | **Enforced:** Chunks below threshold are discarded from evidence. | If all chunks fail threshold, passes empty list to trigger Absence Protocol. | `[IMPLEMENTED]` FlashRank/cross-encoder reranking.<br>`[PROPOSED]` Authority-weighted scoring boost. |
-| **Evidence Classifier & Assessor** | [`Backend/evidence_engine/engine.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/Backend/evidence_engine/engine.py) <br>`EvidenceEngine.assess()` | **In:** Filtered evidence chunks, target claim.<br>**Out:** `EvidenceEngineResult` with `EvidenceStatus` enum. | **DIRECTLY DETERMINES** Evidence Status (`SUFFICIENT`, `INSUFFICIENT`, etc.). | **Enforced:** Downstream synthesizers cannot upgrade evidence status. | Defaults to `INCONCLUSIVE` or `INSUFFICIENT` if evidence is ambiguous or weak. | `[IMPLEMENTED]` Strict enum mapping and role grouping.<br>`[PROPOSED]` Cross-source corroboration multiplier. |
-| **Counter-Evidence Analyzer** | [`Backend/evidence_engine/counter_evidence.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/Backend/evidence_engine/counter_evidence.py) <br>`detect_counter_evidence()` | **In:** Primary supporting evidence, counter-query results.<br>**Out:** Counter-evidence items, conflict score, conflict description. | Directly sets `CONTRADICTORY` status if conflict is verified. | **Enforced:** If conflict detected, overrides `SUFFICIENT` to `CONTRADICTORY`. | Logs conflict details in audit record; marks uncertainty as `HIGH`. | `[IMPLEMENTED]` Contradiction detection active.<br>`[PROPOSED]` Automated statutory hierarchy resolver. |
-| **Absence Verification Protocol** | [`Backend/evidence_engine/absence_protocol.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/Backend/evidence_engine/absence_protocol.py) <br>`verify_absence()` | **In:** Query, examined KB names, search recall metrics.<br>**Out:** `AbsenceResult` (`ABSENCE_ESTABLISHED` vs `ABSENCE_NOT_ESTABLISHED`). | **DIRECTLY DETERMINES** whether missing evidence can support a gap finding. | **Enforced:** Prohibits `CONFIRMED_GAP` if status is `ABSENCE_NOT_ESTABLISHED`. | Emits alert if corpus coverage was restricted or keyword search timed out. | `[IMPLEMENTED]` Absence verification protocol active.<br>`[PROPOSED]` Coverage checklist logging against official DoT gazettes. |
-| **Policy/Standards Mapping Engine** | [`Backend/policy_standard_mapping/mapping_engine.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/Backend/policy_standard_mapping/mapping_engine.py) <br>`map_requirement()` | **In:** International specification clause, national regulation text.<br>**Out:** `MappingResult` enum (`COVERED`, `PARTIALLY_COVERED`, etc.). | **DIRECTLY DETERMINES** Mapping Status. | **Enforced:** Controls whether gap engine evaluates candidate gap. | Emits `POTENTIAL_GAP_NOT_ESTABLISHED` if comparison text is ambiguous. | `[IMPLEMENTED]` Semantic & rule mapping active.<br>`[PROPOSED]` Deterministic functional equivalence dictionary. |
-| **Regional Comparative Gap Engine** | [`Backend/regional_comparative_gap/engine.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/Backend/regional_comparative_gap/engine.py) <br>`evaluate_regional_gap()` | **In:** Host country findings, regional comparative chunks (UK/SG/EU).<br>**Out:** Three-way comparative gap matrix. | Directly determines Regional Comparative Status. | **Enforced:** Strictly isolates foreign evidence from host obligations. | If regional data is missing, falls back cleanly to purely national analysis. | `[IMPLEMENTED]` Strict 3-way jurisdictional isolation active.<br>`[PROPOSED]` Dynamic regional peer selection. |
-| **Gap Analysis Adapter** | [`Backend/evidence_engine/gap_adapter.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/Backend/evidence_engine/gap_adapter.py) <br>`build_gap_input()` | **In:** `EvidenceEngineResult`, mapping result.<br>**Out:** `GapAssessmentInput` structure. | Connects evidence status to gap analysis inputs. | **Enforced:** Filters ungrounded claims before gap synthesis. | Flags claims with low evidence scores; suppresses unqualified gap assertions. | `[IMPLEMENTED]` Adapter pipeline active.<br>`[PROPOSED]` Automated claim decomposition. |
-| **Claim Validation Gate** | [`Backend/policy_standard_mapping/claim_validation_gate.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/Backend/policy_standard_mapping/claim_validation_gate.py) <br>`validate_synthesis_claims()` | **In:** Synthesized claim statements, verified evidence IDs.<br>**Out:** Boolean pass/fail, list of unverified assertions. | Validates factual grounding before output delivery. | **Enforced:** Strips or flags any claim lacking valid `[EV-xxx]` citation. | Replaces unverified gap claims with uncertainty disclosures. | `[IMPLEMENTED]` Pre-synthesis citation verification active.<br>`[PROPOSED]` AST-based statement parsing. |
-| **Governance Engine** | [`Backend/governance.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/Backend/governance.py) <br>`evaluate_governance()` | **In:** Synthesis text, evidence status, gap status.<br>**Out:** Governance flags, escalation status, confidence band. | Overrides synthesis if governance rules violated. | **Enforced:** Injects mandatory caveats or triggers human review. | If evidence is contradictory, forces explicit dual-reporting disclaimer. | `[IMPLEMENTED]` Policy guardrails and escalation active.<br>`[PROPOSED]` Real-time compliance alert webhooks. |
-| **Final Synthesis Engine** | [`Backend/final_synthesis.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/Backend/final_synthesis.py) <br>`synthesize_final_response()` | **In:** All validated evidence items, mapping outcomes, governance alerts.<br>**Out:** Structured markdown response. | Synthesizes user-facing output. | **Constrained:** Strictly bound by upstream statuses; cannot override gates. | Emits fallback message if upstream components fail or timeout. | `[IMPLEMENTED]` Fast-path demo & full synthesis active.<br>`[PROPOSED]` Multi-perspective executive summary generator. |
-| **Audit Recorder** | [`Backend/audit/audit_recorder.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/Backend/audit/audit_recorder.py) <br>`record_audit_event()` | **In:** Execution traces, queries, retrieved IDs, statuses, latency.<br>**Out:** Persistent JSONL audit record. | Immutably records runtime decisions. | **Enforced:** Runs asynchronously or inline for all `/api/query` invocations. | Logs file write errors to console without terminating user request. | `[IMPLEMENTED]` Event-driven runtime audit logging active.<br>`[PROPOSED]` Cryptographic hash chaining of audit logs. |
+| **Query & Domain Classifier** | [`Backend/query_analysis/classifier.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/Backend/query_analysis/classifier.py) <br>`classify_query()` | **In:** Raw user query string.<br>**Out:** Domain tag (e.g. `5G_SECURITY`, `LICENSING`), query intent, jurisdiction intent. | Contributes information (routes retrieval; does not set status). | **Enforced:** Determines which FAISS vector collections are queried. | Falls back to `GENERAL_TELECOM` with all KBs queried if ambiguity exceeds threshold. | `[IMPLEMENTED]` Domain routing active.<br>`[PROPOSED]` Temporal intent extractor. |
+| **Multi-KB Retriever** | [`rag/multi_kb_retriever.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/rag/multi_kb_retriever.py) <br>`MultiKBRetriever.retrieve()` | **In:** Normalized query, target domains, top-k.<br>**Out:** Raw retrieved text chunks with metadata (source, page, file). | Contributes information (gathers candidate evidence). | **Enforced:** Missing chunks cannot be analyzed downstream. | Returns empty list if indices unavailable; catches missing index errors without crash. | `[IMPLEMENTED]` Multi-index querying active.<br>`[PROPOSED]` Dynamic query expansion for Indian gazettes. |
+| **Context Reranker** | [`Backend/evidence_engine/reranker.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/Backend/evidence_engine/reranker.py) <br>`rerank_chunks()` | **In:** Candidate chunks, query text.<br>**Out:** Top-scored chunks with relevance score (>0.60). | Contributes information (filters low-relevance noise). | **Enforced:** Chunks below threshold are discarded from evidence. | If all chunks fail threshold, passes empty list to trigger Absence Protocol. | `[IMPLEMENTED]` FlashRank/cross-encoder reranking.<br>`[PROPOSED]` Authority-weighted scoring boost. |
+| **Evidence Classifier & Assessor** | [`Backend/evidence_engine/engine.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/Backend/evidence_engine/engine.py) <br>`EvidenceEngine.assess()` | **In:** Filtered evidence chunks, target claim.<br>**Out:** `EvidenceEngineResult` with `EvidenceStatus` enum. | **DIRECTLY DETERMINES** Evidence Status (`SUFFICIENT`, `INSUFFICIENT`, etc.). | **Enforced:** Downstream synthesizers cannot upgrade evidence status. | Defaults to `INCONCLUSIVE` or `INSUFFICIENT` if evidence is ambiguous or weak. | `[IMPLEMENTED]` Strict enum mapping and role grouping.<br>`[PROPOSED]` Cross-source corroboration multiplier. |
+| **Counter-Evidence Analyzer** | [`Backend/evidence_engine/counter_evidence.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/Backend/evidence_engine/counter_evidence.py) <br>`detect_counter_evidence()` | **In:** Primary supporting evidence, counter-query results.<br>**Out:** Counter-evidence items, conflict score, conflict description. | Directly sets `CONTRADICTORY` status if conflict is verified. | **Enforced:** If conflict detected, overrides `SUFFICIENT` to `CONTRADICTORY`. | Logs conflict details in audit record; marks uncertainty as `HIGH`. | `[IMPLEMENTED]` Contradiction detection active.<br>`[PROPOSED]` Automated statutory hierarchy resolver. |
+| **Absence Verification Protocol** | [`Backend/evidence_engine/absence_protocol.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/Backend/evidence_engine/absence_protocol.py) <br>`verify_absence()` | **In:** Query, examined KB names, search recall metrics.<br>**Out:** `AbsenceResult` (`ABSENCE_ESTABLISHED` vs `ABSENCE_NOT_ESTABLISHED`). | **DIRECTLY DETERMINES** whether missing evidence can support a gap finding. | **Enforced:** Prohibits `CONFIRMED_GAP` if status is `ABSENCE_NOT_ESTABLISHED`. | Emits alert if corpus coverage was restricted or keyword search timed out. | `[IMPLEMENTED]` Absence verification protocol active.<br>`[PROPOSED]` Coverage checklist logging against official DoT gazettes. |
+| **Policy/Standards Mapping Engine** | [`Backend/policy_standard_mapping/mapping_engine.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/Backend/policy_standard_mapping/mapping_engine.py) <br>`map_requirement()` | **In:** International specification clause, national regulation text.<br>**Out:** `MappingResult` enum (`COVERED`, `PARTIALLY_COVERED`, etc.). | **DIRECTLY DETERMINES** Mapping Status. | **Enforced:** Controls whether gap engine evaluates candidate gap. | Emits `POTENTIAL_GAP_NOT_ESTABLISHED` if comparison text is ambiguous. | `[IMPLEMENTED]` Semantic & rule mapping active.<br>`[PROPOSED]` Deterministic functional equivalence dictionary. |
+| **Regional Comparative Gap Engine** | [`Backend/regional_comparative_gap/engine.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/Backend/regional_comparative_gap/engine.py) <br>`evaluate_regional_gap()` | **In:** Host country findings, regional comparative chunks (UK/SG/EU).<br>**Out:** Three-way comparative gap matrix. | Directly determines Regional Comparative Status. | **Enforced:** Strictly isolates foreign evidence from host obligations. | If regional data is missing, falls back cleanly to purely national analysis. | `[IMPLEMENTED]` Strict 3-way jurisdictional isolation active.<br>`[PROPOSED]` Dynamic regional peer selection. |
+| **Gap Analysis Adapter** | [`Backend/evidence_engine/gap_adapter.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/Backend/evidence_engine/gap_adapter.py) <br>`build_gap_input()` | **In:** `EvidenceEngineResult`, mapping result.<br>**Out:** `GapAssessmentInput` structure. | Connects evidence status to gap analysis inputs. | **Enforced:** Filters ungrounded claims before gap synthesis. | Flags claims with low evidence scores; suppresses unqualified gap assertions. | `[IMPLEMENTED]` Adapter pipeline active.<br>`[PROPOSED]` Automated claim decomposition. |
+| **Claim Validation Gate** | [`Backend/policy_standard_mapping/claim_validation_gate.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/Backend/policy_standard_mapping/claim_validation_gate.py) <br>`validate_synthesis_claims()` | **In:** Synthesized claim statements, verified evidence IDs.<br>**Out:** Boolean pass/fail, list of unverified assertions. | Validates factual grounding before output delivery. | **Enforced:** Strips or flags any claim lacking valid `[EV-xxx]` citation. | Replaces unverified gap claims with uncertainty disclosures. | `[IMPLEMENTED]` Pre-synthesis citation verification active.<br>`[PROPOSED]` AST-based statement parsing. |
+| **Governance Engine** | [`Backend/governance.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/Backend/governance.py) <br>`evaluate_governance()` | **In:** Synthesis text, evidence status, gap status.<br>**Out:** Governance flags, escalation status, confidence band. | Overrides synthesis if governance rules violated. | **Enforced:** Injects mandatory caveats or triggers human review. | If evidence is contradictory, forces explicit dual-reporting disclaimer. | `[IMPLEMENTED]` Policy guardrails and escalation active.<br>`[PROPOSED]` Real-time compliance alert webhooks. |
+| **Final Synthesis Engine** | [`Backend/final_synthesis.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/Backend/final_synthesis.py) <br>`synthesize_final_response()` | **In:** All validated evidence items, mapping outcomes, governance alerts.<br>**Out:** Structured markdown response. | Synthesizes user-facing output. | **Constrained:** Strictly bound by upstream statuses; cannot override gates. | Emits fallback message if upstream components fail or timeout. | `[IMPLEMENTED]` Fast-path demo & full synthesis active.<br>`[PROPOSED]` Multi-perspective executive summary generator. |
+| **Audit Recorder** | [`Backend/audit/audit_recorder.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/Backend/audit/audit_recorder.py) <br>`record_audit_event()` | **In:** Execution traces, queries, retrieved IDs, statuses, latency.<br>**Out:** Persistent JSONL audit record. | Immutably records runtime decisions. | **Enforced:** Runs asynchronously or inline for all `/api/query` invocations. | Logs file write errors to console without terminating user request. | `[IMPLEMENTED]` Event-driven runtime audit logging active.<br>`[PROPOSED]` Cryptographic hash chaining of audit logs. |
 
 ---
 
 ### 7.2 Verification of LLM Advisory vs Code Enforcement
 
 > [!CAUTION]
-> **Architectural Guardrail:** In HackGrid, an LLM prompt response that outputs `"GAP FOUND"` is **never accepted as authoritative on its own**. 
+> **Architectural Guardrail:** In NetraSetu, an LLM prompt response that outputs `"GAP FOUND"` is **never accepted as authoritative on its own**. 
 > 
 > The text is parsed, mapped to `MappingResult`, and then subjected to deterministic code checks:
 > 1. Does the evidence have `EvidenceStatus.SUFFICIENT`? (Enforced in `Backend/evidence_engine/engine.py`).
@@ -764,16 +764,16 @@ Because Mechanism B adequately fulfills the security mandate, this technical div
 
 ### 9.1 Verification of Implemented vs Proposed Capabilities
 
-This documentation was generated following a comprehensive, line-by-line verification of the HackGrid codebase. The table below provides an honest accounting of verified code implementations versus proposed safeguards:
+This documentation was generated following a comprehensive, line-by-line verification of the NetraSetu codebase. The table below provides an honest accounting of verified code implementations versus proposed safeguards:
 
 | Architectural Capability | Target File & Code Symbol | Verification Status | Operational Notes |
 |---|---|---|---|
-| **Evidence Status Enum** | [`Backend/evidence_engine/models.py`](file:///C:/Users/Shashank Kotnala/OneDrive/Documents/HackGrid_new/Backend/evidence_engine/models.py) <br>`EvidenceStatus` | **VERIFIED IMPLEMENTED** | All 7 statuses (`SUFFICIENT`, `PARTIALLY_SUFFICIENT`, `INSUFFICIENT`, `CONTRADICTORY`, `INCONCLUSIVE`, `ABSENCE_ESTABLISHED`, `ABSENCE_NOT_ESTABLISHED`) exist in code. |
-| **Absence Protocol** | [`Backend/evidence_engine/absence_protocol.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/Backend/evidence_engine/absence_protocol.py) <br>`verify_absence()` | **VERIFIED IMPLEMENTED** | Returns `ABSENCE_ESTABLISHED` vs `ABSENCE_NOT_ESTABLISHED`. Prevents assuming non-existence from failed retrieval. |
-| **Claim Citation Gate** | [`Backend/policy_standard_mapping/claim_validation_gate.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/Backend/policy_standard_mapping/claim_validation_gate.py) <br>`validate_synthesis_claims()` | **VERIFIED IMPLEMENTED** | Enforces that claims reference valid `[EV-xxx]` citation tokens before final presentation. |
-| **Regional Separation** | [`Backend/regional_comparative_gap/engine.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/Backend/regional_comparative_gap/engine.py) <br>`evaluate_regional_gap()` | **VERIFIED IMPLEMENTED** | Strictly isolates Host Country (`IN`), International (`GLOBAL`), and Regional Comparative (`UK`/`SG`/`EU`) jurisdictions. |
-| **Event-Driven Audit** | [`Backend/audit/audit_recorder.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/Backend/audit/audit_recorder.py) <br>`record_audit_event()` | **VERIFIED IMPLEMENTED** | Real-time event recording with timestamp, latency, decision status, and citation tracking. |
-| **Multi-KB Retrieval** | [`rag/multi_kb_retriever.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/rag/multi_kb_retriever.py) <br>`MultiKBRetriever` | **VERIFIED IMPLEMENTED** | Queries multiple domain FAISS indexes. |
+| **Evidence Status Enum** | [`Backend/evidence_engine/models.py`](file:///C:/Users/Shashank Kotnala/OneDrive/Documents/NetraSetu/Backend/evidence_engine/models.py) <br>`EvidenceStatus` | **VERIFIED IMPLEMENTED** | All 7 statuses (`SUFFICIENT`, `PARTIALLY_SUFFICIENT`, `INSUFFICIENT`, `CONTRADICTORY`, `INCONCLUSIVE`, `ABSENCE_ESTABLISHED`, `ABSENCE_NOT_ESTABLISHED`) exist in code. |
+| **Absence Protocol** | [`Backend/evidence_engine/absence_protocol.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/Backend/evidence_engine/absence_protocol.py) <br>`verify_absence()` | **VERIFIED IMPLEMENTED** | Returns `ABSENCE_ESTABLISHED` vs `ABSENCE_NOT_ESTABLISHED`. Prevents assuming non-existence from failed retrieval. |
+| **Claim Citation Gate** | [`Backend/policy_standard_mapping/claim_validation_gate.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/Backend/policy_standard_mapping/claim_validation_gate.py) <br>`validate_synthesis_claims()` | **VERIFIED IMPLEMENTED** | Enforces that claims reference valid `[EV-xxx]` citation tokens before final presentation. |
+| **Regional Separation** | [`Backend/regional_comparative_gap/engine.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/Backend/regional_comparative_gap/engine.py) <br>`evaluate_regional_gap()` | **VERIFIED IMPLEMENTED** | Strictly isolates Host Country (`IN`), International (`GLOBAL`), and Regional Comparative (`UK`/`SG`/`EU`) jurisdictions. |
+| **Event-Driven Audit** | [`Backend/audit/audit_recorder.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/Backend/audit/audit_recorder.py) <br>`record_audit_event()` | **VERIFIED IMPLEMENTED** | Real-time event recording with timestamp, latency, decision status, and citation tracking. |
+| **Multi-KB Retrieval** | [`rag/multi_kb_retriever.py`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/rag/multi_kb_retriever.py) <br>`MultiKBRetriever` | **VERIFIED IMPLEMENTED** | Queries multiple domain FAISS indexes. |
 | **Temporal Supersession Gate** | `TemporalValidityChecker` | **`[PROPOSED SAFEGUARD]`** | Date metadata is extracted, but automated chronological supersession invalidation is not yet enforced as a blocking gate. |
 | **Deterministic Functional Equivalence Matrix** | `EquivalenceRegistry` | **`[PROPOSED SAFEGUARD]`** | Semantic equivalence is evaluated via LLM prompt instructions; a deterministic, hardcoded protocol equivalence matrix is proposed. |
 | **Automated Exception / Carve-Out Tracker** | `ExceptionChecker` | **`[PROPOSED SAFEGUARD]`** | Legal carve-outs (e.g., CNPN pilot exemptions) are currently analyzed as general text; structured exemption flags are proposed. |
@@ -782,7 +782,7 @@ This documentation was generated following a comprehensive, line-by-line verific
 
 ### 9.2 Summary of Documentation Deliverable
 
-- **Target File Created & Verified:** [`docs/HACKGRID_EVIDENCE_AND_AGENT_WORKFLOWS.md`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/HackGrid_new/docs/HACKGRID_EVIDENCE_AND_AGENT_WORKFLOWS.md)
+- **Target File Created & Verified:** [`docs/NETRASETU_EVIDENCE_AND_AGENT_WORKFLOWS.md`](file:///C:/Users/Shashank%20Kotnala/OneDrive/Documents/NetraSetu/docs/NETRASETU_EVIDENCE_AND_AGENT_WORKFLOWS.md)
 - **Sections Included:**
   1. Evidence Analysis: Exact Statuses and Decision Meanings (including codebase enums, 5-layer distinction, 6 worked examples).
   2. Regulatory Mapping: 3GPP, Indian Policy, and Indian Regulation (normative hierarchy, 10 mandatory fields, worked JSON schema).
@@ -796,4 +796,4 @@ This documentation was generated following a comprehensive, line-by-line verific
 - **Executable Application Code:** Completely untouched. No changes were made to `Backend/`, `rag/`, or `Frontend/` application code.
 
 ---
-*End of Specification — HackGrid Regulatory & Evidence Engineering Desk*
+*End of Specification — NetraSetu Regulatory & Evidence Engineering Desk*

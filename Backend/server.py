@@ -28,7 +28,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 # ============================================================
-# HACKGRID IMPORTS
+# NETRASETU IMPORTS
 # ============================================================
 
 from .risk_engine_api import router as risk_router
@@ -61,13 +61,13 @@ app = FastAPI(
     title="NetraSetu Backend",
     version="1.0",
     description=(
-        "HackGrid Evidence Intelligence Backend"
+        "NetraSetu Evidence Intelligence Backend"
     ),
 )
 
 @app.on_event("startup")
 def warmup_services():
-    if os.environ.get("HACKGRID_TESTING") or os.environ.get("NETRASETU_TESTING"):
+    if os.environ.get("NETRASETU_TESTING") or os.environ.get("NETRASETU_TESTING"):
         return
     try:
         from rag.multi_kb_retriever import get_unified_retriever
@@ -229,7 +229,7 @@ def root():
 
     return {
         "status": "online",
-        "project": "HackGrid",
+        "project": "NetraSetu",
         "product_name": "NetraSetu",
         "tagline": "Connecting Evidence. Testing Resilience.",
         "backend": "FastAPI",
@@ -294,7 +294,7 @@ def health():
 
         "status": "healthy",
 
-        "project": "HackGrid",
+        "project": "NetraSetu",
         "product_name": "NetraSetu",
         "tagline": "Connecting Evidence. Testing Resilience.",
 
@@ -856,7 +856,7 @@ def run_scenario(
     # IMPORTANT:
     # Scenario execution ALWAYS uses DEMO mode.
     #
-    # This keeps the complete HackGrid architecture:
+    # This keeps the complete NetraSetu architecture:
     #
     # Retrieval
     # -> Reranking

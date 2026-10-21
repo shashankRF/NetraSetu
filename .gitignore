@@ -23,4 +23,7 @@ dist/
 Thumbs.db
 
 # Scratch directory
-scratch/
+scratch/
+# Cache
+.ocr_cache/
+**/.ocr_cache/

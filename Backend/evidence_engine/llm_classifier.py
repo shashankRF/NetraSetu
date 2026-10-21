@@ -62,7 +62,7 @@ def _get_client() -> Groq:
 # ============================================================
 
 SYSTEM_PROMPT = """
-You are HackGrid's Evidence Classification Engine.
+You are NetraSetu's Evidence Classification Engine.
 
 Your job is ONLY to classify supplied evidence against a
 specific claim.
@@ -656,7 +656,7 @@ def classify_evidence(
     Important:
     - GPT-OSS interprets evidence.
     - Python validates the result.
-    - Evidence IDs are controlled by HackGrid.
+    - Evidence IDs are controlled by NetraSetu.
     - Provenance remains controlled by the RAG system.
     """
 
@@ -932,7 +932,7 @@ def classify_evidence(
 if __name__ == "__main__":
 
     print("=" * 80)
-    print("HACKGRID GPT-OSS EVIDENCE CLASSIFIER TEST")
+    print("NETRASETU GPT-OSS EVIDENCE CLASSIFIER TEST")
     print("=" * 80)
 
     test_claim = (

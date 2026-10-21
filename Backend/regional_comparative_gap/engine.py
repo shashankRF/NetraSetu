@@ -21,7 +21,7 @@ from .jurisdiction_matrix import (
 
 class RegionalComparativeGapEngine:
     """
-    Regional Comparative Gap Analysis Engine for HackGrid.
+    Regional Comparative Gap Analysis Engine for NetraSetu.
     Enforces the strict distinction between:
     1. HOST-COUNTRY APPLICABLE REQUIREMENTS
     2. INTERNATIONAL TECHNICAL REQUIREMENTS

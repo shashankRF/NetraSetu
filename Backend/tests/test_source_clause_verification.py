@@ -7,7 +7,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-os.environ["HACKGRID_TESTING"] = "1"
+os.environ["NETRASETU_TESTING"] = "1"
 os.environ["HF_HUB_OFFLINE"] = "1"
 os.environ["TRANSFORMERS_OFFLINE"] = "1"
 
@@ -82,7 +82,7 @@ def test_certin_valid_6hour_reporting():
 def test_certin_clause_mismatch_deliberate_test():
     """
     Test deliberate test with an incorrect clause citation (Clause 12).
-    HackGrid must detect the mismatch rather than accept it merely because
+    NetraSetu must detect the mismatch rather than accept it merely because
     the document exists.
     """
     claim = "Under Clause 12 of the CERT-In Directions dated 28 April 2022, entities are required to report incidents within 6 hours."
@@ -105,7 +105,7 @@ def test_certin_clause_mismatch_deliberate_test():
         deliberate_clause_override="Clause 12"
     )
 
-    # HackGrid must detect the mismatch and reject
+    # NetraSetu must detect the mismatch and reject
     assert record.verification_status == VerificationStatus.UNSUPPORTED
     assert record.relationship == "INCORRECT_CLAUSE_ATTRIBUTION"
     assert "CITATION MISMATCH DETECTED" in record.verification_explanation

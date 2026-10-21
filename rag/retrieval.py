@@ -164,7 +164,7 @@ def retrieve(
 if __name__ == "__main__":
 
     print("\n" + "=" * 80)
-    print("HACKGRID JURISDICTION-AWARE RETRIEVAL TEST")
+    print("NETRASETU JURISDICTION-AWARE RETRIEVAL TEST")
     print("=" * 80)
 
     query = (

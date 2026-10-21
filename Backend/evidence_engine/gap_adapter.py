@@ -1,6 +1,6 @@
 from __future__ import annotations
 """
-HackGrid Gap Analysis Adapter
+NetraSetu Gap Analysis Adapter
 =============================
 
 Converts Evidence Engine output into the gap-analysis representation.

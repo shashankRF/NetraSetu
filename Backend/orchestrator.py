@@ -252,7 +252,7 @@ def get_ranking_pipeline() -> EvidenceRankingPipeline:
 
 
 # ============================================================
-# FULL HACKGRID PIPELINE
+# FULL NETRASETU PIPELINE
 # ============================================================
 
 def run_pipeline(
@@ -388,7 +388,7 @@ def run_pipeline(
     print("=" * 80)
 
     print(
-        "HACKGRID -- "
+        "NETRASETU -- "
         + (
             "COMPACT DEMO"
             if demo_mode
@@ -918,7 +918,7 @@ def run_pipeline(
         evidence_records=evidence_records,
 
         search_scope=(
-            "HackGrid RAG knowledge base; "
+            "NetraSetu RAG knowledge base; "
             f"jurisdiction={jurisdiction}; "
             f"{len(results)}-candidate "
             "jurisdiction-filtered retrieval "
@@ -1597,7 +1597,7 @@ def main():
     )
 
     print(
-        "HACKGRID FINAL ASSESSMENT"
+        "NETRASETU FINAL ASSESSMENT"
     )
 
     print(

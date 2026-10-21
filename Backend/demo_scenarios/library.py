@@ -430,7 +430,7 @@ SCENARIOS = [
                 title="Deliberate Mismatch: Erroneous Clause Citation Test",
                 event=(
                     "A compliance report erroneously cites Clause 12 of the CERT-In Directions "
-                    "as establishing the 6-hour incident reporting requirement. HackGrid must "
+                    "as establishing the 6-hour incident reporting requirement. NetraSetu must "
                     "verify whether the cited clause actually contains the rule."
                 ),
                 evidence_prompt=(
@@ -737,7 +737,7 @@ SCENARIO_VERIFIED_SOURCES = {
             "RS3": {
                 "source_doc_id": "ITU-T-Y3172",
                 "source_title": "Comparative Gap Analysis & Governance",
-                "issuing_authority": "HackGrid Multi-Jurisdiction Reasoning Layer",
+                "issuing_authority": "NetraSetu Multi-Jurisdiction Reasoning Layer",
                 "document_identifier": "HG-REG-CROSSWALK",
                 "jurisdiction": "Cross-Border",
                 "legal_status": "NON_BINDING_TECHNICAL_STANDARD",
@@ -905,7 +905,7 @@ SCENARIO_VERIFIED_SOURCES = {
             "C2": {
                 "source_doc_id": "CERTIN-DIR-2022",
                 "source_title": "Deliberate Mismatch Test: Erroneous Citation (Clause 12)",
-                "issuing_authority": "CERT-In / MeitY (Mismatch Flagged by HackGrid)",
+                "issuing_authority": "CERT-In / MeitY (Mismatch Flagged by NetraSetu)",
                 "document_identifier": "No. 20(3)/2022-CERT-In",
                 "jurisdiction": "India",
                 "legal_status": "BINDING_DIRECTION",
@@ -914,8 +914,8 @@ SCENARIO_VERIFIED_SOURCES = {
                 "source_url": "https://www.cert-in.org.in/PDF/CERT-In_Directions_70B_28.04.2022.pdf",
                 "local_viewer_url": "/api/documents/raw/knowledge_base/Documents main/Indian_Acts/CERT-In_Directions_70B_28.04.2022.pdf#page=2",
                 "supporting_text": "[CLAUSE MISMATCH: The official text in cited 'Clause 12' does not contain or establish the 6-hour cyber incident reporting obligation. The obligation is located in Paragraph (ii).]",
-                "surrounding_context": "Deliberate test case for judges and evaluators to verify that HackGrid detects fabricated or erroneous clause citations rather than accepting them blindly.",
-                "faq_clarification": "HackGrid detects the citation mismatch and automatically flags the claim as UNSUPPORTED with an explicit discrepancy explanation."
+                "surrounding_context": "Deliberate test case for judges and evaluators to verify that NetraSetu detects fabricated or erroneous clause citations rather than accepting them blindly.",
+                "faq_clarification": "NetraSetu detects the citation mismatch and automatically flags the claim as UNSUPPORTED with an explicit discrepancy explanation."
             }
         }
     }

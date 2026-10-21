@@ -1,13 +1,13 @@
 @echo off
 setlocal
 
-title HackGrid - IMC Demo
+title NetraSetu - IMC Demo
 
 cd /d "%~dp0"
 
 echo.
 echo ==========================================
-echo          HACKGRID IMC DEMO
+echo          NETRASETU IMC DEMO
 echo ==========================================
 echo.
 echo Project:
@@ -69,8 +69,8 @@ REM ------------------------------------------
 powershell -NoProfile -Command "$c=Get-NetTCPConnection -LocalPort 8000 -State Listen -ErrorAction SilentlyContinue; if($c){exit 0}else{exit 1}"
 
 if errorlevel 1 (
-    echo [3/4] Starting HackGrid backend...
-    start "HackGrid Backend" cmd /k "%CD%\.venv\Scripts\python.exe -m uvicorn Backend.server:app --host 127.0.0.1 --port 8000"
+    echo [3/4] Starting NetraSetu backend...
+    start "NetraSetu Backend" cmd /k "%CD%\.venv\Scripts\python.exe -m uvicorn Backend.server:app --host 127.0.0.1 --port 8000"
 ) else (
     echo [3/4] Backend already running on port 8000.
 )
@@ -82,8 +82,8 @@ REM ------------------------------------------
 powershell -NoProfile -Command "$c=Get-NetTCPConnection -LocalPort 5500 -State Listen -ErrorAction SilentlyContinue; if($c){exit 0}else{exit 1}"
 
 if errorlevel 1 (
-    echo Starting HackGrid frontend...
-    start "HackGrid Frontend" cmd /k "%PYTHON% -m http.server 5500 --bind 127.0.0.1 --directory Frontend"
+    echo Starting NetraSetu frontend...
+    start "NetraSetu Frontend" cmd /k "%PYTHON% -m http.server 5500 --bind 127.0.0.1 --directory Frontend"
 ) else (
     echo Frontend already running on port 5500.
 )
@@ -93,7 +93,7 @@ REM Wait for backend
 REM ------------------------------------------
 
 echo.
-echo Waiting for HackGrid backend...
+echo Waiting for NetraSetu backend...
 
 set /a COUNT=0
 
@@ -108,7 +108,7 @@ set /a COUNT+=1
 if %COUNT% GEQ 60 (
     echo.
     echo ERROR: Backend did not become ready.
-    echo Check the HackGrid Backend terminal.
+    echo Check the NetraSetu Backend terminal.
     echo.
     pause
     exit /b 1
@@ -126,13 +126,13 @@ REM ------------------------------------------
 REM Wait for frontend
 REM ------------------------------------------
 
-echo Waiting for HackGrid frontend...
+echo Waiting for NetraSetu frontend...
 
 timeout /t 2 /nobreak >nul
 
 echo.
 echo ==========================================
-echo       HACKGRID IS READY
+echo       NETRASETU IS READY
 echo ==========================================
 echo.
 echo Backend:
@@ -141,7 +141,7 @@ echo.
 echo Frontend:
 echo http://127.0.0.1:5500
 echo.
-echo Opening HackGrid...
+echo Opening NetraSetu...
 echo.
 
 start "" "http://127.0.0.1:5500"

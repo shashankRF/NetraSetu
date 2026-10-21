@@ -45,7 +45,7 @@ def update_readme():
     # 4. Section 9 Knowledge Base Architecture Diagram & Inventory
     old_kb_sec = """```mermaid
 flowchart TD
-    subgraph Knowledge_Bases [HackGrid Knowledge Bases]
+    subgraph Knowledge_Bases [NetraSetu Knowledge Bases]
         MainKB[Main Production KB<br/>14,143 Chunks<br/>Status: ACTIVE LIVE]
         MaritimeKB[Maritime KB<br/>Directory: rag/MARITIME CHUNKS<br/>Status: In Repo / Fallback to Main]
         DefenceKB[Defence KB<br/>Directory: rag/DEFENCE CHUNKS<br/>Status: In Repo / Fallback to Main]
@@ -54,7 +54,7 @@ flowchart TD
     MainKB --> UnifiedRetriever[Multi-KB Retriever Engine]
     MaritimeKB -.->|When populated| UnifiedRetriever
     DefenceKB -.->|When populated| UnifiedRetriever
-    UnifiedRetriever --> Pipeline[HackGrid Production Pipeline]
+    UnifiedRetriever --> Pipeline[NetraSetu Production Pipeline]
 ```
 
 ### Knowledge Base Inventory
@@ -70,7 +70,7 @@ flowchart TD
 
     new_kb_sec = """```mermaid
 flowchart TD
-    subgraph Knowledge_Bases [HackGrid Multi-Domain Knowledge Bases]
+    subgraph Knowledge_Bases [NetraSetu Multi-Domain Knowledge Bases]
         MainKB[Main Production KB<br/>14,143 Chunks<br/>Status: ACTIVE LIVE]
         MaritimeKB[Maritime Domain KB<br/>273 Chunks<br/>Status: ACTIVE LIVE]
         DefenceKB[Defence Domain KB<br/>397 Chunks<br/>Status: ACTIVE LIVE]
@@ -79,7 +79,7 @@ flowchart TD
     MainKB --> UnifiedRetriever[Unified Multi-KB Retriever Engine]
     MaritimeKB -->|Domain Routing + Quota Pooling| UnifiedRetriever
     DefenceKB -->|Domain Routing + Quota Pooling| UnifiedRetriever
-    UnifiedRetriever --> Pipeline[HackGrid Production Pipeline]
+    UnifiedRetriever --> Pipeline[NetraSetu Production Pipeline]
 ```
 
 ### Knowledge Base Inventory
@@ -177,21 +177,21 @@ flowchart TD
     if old_tree in text:
         text = text.replace(old_tree, new_tree)
 
-    # 8. Section 32 Why HackGrid is Different
+    # 8. Section 32 Why NetraSetu is Different
     text = text.replace(
         "| **Primary Grounding** | Unranked text chunks | Model conversational context | **Verified 14,143-chunk statutory/standards KB** |",
         "| **Primary Grounding** | Unranked text chunks | Model conversational context | **Verified 14,813-chunk statutory/standards corpus across 3 KBs** |"
     )
 
     # 9. Section 36 Limitations
-    old_lim = """* **Corpus Boundedness**: HackGrid's factual horizon is bounded by its 14,143 indexed chunks. Novel circulars issued after indexing require manual ingestion.
+    old_lim = """* **Corpus Boundedness**: NetraSetu's factual horizon is bounded by its 14,143 indexed chunks. Novel circulars issued after indexing require manual ingestion.
 * **Probabilistic Synthesis**: While grounded in evidence, language-model synthesis can exhibit phrasing variance across identical contexts.
 * **Domain KB Integration**: The dedicated Defence and Maritime chunk indices exist physically as repository scaffolds but currently fall back to the Main KB in unified live querying.
-* **Non-Legal Finality**: HackGrid provides technical and regulatory **decision support**. It does not substitute for qualified legal counsel or statutory government gazettes."""
+* **Non-Legal Finality**: NetraSetu provides technical and regulatory **decision support**. It does not substitute for qualified legal counsel or statutory government gazettes."""
 
-    new_lim = """* **Corpus Boundedness**: HackGrid's factual horizon is bounded by its 14,813 indexed chunks across the Main, Defence, and Maritime repositories. Novel circulars issued after indexing require manual ingestion.
+    new_lim = """* **Corpus Boundedness**: NetraSetu's factual horizon is bounded by its 14,813 indexed chunks across the Main, Defence, and Maritime repositories. Novel circulars issued after indexing require manual ingestion.
 * **Probabilistic Synthesis**: While grounded in evidence, language-model synthesis can exhibit phrasing variance across identical contexts.
-* **Non-Legal Finality**: HackGrid provides technical and regulatory **decision support**. It does not substitute for qualified legal counsel or statutory government gazettes."""
+* **Non-Legal Finality**: NetraSetu provides technical and regulatory **decision support**. It does not substitute for qualified legal counsel or statutory government gazettes."""
     if old_lim in text:
         text = text.replace(old_lim, new_lim)
 

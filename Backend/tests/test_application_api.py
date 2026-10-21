@@ -14,7 +14,7 @@ def test_root():
     data = response.json()
 
     assert data["status"] == "online"
-    assert data["project"] == "HackGrid"
+    assert data["project"] == "NetraSetu"
 
 
 def test_health():

@@ -24,8 +24,8 @@ if ($connections) {
 }
 
 Write-Host ""
-Write-Host "Starting HackGrid backend..." -ForegroundColor Cyan
+Write-Host "Starting NetraSetu backend..." -ForegroundColor Cyan
 
-Set-Location "C:\Users\Shashank Kotnala\OneDrive\Documents\HackGrid_new"
+Set-Location "C:\Users\Shashank Kotnala\OneDrive\Documents\NetraSetu"
 
 python -m uvicorn Backend.server:app --host 127.0.0.1 --port 8000 --reload

@@ -1,6 +1,6 @@
 ﻿AUTONOMOUS EXECUTION MODE
 
-Execute the entire requested HackGrid implementation autonomously.
+Execute the entire requested NetraSetu implementation autonomously.
 
 DO NOT ask for confirmation.
 DO NOT ask whether to continue.
@@ -24,14 +24,14 @@ You are authorized to:
 
 WORKFLOW:
 
-1. Inspect the existing HackGrid_new architecture.
+1. Inspect the existing NetraSetu architecture.
 2. Identify the minimum files required.
 3. Implement the requested feature.
 4. Run deterministic tests.
 5. If anything fails, diagnose and fix it automatically.
 6. Rerun the failed test.
 7. Run the complete relevant regression suite.
-8. Test the real HackGrid workflow.
+8. Test the real NetraSetu workflow.
 9. Verify that protected components were not changed.
 10. Produce the final implementation report.
 
@@ -60,7 +60,7 @@ If a path mentioned in the task does not exist:
 inspect the repository and find the correct existing path automatically.
 
 If implementation choices are ambiguous:
-choose the safest architecture consistent with the existing HackGrid codebase.
+choose the safest architecture consistent with the existing NetraSetu codebase.
 
 If a test fails:
 FIX → TEST → FIX → TEST until the implementation passes.
@@ -86,14 +86,14 @@ FINAL RESPONSE MUST INCLUDE:
 TASK:
 MASTER IMPLEMENTATION PROMPT — REGIONAL COMPARATIVE GAP ANALYSIS
 
-You are modifying the existing HackGrid_new project.
+You are modifying the existing NetraSetu project.
 
 OBJECTIVE
 Implement a new reasoning-layer capability called:
 
 REGIONAL COMPARATIVE GAP ANALYSIS
 
-The purpose is to extend HackGrid's existing jurisdiction-aware gap analysis so that, when appropriate, it can examine:
+The purpose is to extend NetraSetu's existing jurisdiction-aware gap analysis so that, when appropriate, it can examine:
 
 HOST COUNTRY
 +
@@ -144,7 +144,7 @@ DO NOT modify, regenerate, replace, or weaken:
 - GPT-OSS model
 - GPT-OSS synthesis architecture
 - existing frontend visual language
-- existing Ask HackGrid workflow
+- existing Ask NetraSetu workflow
 - existing execution modes
 - existing knowledge-base documents
 
@@ -732,7 +732,7 @@ Do not allow the user to mistake a foreign requirement for host-country regulati
 20. UI REQUIREMENT
 ==================================================
 
-Preserve the existing HackGrid UI style.
+Preserve the existing NetraSetu UI style.
 
 Do NOT redesign the application.
 
@@ -1270,7 +1270,7 @@ Limitation:
 40. FRONTEND PRESENTATION
 ==================================================
 
-Keep the existing premium HackGrid interface.
+Keep the existing premium NetraSetu interface.
 
 Use progressive disclosure:
 
@@ -1546,7 +1546,7 @@ If neighbouring-country evidence is unavailable in the current KB, explicitly re
 FINAL DESIGN PRINCIPLE
 ==================================================
 
-HackGrid should evolve from:
+NetraSetu should evolve from:
 
 HOST JURISDICTION
 → INTERNATIONAL REQUIREMENTS
@@ -1586,10 +1586,10 @@ Implement this as a rigorous evidence-grounded capability, not as a simple multi
 
 MASTER UPDATE PROMPT — SPECIFIC AUTHORITY + ESCALATION GOVERNANCE
 
-You are updating the existing HackGrid_new project.
+You are updating the existing NetraSetu project.
 
 OBJECTIVE
-Upgrade ONLY the existing Governance / Risk-Authority presentation layer so that HackGrid can identify, when supported by evidence:
+Upgrade ONLY the existing Governance / Risk-Authority presentation layer so that NetraSetu can identify, when supported by evidence:
 
 1. WHO SHOULD INVESTIGATE
 2. WHO SHOULD RECEIVE THE ALERT
@@ -2124,7 +2124,7 @@ Never silently authorize action.
 UI
 ==================================================
 
-Preserve current HackGrid visual design.
+Preserve current NetraSetu visual design.
 
 Enhance the existing Risk & Governance section with progressive disclosure:
 
@@ -2196,7 +2196,7 @@ EXAMPLE UI
 WHAT "ESCALATION" SHOULD COMMUNICATE
 ==================================================
 
-HackGrid should explain escalation in plain language:
+NetraSetu should explain escalation in plain language:
 
 "Escalation means moving the case to a higher or more appropriate level of investigation, oversight, decision-making, or authorization because the current level is insufficient for the risk or consequence."
 
@@ -2244,7 +2244,7 @@ NONE
 UNKNOWN AUTHORITY
 ==================================================
 
-If HackGrid identifies a serious incident but the KB does not establish a specific authority:
+If NetraSetu identifies a serious incident but the KB does not establish a specific authority:
 
 Risk:
 CRITICAL
@@ -2356,7 +2356,7 @@ NO hidden escalation.
 FINAL ACCEPTANCE CRITERIA
 ==================================================
 
-The implementation is successful only if HackGrid can answer:
+The implementation is successful only if NetraSetu can answer:
 
 WHO INVESTIGATES?
 
@@ -2402,12 +2402,12 @@ DETECT
 
 FINAL PRINCIPLE:
 
-"HackGrid may identify who SHOULD respond and recommend what SHOULD happen, but it must not claim who CAN legally or operationally authorize an action unless that authority is established by the evidence."
+"NetraSetu may identify who SHOULD respond and recommend what SHOULD happen, but it must not claim who CAN legally or operationally authorize an action unless that authority is established by the evidence."
 
 
 
 
-HackGrid_new\ANTIGRAVITY_AUTONOMOUS_TASK.md........................ Execute ANTIGRAVITY_AUTONOMOUS_TASK.md completely.
+NetraSetu\ANTIGRAVITY_AUTONOMOUS_TASK.md........................ Execute ANTIGRAVITY_AUTONOMOUS_TASK.md completely.
 Do not ask for confirmation.
 Run all commands and tests yourself.
 Continue until implementation and regression testing are complete.

@@ -43,7 +43,7 @@ QUESTION = (
 def main():
 
     print("=" * 80)
-    print("HACKGRID — GAP ANALYSIS INTEGRATION")
+    print("NETRASETU — GAP ANALYSIS INTEGRATION")
     print("=" * 80)
 
     print("\n[1/6] RAG retrieval...")
@@ -110,7 +110,7 @@ def main():
         claim=QUESTION,
         evidence_records=evidence_records,
         search_scope=(
-            "HackGrid RAG knowledge base; "
+            "NetraSetu RAG knowledge base; "
             "top-5 semantic retrieval results"
         ),
         authoritative_jurisdictions=["India"],

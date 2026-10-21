@@ -126,7 +126,7 @@ def verify_claim_evidence(
             relationship="UNESTABLISHED",
             verification_status=VerificationStatus.UNVERIFIED,
             verification_explanation=(
-                "The cited source document is not accessible in the HackGrid indexed registry "
+                "The cited source document is not accessible in the NetraSetu indexed registry "
                 "or external repository. Citation cannot be verified."
             ),
             confidence=0.0,
