@@ -40,6 +40,28 @@ def test_audit_list_endpoint(client):
         assert "provenance" in first
 
 
+def test_audit_highlights_are_capped_and_prioritized(client):
+    response = client.get("/api/audits?limit=30&provenance=RUNTIME_EXECUTION&sort=important")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["limit"] == 30
+    assert len(data["audits"]) <= 30
+    assert data["filtered_count"] >= len(data["audits"])
+    assert all(record["provenance"] == "RUNTIME_EXECUTION" for record in data["audits"])
+    priorities = []
+    for record in data["audits"]:
+        status = str(record.get("execution_status") or "").upper()
+        event = str(record.get("event_type") or record.get("audit_type") or "").upper()
+        has_evidence = bool(record.get("retrieved_evidence"))
+        if event == "GOVERNANCE_DECISION": priorities.append(0)
+        elif event == "SCENARIO_EXECUTION" and status == "COMPLETED" and has_evidence: priorities.append(1)
+        elif event in {"QUESTION_ANALYSIS", "QUESTION / ANALYSIS"} and status == "COMPLETED" and has_evidence: priorities.append(2)
+        elif record.get("human_review_required"): priorities.append(3)
+        elif status in {"FAILED", "BLOCKED"}: priorities.append(4)
+        else: priorities.append(5)
+    assert priorities == sorted(priorities)
+
+
 def test_excel_export_endpoint(client):
     res = client.get("/api/audits/export/excel")
     assert res.status_code == 200

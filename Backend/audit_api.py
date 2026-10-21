@@ -317,7 +317,7 @@ def get_all_audits(
     scenario_id: Optional[str] = Query(None, description="Filter by scenario ID"),
     execution_status: Optional[str] = Query(None, description="Filter by execution status (COMPLETED, FAILED, BLOCKED)"),
     provenance: Optional[str] = Query(None, description="Filter by provenance (RUNTIME_EXECUTION, LEGACY_UNVERIFIED)"),
-    sort: Optional[str] = Query("newest", description="Sort order: newest, oldest, highest_risk, lowest_risk"),
+    sort: Optional[str] = Query("newest", description="Sort order: important, newest, oldest, highest_risk, lowest_risk"),
     limit: int = Query(100, ge=1, le=500),
     offset: int = Query(0, ge=0),
 ):
@@ -414,8 +414,29 @@ def get_all_audits(
             if a["scenario"] and a["scenario"]["scenario_id"].lower() == scenario_id.lower()
         ]
 
-    # Sort
-    if sort == "oldest":
+    # The compact dashboard highlights decision records and evidence-backed
+    # work first. Failed/blocked executions remain visible if space permits.
+    if sort == "important":
+        filtered.sort(key=lambda x: x.get("timestamp") or "", reverse=True)
+        def importance_key(record: Dict[str, Any]) -> tuple[int, float]:
+            status = str(record.get("execution_status") or "").upper()
+            event = str(record.get("event_type") or record.get("audit_type") or "").upper()
+            has_evidence = bool(record.get("retrieved_evidence"))
+            if event == "GOVERNANCE_DECISION":
+                priority = 0
+            elif event == "SCENARIO_EXECUTION" and status == "COMPLETED" and has_evidence:
+                priority = 1
+            elif event in {"QUESTION_ANALYSIS", "QUESTION / ANALYSIS"} and status == "COMPLETED" and has_evidence:
+                priority = 2
+            elif record.get("human_review_required"):
+                priority = 3
+            elif status in {"FAILED", "BLOCKED"}:
+                priority = 4
+            else:
+                priority = 5
+            return priority, -float(record.get("risk_score") or 0)
+        filtered.sort(key=importance_key)
+    elif sort == "oldest":
         filtered.sort(key=lambda x: x["timestamp"] or "")
     elif sort == "highest_risk":
         filtered.sort(key=lambda x: x["risk_score"], reverse=True)

@@ -4892,6 +4892,22 @@
     .home-capabilities h2 { margin:11px 0 6px; color:#19354a; font-size:17px; letter-spacing:-.02em; } .home-capabilities p { color:#617488; font-size:12px; line-height:1.55; } .home-capabilities .hg-btn-primary,.home-capabilities .hg-btn-secondary { display:inline-flex; align-items:center; margin-top:9px; padding:10px 12px; border-radius:8px; font-size:12px; background:#176f82!important; color:#fff!important; } .home-capabilities .hg-btn-secondary { background:#eef6f8!important; border:1px solid #cbdfe5; color:#176f82!important; } .netra-contact-wrapper { background:#fff!important; border:1px solid #dce5eb; box-shadow:0 5px 18px rgba(20,48,68,.045); color:#193047; } .netra-contact-wrapper h3 { color:#193047!important; } .netra-contact-wrapper p { color:#526477!important; } .netra-contact-wrapper [style*="border-top"] { border-color:#dce5eb!important; color:#62778a!important; } .netra-contact-wrapper .netra-email-display { background:#f5f8fa!important; border-color:#dce5eb!important; color:#193047!important; } .cap-status { font-size:9px; font-weight:800; letter-spacing:.09em; } .cap-status.implemented { color:#14758a; } .cap-status.planned { color:#9b6a1a; }
     @media(max-width:850px) { .topbar { justify-content:flex-end; padding-right:20px; } .brand-name { left:20px; } .links { gap:14px; font-size:12px; } .pill-nav { right:20px; position:static; transform:none; margin-left:18px; } .netra-home { grid-template-columns:1fr .8fr; gap:28px; } }
     @media(max-width:640px) { .topbar { height:66px; justify-content:flex-end; padding-right:16px; } .brand-name { left:16px; font-size:19px; } .links { display:none; } .pill-nav { margin:0; min-height:38px; padding:0 14px; font-size:12px; } .burger { display:flex; flex-direction:column; align-items:center; justify-content:center; position:static; flex:0 0 40px; width:40px; height:38px; gap:5px; margin-left:11px; border:1px solid #d2dfe6; border-radius:9px; background:#fff; backdrop-filter:none; z-index:32; } .burger i { display:block; width:17px; height:2px; flex:0 0 2px; background:#29445a; } .menu { display:block; position:fixed; inset:66px 0 0; z-index:30; background:#fff; opacity:0; visibility:hidden; transition:opacity .2s ease,visibility .2s ease; } .is-open .menu { opacity:1; visibility:visible; } body.is-open #menu { display:block!important; position:fixed; inset:66px 12px auto; height:auto; min-height:260px; padding:14px; border:1px solid #dce5eb; border-radius:12px; box-shadow:0 16px 42px rgba(19,48,71,.18); opacity:1!important; visibility:visible!important; } .menu-inner { padding:34px 24px; } .menu-list a { color:#193047; font-size:24px; padding:13px 0; } .netra-home { display:flex; flex-direction:column; align-items:stretch; padding:94px 18px 42px; gap:26px; } .netra-home h1 { font-size:clamp(41px,12vw,58px); max-width:12ch; } .home-visual { min-height:330px; } .home-capabilities { display:grid; grid-template-columns:1fr; width:100%; } body.inner .story { padding-top:66px; } }
+    .about-netra { max-width:1080px; margin:0 auto; padding:clamp(102px,12vh,132px) clamp(20px,5vw,64px) 68px; color:#193047; }
+    .about-netra-hero { padding:clamp(22px,4vw,42px); border:1px solid #dce5eb; border-radius:18px; background:linear-gradient(135deg,#fff,#f2f8fa); box-shadow:0 8px 26px rgba(20,48,68,.05); }
+    .about-netra-hero h2 { max-width:20ch; margin:18px 0 14px; color:#122b41; font-size:clamp(32px,4.5vw,52px); line-height:1.08; letter-spacing:-.04em; }
+    .about-netra-hero>p,.about-netra-block>p,.about-netra-status>p { max-width:82ch; color:#52697a; font-size:14px; line-height:1.75; }
+    .about-netra-block,.about-netra-status { margin-top:22px; padding:clamp(20px,3vw,30px); border:1px solid #dce5eb; border-radius:15px; background:#fff; }
+    .about-netra-block h3,.about-netra-status h3 { margin:0 0 12px; color:#183047; font-size:clamp(20px,2.4vw,26px); }
+    .about-netra-block h4 { margin:0 0 8px; color:#1a4056; font-size:15px; }
+    .about-netra-cards { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-top:18px; }
+    .about-netra-cards article { padding:17px; border:1px solid #dce7ed; border-radius:11px; background:#f8fbfc; }
+    .about-netra-cards p { margin:0; color:#5a7081; font-size:12px; line-height:1.65; }
+    .about-netra-audience { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; padding:0; list-style:none; }
+    .about-netra-audience li { display:grid; gap:4px; padding:12px 14px; border:1px solid #e0e9ee; border-radius:9px; background:#fafcfd; }
+    .about-netra-audience strong { color:#21445b; font-size:12px; }
+    .about-netra-audience span,.about-netra-note { color:#627789; font-size:11px; line-height:1.55; }
+    .about-netra-status { border-color:#d9e9eb; background:#f1f8f9; }
+    @media(max-width:640px) { .about-netra { padding:88px 14px 42px; } .about-netra-cards,.about-netra-audience { grid-template-columns:1fr; } }
     @media(prefers-reduced-motion:reduce) { .home-button { transition:none; } }
 
   </style>
@@ -4922,7 +4938,7 @@
     </a>
     <a class="brand-name" href="#/home" aria-label="NetraSetu home">NetraSetu</a>
     <nav class="links" aria-label="Primary">
-      <a href="#/home">Home</a><a href="#/intelligence">Intelligence</a><a href="#/contact">Contact Us</a>
+      <a href="#/home">Home</a><a href="#/about">About Us</a><a href="#/intelligence">Intelligence</a><a href="#/contact">Contact Us</a><a href="#/sign-in">Sign In</a>
     </nav>
     <a class="pill pill-nav" href="#/dashboard"><span>Dashboard</span></a>
     <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false"
@@ -4931,8 +4947,7 @@
   <nav class="menu" id="menu" aria-hidden="true" aria-label="Mobile">
     <div class="menu-inner">
       <p class="menu-eyebrow">Menu</p>
-      <ul class="menu-list"><li><a href="#/home">Home</a></li><li><a href="#/intelligence">Intelligence</a></li><li><a href="#/contact">Contact Us</a></li><li><a href="#/dashboard">Dashboard</a></li></ul>
-      <div class="menu-foot"><a class="ghost" href="#/about">About NetraSetu</a></div>
+      <ul class="menu-list"><li><a href="#/home">Home</a></li><li><a href="#/about">About Us</a></li><li><a href="#/intelligence">Intelligence</a></li><li><a href="#/contact">Contact Us</a></li><li><a href="#/sign-in">Sign In</a></li><li><a href="#/dashboard">Dashboard</a></li></ul>
     </div>
   </nav>
   <div class="story">
@@ -5249,15 +5264,42 @@
 </section>
 
 <section class="sec rv" id="about" data-page="about">
-  <div class="account-card" style="max-width:850px"><div class="k"><span>PROJECT INFORMATION</span></div><h2>About NetraSetu</h2>
-    <p class="lead">NetraSetu is an evidence-driven disaster-management intelligence prototype designed to help users retrieve relevant requirements from disaster-management documents, examine supporting evidence and support structured, risk-aware decision-making.</p>
-    <p class="lead">The project focuses on traceable evidence, scenario-based analysis and improved information accessibility for disaster-management stakeholders.</p>
-    <h3>Built by Shashank Kotnala</h3>
-    <p>NetraSetu is being developed by Shashank Kotnala, an Electronics and Communication Engineering student interested in telecommunications, disaster resilience, evidence intelligence and responsible technology for public benefit.</p>
-    <h3>Project purpose</h3>
-    <p>NetraSetu is being prepared for the <strong>Viksit Bharat Young Leaders' Dialogue (VBYLD) 2027 — Hack for Social Cause</strong>. The project explores how document intelligence, evidence traceability and structured governance support could help disaster-management stakeholders make better-informed decisions. This describes the project's intended purpose and competition context; it does not imply official endorsement, selection or partnership.</p>
-    <h3>Current status</h3>
-    <p>The current prototype includes document retrieval, source-linked evidence, scenario-based analysis and dashboard review workflows where implemented. Production authentication, live satellite analysis, operational government deployment, real-time inter-agency communications and quantified social impact are not claimed.</p>
+  <div class="about-netra">
+    <header class="about-netra-hero">
+      <div class="home-eyebrow"><span class="home-dot"></span>DISASTER INTELLIGENCE &amp; RESILIENCE</div>
+      <h2>Turning Disaster-Management Evidence into Actionable Intelligence</h2>
+      <p>NetraSetu is an evidence-driven disaster-management intelligence prototype designed to help authorities analyse disaster scenarios, retrieve relevant requirements from trusted documents, and make better-informed decisions through traceable evidence and risk-aware governance workflows.</p>
+      <div class="home-actions"><a class="home-button primary" href="#/intelligence">Explore Intelligence</a><a class="home-button secondary" href="#/dashboard">Open Dashboard</a></div>
+    </header>
+    <section class="about-netra-block"><h3>Built for Evidence-Based Disaster Response</h3>
+      <p>During disasters, authorities may need to consult multiple disaster-management plans, policies, operational guidelines, and institutional requirements while coordinating across agencies.</p>
+      <p>NetraSetu aims to reduce the effort required to locate relevant documentary evidence, understand its context, identify potential gaps, and support structured decision-making. It combines domain-aware document retrieval with evidence-linked analysis and a separate risk and governance workflow.</p>
+      <p>The objective is not to replace emergency officials or established command structures. It is to provide a more traceable and structured way to support their decisions.</p>
+    </section>
+    <section class="about-netra-block"><h3>What NetraSetu is designed to do</h3>
+      <div class="about-netra-cards">
+        <article><h4>Evidence Intelligence</h4><p>Retrieve relevant passages from the available disaster-management knowledge base and present source-linked evidence so users can inspect the original documents.</p></article>
+        <article><h4>Scenario-Based Analysis</h4><p>Evaluate selected disaster scenarios against available documentary evidence and identify relevant requirements, potential concerns, and areas requiring further review.</p></article>
+        <article><h4>Risk &amp; Governance Support</h4><p>Apply the existing deterministic governance rules to support risk classification, escalation and human review where configured.</p></article>
+      </div>
+    </section>
+    <section class="about-netra-block"><h3>Who it is designed for</h3>
+      <ul class="about-netra-audience">
+        <li><strong>District Administration</strong><span>Review scenario findings and supporting requirements.</span></li>
+        <li><strong>State Disaster Response Teams</strong><span>Support operational preparedness and evidence review.</span></li>
+        <li><strong>National Response Agencies</strong><span>Examine relevant documentary requirements and coordination needs.</span></li>
+        <li><strong>Telecom Operators</strong><span>Review applicable communication and infrastructure considerations supported by the available knowledge base.</span></li>
+        <li><strong>Emergency Management Officials</strong><span>Inspect findings, evidence and governance recommendations.</span></li>
+      </ul>
+      <p class="about-netra-note">These are intended user groups, not confirmed customers, partners, or deployed organisations.</p>
+    </section>
+    <section class="about-netra-block"><h3>Evidence First. Decisions with Accountability.</h3>
+      <p>NetraSetu separates evidence retrieval, analytical findings, and governance decisions so users can inspect the basis of an assessment rather than relying on an unexplained recommendation.</p>
+      <p>The prototype is designed to support human oversight, traceability and more consistent review. Its findings depend on the documents available, the quality of retrieval, the scenario inputs and the validation performed.</p>
+    </section>
+    <section class="about-netra-status"><h3>Current development status</h3>
+      <p>NetraSetu is a developing prototype. Scenario-based analysis and existing document-intelligence capabilities are presented according to what is implemented and verified. Live satellite imagery, real-time external feeds, and expanded inter-agency collaboration are planned or in development unless identified as working features.</p>
+    </section>
   </div>
 </section>
 
@@ -5567,7 +5609,7 @@
 <div class="hg-dash-header">
   <div class="hg-dash-title-wrap">
     <h2>Audit Trail</h2>
-    <p class="lead">Search and inspect recorded NetraSetu analyses, evidence references, review decisions, and exported audit records.</p>
+    <p class="lead">Review up to 30 prioritized prototype runtime records. Export the complete audit history when you need the full ledger.</p>
   </div>
   <div class="hg-dash-live-badge">
     <span class="hg-pulse-dot"></span>
@@ -5616,6 +5658,7 @@
           <option value="SIMULATED SCENARIO">Simulated Scenario</option>
         </select>
         <select class="audit-select" id="audit-sort" aria-label="Sort Records">
+          <option value="important" selected>Important First</option>
           <option value="newest">Newest First</option>
           <option value="oldest">Oldest First</option>
           <option value="highest_risk">Highest Risk</option>
@@ -8302,7 +8345,7 @@
         var jurVal = $('audit-filter-jur') ? $('audit-filter-jur').value : 'all';
         var riskVal = $('audit-filter-risk') ? $('audit-filter-risk').value : 'all';
         var typeVal = $('audit-filter-type') ? $('audit-filter-type').value : 'all';
-        var sortVal = $('audit-sort') ? $('audit-sort').value : 'newest';
+        var sortVal = $('audit-sort') ? $('audit-sort').value : 'important';
 
         var params = new URLSearchParams();
         if (searchVal) params.append('search', searchVal);
@@ -8311,6 +8354,8 @@
         if (riskVal !== 'all') params.append('risk_level', riskVal);
         if (typeVal !== 'all') params.append('audit_type', typeVal);
         if (sortVal) params.append('sort', sortVal);
+        params.append('provenance', 'RUNTIME_EXECUTION');
+        params.append('limit', '30');
 
         try {
           var data = await apiFetch('/api/audits?' + params.toString());
@@ -8326,7 +8371,7 @@
           if ($('stat-insufficient')) $('stat-insufficient').textContent = m.insufficient_evidence || 0;
 
           var audits = data.audits || [];
-          if (countLabel) countLabel.textContent = 'Showing ' + audits.length + ' of ' + (data.total || 0) + ' immutable audit records';
+          if (countLabel) countLabel.textContent = 'Showing ' + audits.length + ' prioritized prototype runtime records of ' + (data.filtered_count || 0) + ' runtime records · Full ledger: ' + (data.total || 0);
 
           if ((data.total || 0) === 0) {
             listEl.innerHTML = '<div style="padding:48px 24px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:12px;margin:20px 0;"><p style="font-size:16px;color:var(--ink);margin-bottom:8px;font-weight:500;">No audit events recorded yet.</p><p style="font-size:13px;color:var(--strip);">Run a question or scenario to create your first audit record.</p></div>';
@@ -8946,13 +8991,13 @@
         if(dashState.audits.length&&!force){dashRenderAudit();dashRenderMetrics();dashRenderGovernance();return;}
         var status=$('dash-audit-status');if(status)status.textContent='Loading persisted audit records…';
         try {
-          var data=await apiFetch('/api/audits?limit=500&sort=newest',{timeout:10000});dashState.auditData=data;dashState.audits=data.audits||[];dashState.auditError=null;await dashLoadLatestRecord();
-          if(status)status.textContent='Loaded '+dashState.audits.length+' of '+(data.total||0)+' persisted records.';
+          var data=await apiFetch('/api/audits?limit=30&provenance=RUNTIME_EXECUTION&sort=important',{timeout:10000});dashState.auditData=data;dashState.audits=data.audits||[];dashState.auditError=null;await dashLoadLatestRecord();
+          if(status)status.textContent='Loaded '+dashState.audits.length+' prioritized prototype runtime records. Full ledger: '+(data.total||0)+'.';
           dashRenderMetrics();dashRenderAudit();dashRenderGovernance();
         } catch(err) {dashState.auditError=err;if(status)status.textContent='Audit service unavailable: '+err.message;var m=$('dash-metric-total');if(m)m.textContent='Unavailable';}
       }
       async function dashLoadLatestRecord() {
-        var latestId=dashState.audits[0]&&dashState.audits[0].audit_id;if(!latestId||dashState.persistedAuditId===latestId)return;
+        var latestId='';try{var latestData=await apiFetch('/api/audits?limit=1&provenance=RUNTIME_EXECUTION&sort=newest',{timeout:10000});latestId=latestData.audits&&latestData.audits[0]&&latestData.audits[0].audit_id;}catch(err){return;}if(!latestId||dashState.persistedAuditId===latestId)return;
         try {dashState.persistedRecord=await apiFetch('/api/audits/'+encodeURIComponent(latestId),{timeout:10000});dashState.persistedAuditId=latestId;if(dashState.latest&&dashState.latest.record==null&&dashState.latest.result){var p=dashState.latest.result.pipeline_result||dashState.latest.result;if(p.audit_id===latestId)dashState.latest.record=dashState.persistedRecord;}if(!dashState.latest){dashRenderEvidence();dashRenderGovernance();dashRenderAttachmentOptions();}}catch(err){dashState.persistedRecord=null;}
       }
       function dashRenderMetrics() {
@@ -8969,7 +9014,7 @@
         var typeSelect=$('dash-audit-type');if(typeSelect&&typeSelect.options.length===1){Array.from(new Set(dashState.audits.map(function(a){return a.event_type||a.audit_type;}).filter(Boolean))).sort().forEach(function(t){typeSelect.add(new Option(t,t));});}
         var rows=dashState.audits.filter(function(a){var text=[a.audit_id,a.execution_id,a.question,a.scenario&&a.scenario.scenario_title,a.event_type,a.domain,a.human_reviewer].join(' ').toLowerCase();var date=String(a.timestamp||'').slice(0,10);return (!search||text.includes(search))&&(type==='all'||(a.event_type||a.audit_type)===type)&&(!from||date>=from)&&(!to||date<=to);});
         if(!rows.length){host.innerHTML='<div class="dash-empty">No persisted audit records match these filters.</div>';return;}
-        host.innerHTML=rows.slice(0,100).map(function(a){return '<article class="dash-audit-record"><header><strong>'+escapeHtml(a.audit_id||'ID unavailable')+' · '+escapeHtml(a.event_type||a.audit_type||'Event type unavailable')+'</strong><span>'+escapeHtml(a.timestamp?new Date(a.timestamp).toLocaleString():'Timestamp unavailable')+'</span></header><p>'+escapeHtml(a.question||a.assessment_excerpt||'Description unavailable')+'</p><div class="dash-record-badges"><span class="dash-record-badge">'+escapeHtml(a.execution_status||'Status unavailable')+'</span><span class="dash-record-badge">Risk: '+escapeHtml(a.risk_level||'Unavailable')+'</span><span class="dash-record-badge">Review: '+escapeHtml(a.human_review_status||'Unavailable')+'</span><span class="dash-record-badge">'+escapeHtml(a.provenance||'Provenance unavailable')+'</span></div><a class="dash-inline-link" href="#/audit-trail">Open in full review console →</a></article>';}).join('');
+        host.innerHTML=rows.slice(0,30).map(function(a){return '<article class="dash-audit-record"><header><strong>'+escapeHtml(a.audit_id||'ID unavailable')+' · '+escapeHtml(a.event_type||a.audit_type||'Event type unavailable')+'</strong><span>'+escapeHtml(a.timestamp?new Date(a.timestamp).toLocaleString():'Timestamp unavailable')+'</span></header><p>'+escapeHtml(a.question||a.assessment_excerpt||'Description unavailable')+'</p><div class="dash-record-badges"><span class="dash-record-badge">'+escapeHtml(a.execution_status||'Status unavailable')+'</span><span class="dash-record-badge">Risk: '+escapeHtml(a.risk_level||'Unavailable')+'</span><span class="dash-record-badge">Review: '+escapeHtml(a.human_review_status||'Unavailable')+'</span><span class="dash-record-badge">'+escapeHtml(a.provenance||'Provenance unavailable')+'</span></div><a class="dash-inline-link" href="#/audit-trail">Open in full review console →</a></article>';}).join('');
       }
       async function dashLoadTelemetry() {
         if(dashState.telemetry.length){dashRenderTelemetry();return;}
