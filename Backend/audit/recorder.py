@@ -253,6 +253,7 @@ def apply_review_overlay(
         )
         overlay["reviewer"] = overlay["human_reviewer"]
         overlay["review_timestamp"] = review_event.get("timestamp")
+        overlay["undo_expires_at"] = review_event.get("undo_expires_at")
         overlay["reviewer_modifications"] = review_event.get("reviewer_modifications")
         overlay["reviewer_reason"] = review_event.get("reviewer_reason")
         overlay["accountable_authority"] = review_event.get("accountable_authority") or overlay.get("accountable_authority")
@@ -269,6 +270,7 @@ def apply_review_overlay(
         overlay["human_reviewer"] = overlay.get("human_reviewer", "")
         overlay["reviewer"] = overlay.get("human_reviewer", "")
         overlay["review_timestamp"] = None
+        overlay["undo_expires_at"] = None
         overlay["reviewer_modifications"] = None
         overlay["reviewer_reason"] = None
 

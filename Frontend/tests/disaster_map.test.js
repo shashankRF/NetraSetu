@@ -30,6 +30,21 @@ test('map uses real road basemap, authenticated dated-data API, citations and so
   assert.match(html, /Browse all /);
 });
 
+test('Show district normalizes boundary aliases and waits for a loaded resizable map before fitting', () => {
+  assert.match(html, /normalize\('NFKC'\)/);
+  assert.match(html, /district_name,f\.properties\.name,f\.properties\.shapeName,f\.properties\.district/);
+  assert.match(html, /disasterMap\.resize\(\);disasterMap\.fitBounds/);
+  assert.match(html, /disasterMap\.once\('load',focus\)/);
+  assert.match(html, /District boundary not found for /);
+});
+
+test('viewer uses the dashboard same-origin API and quotes are verified before the jump button is enabled', () => {
+  assert.match(html, /var API_BASE = window\.location\.pathname\.indexOf\('\/frontend\/'\) === 0 \? window\.location\.origin/);
+  assert.match(html, /api\/documents\/info\?doc_path=/);
+  assert.match(html, /EXACT_MATCH_VERIFIED/);
+  assert.match(html, /api\/documents\/preview\?doc_path=/);
+});
+
 test('demo markers are removed and remaining inline scripts parse', () => {
   assert.doesNotMatch(html, /DEMO MARKERS — NOT OBSERVED OR VERIFIED INCIDENTS|disasterMapSetDemos|demo_features|Demo flood marker/);
   assert.doesNotMatch(html, /data-dash-panel="terrain"|data-dash-view="terrain"|api\/terrain\/|terrainRunEvaluation|HG-TERRAIN-009/);

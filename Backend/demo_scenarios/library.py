@@ -235,62 +235,6 @@ SCENARIOS = [
     ),
 
     # ============================================================
-    # RESEARCH
-    # ============================================================
-
-    Scenario(
-        scenario_id="HG-RESEARCH-005",
-        title="Conflicting O-RAN Security Research",
-        domain="Research",
-        jurisdiction="European Union",
-        description=(
-            "Simulated research-analysis scenario involving conflicting "
-            "technical findings concerning O-RAN security and network "
-            "efficiency."
-        ),
-        simulated=True,
-        steps=[
-            ScenarioStep(
-                step_id="RS1",
-                title="Research question",
-                event=(
-                    "A research team wants to determine whether an O-RAN "
-                    "security mechanism introduces measurable performance "
-                    "or energy overhead."
-                ),
-                evidence_prompt=(
-                    "What published standards and technical evidence "
-                    "address the relevant O-RAN security mechanisms?"
-                ),
-            ),
-            ScenarioStep(
-                step_id="RS2",
-                title="Conflicting findings",
-                event=(
-                    "Two groups report apparently different conclusions "
-                    "about security overhead."
-                ),
-                evidence_prompt=(
-                    "Identify supporting, contradicting, contextual, and "
-                    "insufficient evidence relevant to the research question."
-                ),
-            ),
-            ScenarioStep(
-                step_id="RS3",
-                title="Research gap",
-                event=(
-                    "The research team wants to determine whether a genuine "
-                    "research gap remains."
-                ),
-                evidence_prompt=(
-                    "Does the available evidence establish a research gap, "
-                    "or is the evidence insufficient to establish one?"
-                ),
-            ),
-        ],
-    ),
-
-    # ============================================================
     # EUROPEAN UNION
     # ============================================================
 
@@ -456,12 +400,12 @@ SCENARIOS = [
         title="Flood Disruption to Emergency Telecommunications",
         domain="Disaster Management",
         jurisdiction="India",
-        description="Simulated flood communications assessment. Reports and network conditions are hypothetical and require verification.",
+        description="Detailed simulated flood and emergency-communications assessment. All incident conditions are hypothetical; the workflow must distinguish observed source records from assumptions and retrieve documentary authority before assigning responsibility.",
         simulated=True,
         steps=[
-            ScenarioStep("F1", "Validate flood and service reports", "Initial reports describe possible flooding near communications infrastructure; no impact is confirmed.", "What authoritative observations and source evidence are needed to verify the reported flood extent, timing, and affected communications assets?"),
-            ScenarioStep("F2", "Assess telecom service impact", "The review examines possible power, backhaul, access-network, and emergency-calling impacts using supplied or retrieved evidence.", "What evidence supports or contradicts each reported service impact, and what network dependencies or coverage gaps remain unknown?"),
-            ScenarioStep("F3", "Review response and restoration needs", "A human reviewer assesses evidence-backed coordination and restoration options; no action is automatically authorized.", "Which disaster-management and emergency-telecommunications guidance applies, what remains uncertain, and which responsible agencies should review proposed next steps?"),
+            ScenarioStep("F1", "Verify flood incident and source scope", "Hypothetical flood reports are not confirmed observations. Check the date, location, issuing source, and whether each record is an alert, incident report, or historical risk document.", "For this hypothetical flood, identify the retrieved NDMA/SDMA or official incident evidence, its exact document and clause/page, what it confirms, and what remains unverified. If no statement is retrieved, say Evidence not retrieved."),
+            ScenarioStep("F2", "Trace emergency telecom dependencies", "Assess possible power, backhaul, access-network, and emergency-call disruptions only against supplied operator or official status records; no outage is presumed.", "Using retrieved DoT disaster-communications guidance, the National Disaster Management Plan, and relevant ITU emergency-telecommunications material where present, assess each stated dependency. Give exact source citation, separate mandatory rules from guidance, and list counter-evidence or missing outage records."),
+            ScenarioStep("F3", "Assign evidence-backed governance follow-up", "Prepare options for authorized review. This simulation does not dispatch agencies or authorize network changes.", "What next step is supported by the retrieved evidence? Name a ministry, department, or authority only when an exact cited passage assigns responsibility; otherwise report Not retrieved. State required human review, uncertainty, and a safe proposed follow-up."),
         ],
     ),
     Scenario(
@@ -469,12 +413,12 @@ SCENARIOS = [
         title="Landslide Screening and Mountain Telecom Resilience",
         domain="Disaster Management",
         jurisdiction="India",
-        description="Simulated mountain connectivity assessment. No landslide observation or infrastructure impact is confirmed.",
+        description="Detailed simulated Uttarakhand landslide and mountain-connectivity assessment. No landslide, infrastructure impact, or agency assignment is asserted without retrieved evidence.",
         simulated=True,
         steps=[
-            ScenarioStep("L1", "Validate reported landslide information", "Hypothetical reports describe possible slope movement; no landslide or damage is confirmed.", "Which authoritative incident reports, time-stamped observations, and source records support or contradict the reported landslide?"),
-            ScenarioStep("L2", "Assess possible network exposure", "The assessment reviews supplied evidence about nearby telecom routes, towers, power, and redundancy; no asset damage is presumed.", "Which verified infrastructure and service records establish possible exposure, and what location or dependency evidence is missing?"),
-            ScenarioStep("L3", "Set human review and coordination", "Technical findings are prepared for review by relevant disaster-management and telecommunications authorities.", "What independent field or imagery verification, applicable guidance, and accountable agency review are needed before any operational decision?"),
+            ScenarioStep("L1", "Verify landslide reports and uncertainty", "Hypothetical slope-change reports are screening leads only; they are not verified landslides or confirmed damage.", "What official incident records or retrieved NDMA/GSI evidence directly establish this landslide report? Quote exact source, clause/title, page, date, and location. Distinguish hazard susceptibility from an active incident; report Evidence not retrieved when absent."),
+            ScenarioStep("L2", "Assess telecom exposure without assuming damage", "Compare a reported location with supplied, verified telecom assets, access, power, and redundant paths; no exposure is established from proximity alone.", "Which supplied asset and service records support or contradict exposure? Use applicable DoT disaster communications guidance and retrieved ITU material only with exact citations; state unavailable coordinates, dependencies, and counter-evidence."),
+            ScenarioStep("L3", "Recommend accountable review and next steps", "Prepare a cautious review package for competent authorities; no field task, public warning, or network operation is triggered automatically.", "What documentary evidence identifies the responsible ministry/agency and its mandate? Cite exact clauses; if not retrieved, say Not retrieved. Recommend verification steps, senior review needs, uncertainty, and the next safe governance decision without claiming authority to execute it."),
         ],
     ),
     Scenario(
@@ -737,66 +681,6 @@ SCENARIO_VERIFIED_SOURCES = {
                 "local_viewer_url": "/api/documents/raw/knowledge_base/DPDP Acts/DPDP_Act_2023.pdf#page=7",
                 "supporting_text": "In the event of a personal data breach impacting customer subscriber records, the Data Fiduciary shall give intimation to the Board and affected users.",
                 "surrounding_context": "Statutory recovery decision obligations under Indian data protection law."
-            }
-        }
-    },
-    "HG-RESEARCH-005": {
-        "scenario_source": {
-            "source_doc_id": "ITU-T-Y3172",
-            "source_title": "ITU-T Recommendation Y.3172: Architectural framework for machine learning in future networks",
-            "issuing_authority": "International Telecommunication Union (ITU-T)",
-            "document_identifier": "ITU-T Y.3172 (06/2019)",
-            "jurisdiction": "International",
-            "legal_status": "INTERNATIONAL_RECOMMENDATION",
-            "clause": "Section 6 - Machine Learning Pipeline Architecture",
-            "page": 9,
-            "source_url": "https://www.itu.int/rec/T-REC-Y.3172/en",
-            "local_viewer_url": "",
-            "supporting_text": "The machine learning pipeline comprises data collection, preprocessing, model training, policy engine, and ML sandbox.",
-            "surrounding_context": "International standard serving as voluntary architectural guidance. Differentiated from statutory obligations."
-        },
-        "steps": {
-            "RS1": {
-                "source_doc_id": "ITU-T-Y3172",
-                "source_title": "ITU-T Recommendation Y.3172",
-                "issuing_authority": "ITU-T",
-                "document_identifier": "ITU-T Y.3172",
-                "jurisdiction": "International",
-                "legal_status": "INTERNATIONAL_RECOMMENDATION",
-                "clause": "Section 6 - ML Pipeline Framework",
-                "page": 9,
-                "source_url": "https://www.itu.int/rec/T-REC-Y.3172/en",
-                "local_viewer_url": "",
-                "supporting_text": "Machine learning reference architecture for IMT-2020 and future networks.",
-                "surrounding_context": "Research baseline establishing voluntary pipeline terminology."
-            },
-            "RS2": {
-                "source_doc_id": "3GPP-TS-33501",
-                "source_title": "3GPP TS 33.501 Security Architecture",
-                "issuing_authority": "3GPP",
-                "document_identifier": "Release 18",
-                "jurisdiction": "International",
-                "legal_status": "NON_BINDING_TECHNICAL_STANDARD",
-                "clause": "Section 5 - SBA Zero Trust Principles",
-                "page": 15,
-                "source_url": "https://www.3gpp.org/ftp/Specs/archive/33_series/33.501/",
-                "local_viewer_url": "/api/documents/raw/knowledge_base/3gpp/ETSI 33.501 Rel 18.pdf#page=15",
-                "supporting_text": "Technical security specifications for service-based 5G core network functions.",
-                "surrounding_context": "Comparing 3GPP technical specification with ITU-T recommendation."
-            },
-            "RS3": {
-                "source_doc_id": "ITU-T-Y3172",
-                "source_title": "Comparative Gap Analysis & Governance",
-                "issuing_authority": "NetraSetu Multi-Jurisdiction Reasoning Layer",
-                "document_identifier": "HG-REG-CROSSWALK",
-                "jurisdiction": "Cross-Border",
-                "legal_status": "NON_BINDING_TECHNICAL_STANDARD",
-                "clause": "Advisory Gap Finding Protocol",
-                "page": 1,
-                "source_url": "https://www.itu.int/rec/T-REC-Y.3172/en",
-                "local_viewer_url": "",
-                "supporting_text": "Distinguishing differences in scope and technical recommendation from binding legal non-compliance.",
-                "surrounding_context": "Prevents misclassifying voluntary research baselines as national regulatory gaps."
             }
         }
     },

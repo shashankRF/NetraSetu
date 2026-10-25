@@ -15,8 +15,8 @@ def test_scenario_library_has_required_domains():
     assert "Defence" in domains
     assert "Maritime" in domains
     assert "Telecom/5G" in domains
-    assert "Research" in domains
     assert "Enterprise Incident" in domains
+    assert all("O-RAN" not in scenario["title"] for scenario in scenarios)
 
 
 def test_eu_scenario_exists():

@@ -72,6 +72,14 @@ def test_canonical_viewer_url_serves_pdf_ranges_and_maps_physical_page(registere
     assert "Context line following" in payload["surrounding_context"]
     assert expected.name == payload["document_name"]
 
+    preview = client.get("/api/documents/preview", params={
+        "doc_path": "Regulation_14052026", "page": 2,
+        "quote": "Rule 3(1)(a) requires resilient emergency communications.",
+    })
+    assert preview.status_code == 200, preview.text
+    assert preview.headers["content-type"].startswith("image/png")
+    assert preview.content.startswith(b"\x89PNG\r\n\x1a\n")
+
 
 def test_unknown_document_and_path_traversal_fail_without_leaking_paths(registered_test_pdf):
     _root, _expected = registered_test_pdf

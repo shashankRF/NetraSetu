@@ -40,6 +40,7 @@ from .dynamic_kb_api import router as dynamic_kb_router
 from .disaster_map_api import router as disaster_map_router
 from .ecr5g.api import router as ecr5g_router
 from .aftermath_api import router as aftermath_router
+from .coordination_api import router as coordination_router
 from .audit.recorder import (
     create_audit_record,
     append_audit_record,
@@ -185,6 +186,7 @@ app.include_router(
     ecr5g_router
 )
 app.include_router(aftermath_router)
+app.include_router(coordination_router)
 
 
 # ============================================================
@@ -481,56 +483,6 @@ def query(
                 f"{exc}"
             ),
         )
-
-
-# ============================================================
-# Source document endpoints routed via verification_router
-
-# ============================================================
-
-from fastapi.responses import FileResponse
-
-@app.get("/api/documents/raw/{doc_path:path}")
-def get_raw_document(
-    doc_path: str,
-):
-    """
-    Safely stream local knowledge base document (PDF or text)
-    with inline disposition to support browser document viewer.
-    """
-    clean_path = os.path.normpath(doc_path).lstrip("/\\")
-    full_path = (PROJECT_ROOT / clean_path).resolve()
-
-    if not str(full_path).startswith(str(PROJECT_ROOT.resolve())):
-        raise HTTPException(
-            status_code=403,
-            detail="Access denied outside project root.",
-        )
-
-    if not full_path.is_file():
-        kb_path = (PROJECT_ROOT / "knowledge_base" / clean_path).resolve()
-        if kb_path.is_file():
-            full_path = kb_path
-        else:
-            raise HTTPException(
-                status_code=404,
-                detail=f"Document file '{doc_path}' not found in knowledge base.",
-            )
-
-    media_type = (
-        "application/pdf"
-        if str(full_path).lower().endswith(".pdf")
-        else "text/plain; charset=utf-8"
-    )
-
-    return FileResponse(
-        path=str(full_path),
-        media_type=media_type,
-        headers={
-            "Content-Disposition": "inline",
-            "Cache-Control": "public, max-age=3600",
-        },
-    )
 
 
 @app.get("/api/document_metadata")

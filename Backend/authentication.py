@@ -145,6 +145,8 @@ def requires_session(path: str, method: str = "GET") -> bool:
         return True
     if path.startswith("/api/aftermath/"):
         return True
+    if path.startswith("/api/coordination/"):
+        return True
     if path.startswith("/api/change_impact/") or path == "/api/verify_claim" or path.startswith("/api/verify_claim"):
         return True
     return path.startswith("/api/troubleshooting/reports")
