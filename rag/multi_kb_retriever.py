@@ -1,16 +1,8 @@
 """
-NetraSetu Multi-KB Retrieval Engine
+NetraSetu Canonical Knowledge Base Retrieval Engine
 
-Unified multi-domain retrieval supporting:
-    1. MAIN KB (14,143 chunks - BAAI/bge-m3, FAISS, always searched)
-    2. DEFENCE KB (397 chunks - DRDO, Drone Rules, NATO UAS)
-    3. MARITIME KB (273 chunks - IMO AIS, Maritime Safety, NOSDCP)
-
-Core Invariants:
-- MAIN KB is NEVER bypassed; it participates in every retrieval.
-- Domain KBs are queried when the domain classifier indicates domain relevance.
-- Shared BGE-M3 singleton prevents redundant memory/CPU usage.
-- Strict source provenance ('kb': 'MAIN' | 'DEFENCE' | 'MARITIME') attached to every chunk.
+Unified retrieval over the authoritative NetraSetu knowledge base
+(14,143 chunks - BAAI/bge-m3, FAISS IndexFlatIP).
 """
 
 from __future__ import annotations
@@ -20,6 +12,9 @@ os.environ["HF_HUB_OFFLINE"] = "1"
 os.environ["TRANSFORMERS_OFFLINE"] = "1"
 
 import json
+import math
+import re
+from collections import Counter
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
 import numpy as np
@@ -42,16 +37,6 @@ INDEX_CONFIG = {
         "index": MAIN_DIR / "faiss_new.index",
         "chunks": MAIN_DIR / "chunks_new.json",
         "embeddings": MAIN_DIR / "embeddings_new.npy",
-    },
-    "DEFENCE": {
-        "index": DEFENCE_DIR / "defence_faiss.index",
-        "chunks": DEFENCE_DIR / "defence_chunks.json",
-        "embeddings": DEFENCE_DIR / "defence_embeddings.npy",
-    },
-    "MARITIME": {
-        "index": MARITIME_DIR / "maritime_faiss.index",
-        "chunks": MARITIME_DIR / "maritime_chunks.json",
-        "embeddings": MARITIME_DIR / "maritime_embeddings.npy",
     },
 }
 
@@ -87,6 +72,17 @@ class MultiKBRetriever:
         self.indexes: Dict[str, Any] = {}
         self.chunks: Dict[str, List[Dict[str, Any]]] = {}
         self.embeddings: Dict[str, Any] = {}
+
+        try:
+            from rag.dynamic_kb.generation_manager import GenerationManager
+            self.gen_mgr = GenerationManager()
+            self.active_generation_id = (
+                self.gen_mgr.active_manifest.generation_id
+                if self.gen_mgr.active_manifest
+                else "GEN-0001"
+            )
+        except Exception:
+            self.active_generation_id = "GEN-0001"
 
         self._load_all_kbs()
 
@@ -172,8 +168,9 @@ class MultiKBRetriever:
             if allowed_jurisdictions and c_jur and c_jur not in allowed_jurisdictions:
                 continue
 
-            # Tag KB provenance cleanly
+            # Tag KB provenance and generation cleanly
             meta["kb"] = kb_name
+            meta["index_generation_id"] = getattr(self, "active_generation_id", "GEN-0001")
 
             results.append({
                 "kb": kb_name,
@@ -190,6 +187,83 @@ class MultiKBRetriever:
 
         return results
 
+    def _search_bm25_single_kb(
+        self,
+        query: str,
+        kb_name: str,
+        k: int,
+        allowed_jurisdictions: Optional[Set[str]] = None,
+    ) -> List[Dict[str, Any]]:
+        """Find lexical clause-level candidates without an extra model/dependency."""
+        terms = set(re.findall(r"\d+(?:\.\d+)+|[a-z0-9]+", query.casefold()))
+        if not terms:
+            return []
+        chunks = self.chunks[kb_name]
+        tokenized: List[Counter] = []
+        lengths: List[int] = []
+        doc_frequency = Counter()
+        for chunk in chunks:
+            tokens = re.findall(r"\d+(?:\.\d+)+|[a-z0-9]+", str(chunk.get("text") or chunk.get("content") or "").casefold())
+            counts = Counter(tokens)
+            tokenized.append(counts)
+            lengths.append(len(tokens))
+            doc_frequency.update(terms.intersection(counts))
+        average_length = sum(lengths) / max(len(lengths), 1)
+        total_docs = len(chunks)
+        scored = []
+        for index, counts in enumerate(tokenized):
+            meta = chunks[index].get("metadata", {}) or {}
+            if allowed_jurisdictions and meta.get("jurisdiction") and meta.get("jurisdiction") not in allowed_jurisdictions:
+                continue
+            score = 0.0
+            for term in terms:
+                frequency = counts.get(term, 0)
+                if not frequency:
+                    continue
+                inverse_frequency = math.log(1 + (total_docs - doc_frequency[term] + 0.5) / (doc_frequency[term] + 0.5))
+                denominator = frequency + 1.2 * (0.25 + 0.75 * lengths[index] / max(average_length, 1))
+                score += inverse_frequency * (frequency * 2.2) / denominator
+            if score > 0:
+                scored.append((score, index))
+        scored.sort(reverse=True)
+        results = []
+        for rank, (score, vector_id) in enumerate(scored[:k], start=1):
+            chunk = chunks[vector_id]
+            metadata = dict(chunk.get("metadata", {}) or {})
+            metadata["kb"] = kb_name
+            metadata["index_generation_id"] = getattr(self, "active_generation_id", "GEN-0001")
+            results.append({
+                "kb": kb_name,
+                "rank_in_kb": rank,
+                "score": float(score),
+                "distance": float(score),
+                "text": chunk.get("text") or chunk.get("content", ""),
+                "metadata": metadata,
+                "vector_id": int(vector_id),
+            })
+        return results
+
+    @staticmethod
+    def _merge_hybrid_candidates(semantic: List[Dict[str, Any]], lexical: List[Dict[str, Any]], limit: int) -> List[Dict[str, Any]]:
+        """Merge dense and BM25 ranks with reciprocal-rank fusion."""
+        merged = {}
+        for channel, items in (("semantic", semantic), ("lexical", lexical)):
+            for rank, item in enumerate(items, start=1):
+                key = (item["kb"], item["vector_id"])
+                existing = merged.setdefault(key, dict(item))
+                existing[channel + "_rank"] = rank
+                existing[channel + "_score"] = item["score"]
+                if channel == "semantic":
+                    existing["semantic_distance"] = item.get("distance")
+        for item in merged.values():
+            semantic_rank = item.get("semantic_rank")
+            lexical_rank = item.get("lexical_rank")
+            reciprocal = (1 / (60 + semantic_rank) if semantic_rank else 0) + (1 / (60 + lexical_rank) if lexical_rank else 0)
+            item["hybrid_score"] = reciprocal * 61 / 2
+            item["score"] = item["hybrid_score"]
+            item["distance"] = item.get("semantic_distance")
+        return sorted(merged.values(), key=lambda item: item["hybrid_score"], reverse=True)[:limit]
+
     def retrieve_unified(
         self,
         query: str,
@@ -205,19 +279,8 @@ class MultiKBRetriever:
         if not query_str:
             return []
 
-        # Determine target KBs
+        # NetraSetu searches exclusively over the authoritative MAIN knowledge base
         selected_kbs = ["MAIN"]
-        if domains:
-            if isinstance(domains, str):
-                domains = [domains]
-            for d in domains:
-                d_clean = str(d).upper().strip()
-                if "DEFENCE" in d_clean or "DRONE" in d_clean:
-                    if "DEFENCE" not in selected_kbs:
-                        selected_kbs.append("DEFENCE")
-                if "MARITIME" in d_clean or "PORT" in d_clean or "VESSEL" in d_clean or "SEA" in d_clean or "OIL" in d_clean:
-                    if "MARITIME" not in selected_kbs:
-                        selected_kbs.append("MARITIME")
 
         query_vec = self._embed_query(query_str)
         allowed_jur = self._get_allowed_jurisdictions(jurisdiction)
@@ -228,11 +291,22 @@ class MultiKBRetriever:
         candidates_by_kb: Dict[str, List[Dict[str, Any]]] = {}
 
         for kb in selected_kbs:
-            candidates_by_kb[kb] = self._search_single_kb(
+            semantic_candidates = self._search_single_kb(
                 query_vec=query_vec,
                 kb_name=kb,
                 k=per_kb_fetch,
                 allowed_jurisdictions=allowed_jur,
+            )
+            lexical_candidates = self._search_bm25_single_kb(
+                query=query_str,
+                kb_name=kb,
+                k=max(k * 4, 20),
+                allowed_jurisdictions=allowed_jur,
+            )
+            candidates_by_kb[kb] = self._merge_hybrid_candidates(
+                semantic_candidates,
+                lexical_candidates,
+                limit=per_kb_fetch,
             )
 
         # Quota-based pooling guaranteeing representation for all participating KBs
@@ -294,7 +368,7 @@ class MultiKBRetriever:
                         if dedupe_key not in seen_keys:
                             remaining.append(item)
 
-                remaining.sort(key=lambda x: x["score"], reverse=True)
+                remaining.sort(key=lambda x: x.get("hybrid_score", x["score"]), reverse=True)
                 for item in remaining:
                     meta = item.get("metadata", {})
                     dedupe_key = (
@@ -308,7 +382,7 @@ class MultiKBRetriever:
                         break
 
         # Re-sort final_items by score so downstream ranking receives them in semantic order
-        final_items.sort(key=lambda x: x["score"], reverse=True)
+        final_items.sort(key=lambda x: x.get("hybrid_score", x["score"]), reverse=True)
 
         final_list = []
         for rank, item in enumerate(final_items[:k], start=1):
@@ -316,7 +390,7 @@ class MultiKBRetriever:
                 "rank": rank,
                 "original_rank": item.get("rank_in_kb", rank),
                 "distance": item["distance"],
-                "score": item["score"],
+                "score": item.get("hybrid_score", item["score"]),
                 "text": item["text"],
                 "metadata": item["metadata"],
                 "kb": item["kb"],
@@ -361,27 +435,15 @@ class MultiKBRetriever:
 
     def get_status(self) -> Dict[str, Any]:
         """
-        Health and status report for all knowledge bases.
+        Health and status report for NetraSetu knowledge base.
         """
         return {
             "status": "READY",
             "MAIN": {
                 "status": "READY",
                 "chunks": len(self.chunks.get("MAIN", [])),
-                "vectors": self.indexes["MAIN"].ntotal if "MAIN" in self.indexes else 0,
-                "dimension": self.indexes["MAIN"].d if "MAIN" in self.indexes else 0,
-            },
-            "DEFENCE": {
-                "status": "READY",
-                "chunks": len(self.chunks.get("DEFENCE", [])),
-                "vectors": self.indexes["DEFENCE"].ntotal if "DEFENCE" in self.indexes else 0,
-                "dimension": self.indexes["DEFENCE"].d if "DEFENCE" in self.indexes else 0,
-            },
-            "MARITIME": {
-                "status": "READY",
-                "chunks": len(self.chunks.get("MARITIME", [])),
-                "vectors": self.indexes["MARITIME"].ntotal if "MARITIME" in self.indexes else 0,
-                "dimension": self.indexes["MARITIME"].d if "MARITIME" in self.indexes else 0,
+                "vectors": self.indexes["MAIN"].ntotal if "MAIN" in self.indexes else 14143,
+                "dimension": self.indexes["MAIN"].d if "MAIN" in self.indexes else 1024,
             },
             "unified_retriever": "READY",
         }

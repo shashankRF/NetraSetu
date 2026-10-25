@@ -1,6 +1,15 @@
 from .models import Scenario, ScenarioStep
 
 
+DASHBOARD_OVERVIEW_SCENARIO_IDS = (
+    "HG-5G-003",
+    "HG-TELECOM-004",
+    "HG-DISASTER-FLOOD-010",
+    "HG-DISASTER-LANDSLIDE-011",
+    "HG-DISASTER-EARTHQUAKE-012",
+)
+
+
 SCENARIOS = [
 
     # ============================================================
@@ -438,6 +447,47 @@ SCENARIOS = [
                     "mandatory 6-hour cyber incident reporting obligation, or is there a citation mismatch?"
                 ),
             ),
+        ],
+    ),
+
+    # Focused disaster analysis scenarios used by Dashboard Overview.
+    Scenario(
+        scenario_id="HG-DISASTER-FLOOD-010",
+        title="Flood Disruption to Emergency Telecommunications",
+        domain="Disaster Management",
+        jurisdiction="India",
+        description="Simulated flood communications assessment. Reports and network conditions are hypothetical and require verification.",
+        simulated=True,
+        steps=[
+            ScenarioStep("F1", "Validate flood and service reports", "Initial reports describe possible flooding near communications infrastructure; no impact is confirmed.", "What authoritative observations and source evidence are needed to verify the reported flood extent, timing, and affected communications assets?"),
+            ScenarioStep("F2", "Assess telecom service impact", "The review examines possible power, backhaul, access-network, and emergency-calling impacts using supplied or retrieved evidence.", "What evidence supports or contradicts each reported service impact, and what network dependencies or coverage gaps remain unknown?"),
+            ScenarioStep("F3", "Review response and restoration needs", "A human reviewer assesses evidence-backed coordination and restoration options; no action is automatically authorized.", "Which disaster-management and emergency-telecommunications guidance applies, what remains uncertain, and which responsible agencies should review proposed next steps?"),
+        ],
+    ),
+    Scenario(
+        scenario_id="HG-DISASTER-LANDSLIDE-011",
+        title="Landslide Screening and Mountain Telecom Resilience",
+        domain="Disaster Management",
+        jurisdiction="India",
+        description="Simulated mountain connectivity assessment. No landslide observation or infrastructure impact is confirmed.",
+        simulated=True,
+        steps=[
+            ScenarioStep("L1", "Validate reported landslide information", "Hypothetical reports describe possible slope movement; no landslide or damage is confirmed.", "Which authoritative incident reports, time-stamped observations, and source records support or contradict the reported landslide?"),
+            ScenarioStep("L2", "Assess possible network exposure", "The assessment reviews supplied evidence about nearby telecom routes, towers, power, and redundancy; no asset damage is presumed.", "Which verified infrastructure and service records establish possible exposure, and what location or dependency evidence is missing?"),
+            ScenarioStep("L3", "Set human review and coordination", "Technical findings are prepared for review by relevant disaster-management and telecommunications authorities.", "What independent field or imagery verification, applicable guidance, and accountable agency review are needed before any operational decision?"),
+        ],
+    ),
+    Scenario(
+        scenario_id="HG-DISASTER-EARTHQUAKE-012",
+        title="Earthquake Impact and Emergency Network Continuity",
+        domain="Disaster Management",
+        jurisdiction="India",
+        description="Simulated earthquake response analysis of reported telecom dependencies and continuity measures; no live observations are connected.",
+        simulated=True,
+        steps=[
+            ScenarioStep("E1", "Verify incident and infrastructure reports", "Hypothetical reports describe possible damage or service degradation following an earthquake.", "Which authoritative incident, infrastructure, and service-status sources are available, and what can they actually confirm?"),
+            ScenarioStep("E2", "Analyze combined service failures", "The review considers possible concurrent power, transport, backhaul, and radio-access failures using stated assumptions.", "For each supplied or simulated failure, what dependencies and service consequences are supported, what is only modeled, and what evidence is missing?"),
+            ScenarioStep("E3", "Review continuity and recovery options", "Proposed communications-continuity measures are presented for authorized human and agency review.", "Which verified emergency-communications plans or standards inform the options, what uncertainty remains, and who must approve the next step?"),
         ],
     ),
 ]
@@ -938,9 +988,18 @@ def get_scenarios():
     return [enrich_scenario_dict(scenario.to_dict()) for scenario in SCENARIOS]
 
 
+def _slugify(val: str) -> str:
+    import re
+    return re.sub(r'[^a-z0-9]+', '-', (val or '').lower()).strip('-')
+
+
 def get_scenario(scenario_id: str):
+    target = (scenario_id or '').strip()
+    target_slug = _slugify(target)
     for scenario in SCENARIOS:
-        if scenario.scenario_id == scenario_id:
+        if scenario.scenario_id == target or _slugify(scenario.scenario_id) == target_slug:
+            return enrich_scenario_dict(scenario.to_dict())
+        if _slugify(scenario.title) == target_slug:
             return enrich_scenario_dict(scenario.to_dict())
 
     return None

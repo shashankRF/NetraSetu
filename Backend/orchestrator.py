@@ -1,3 +1,5 @@
+from typing import Any, Dict, List, Optional
+import hashlib
 
 class RetrievalList(list):
     """List of retrieved evidence records that also supports dict-like ['count'] access."""
@@ -32,6 +34,31 @@ from Backend.governance import evaluate_governance
 from Backend.evidence_engine.rag_adapter import (
     adapt_retrieval_results,
 )
+
+
+def _fingerprint_run_inputs(
+    *, question, jurisdiction, scenario_id, step_id, demo_mode, retrieval_k, passages
+):
+    """Return a stable digest for the query configuration and retrieved source text."""
+    normalized_passages = []
+    for passage in passages or []:
+        if not isinstance(passage, dict):
+            passage = getattr(passage, "__dict__", {"text": str(passage)})
+        normalized_passages.append({
+            "document": passage.get("document") or passage.get("source_title") or passage.get("source_doc_id"),
+            "page": passage.get("page") or passage.get("page_number"),
+            "text": passage.get("text") or passage.get("content") or passage.get("exact_source_quote"),
+        })
+    canonical = json.dumps({
+        "question": question,
+        "jurisdiction": jurisdiction,
+        "scenario_id": scenario_id,
+        "step_id": step_id,
+        "demo_mode": bool(demo_mode),
+        "retrieval_k": retrieval_k,
+        "passages": normalized_passages,
+    }, sort_keys=True, ensure_ascii=False, separators=(",", ":"), default=str)
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()[:24]
 
 from Backend.evidence_engine.llm_classifier import (
     classify_evidence,
@@ -134,10 +161,12 @@ FULL_CONFIG = {
 DEMO_CONFIG = {
     # Compact execution for live frontend scenarios (<40s target).
     "retrieval_k": 6,
-    "rerank_candidate_limit": 3,
+    # Include lexical-only candidates in the cross-encoder pool; limiting this
+    # to the first three dense results discarded clause-specific BM25 hits.
+    "rerank_candidate_limit": 12,
     "rerank_top_k": 3,
     "counter_retrieval_k": 3,
-    "counter_rerank_candidate_limit": 2,
+    "counter_rerank_candidate_limit": 8,
     "counter_rerank_top_k": 2,
     "final_evidence_k": 3,
 }
@@ -252,8 +281,113 @@ def get_ranking_pipeline() -> EvidenceRankingPipeline:
 
 
 # ============================================================
-# FULL NETRASETU PIPELINE
+# FULL HACKGRID PIPELINE
 # ============================================================
+
+
+def _build_empty_evidence_response(
+    question: str,
+    exec_id: str,
+    scenario_id: Optional[str] = None,
+    scenario_title: Optional[str] = None,
+    step_id: Optional[str] = None,
+    step_title: Optional[str] = None,
+    workflow_stages: Optional[List[str]] = None,
+    notes: Optional[List[str]] = None,
+    jurisdiction: str = "India",
+) -> Dict[str, Any]:
+    from Backend.audit.recorder import create_audit_record, append_audit_record
+    from Backend.governance import evaluate_governance
+    stages = list(workflow_stages or []) + ["Canonical Refusal (No Evidence)"]
+
+    evidence_analysis = {
+        "status": "NO_EVIDENCE",
+        "candidate_count": 0,
+        "supporting_count": 0,
+        "contradicting_count": 0,
+        "contextual_count": 0,
+        "supporting_evidence": [],
+        "contradicting_evidence": [],
+        "contextual_evidence": [],
+        "evidence_gaps": ["No relevant evidence retrieved for this query."],
+        "contradiction_search_performed": False,
+    }
+
+    final_synthesis = {
+        "assessment": "No information retrieved from source documents supports an answer.",
+        "claims": [],
+        "counter_evidence": [],
+        "gaps": ["No source passages were retrieved for this question."],
+        "human_review_required": True,
+        "status": "NO_EVIDENCE",
+    }
+
+    evidence_assessment = {
+        "overall_status": "INSUFFICIENT",
+        "supporting_evidence": [],
+        "contradicting_evidence": [],
+        "contextual_evidence": [],
+    }
+
+    gap_analysis = {"overall_status": "SUFFICIENT"}
+    risk_assessment = {
+        "human_review_required": True,
+        "risk_level": "UNKNOWN",
+        "escalation_level": "OPERATIONAL",
+    }
+
+    governance = evaluate_governance(
+        question=question,
+        evidence_assessment=evidence_assessment,
+        gap_analysis=gap_analysis,
+        risk_assessment=risk_assessment,
+        final_synthesis=final_synthesis,
+        evidence_analysis=evidence_analysis,
+    )
+
+    audit_rec = create_audit_record(
+        question=question,
+        execution_id=exec_id,
+        input_fingerprint=_fingerprint_run_inputs(
+            question=question,
+            jurisdiction=jurisdiction,
+            scenario_id=scenario_id,
+            step_id=step_id,
+            demo_mode=True,
+            retrieval_k=0,
+            passages=[],
+        ),
+        event_type="SCENARIO_EXECUTION" if scenario_id else "QUESTION_ANALYSIS",
+        execution_status="COMPLETED",
+        scenario_id=scenario_id,
+        scenario_title=scenario_title,
+        step_id=step_id,
+        step_title=step_title,
+        workflow_stages=stages,
+        jurisdiction=jurisdiction,
+        evidence_assessment=evidence_assessment,
+        final_synthesis=final_synthesis,
+        risk_assessment=risk_assessment,
+        human_review_required=True,
+        final_decision="PENDING_HUMAN_REVIEW",
+        notes=notes or ["Canonical refusal: No evidence retrieved."],
+    )
+    audit_id = append_audit_record(audit_rec)
+
+    return {
+        "question": question,
+        "execution_id": exec_id,
+        "status": "COMPLETED",
+        "final_synthesis": final_synthesis,
+        "retrieved_evidence": [],
+        "evidence_analysis": evidence_analysis,
+        "counter_evidence_analysis": evidence_analysis,
+        "governance": governance,
+        "risk_assessment": risk_assessment,
+        "audit_record": audit_rec,
+        "audit_id": audit_id,
+        "claims": [],
+    }
 
 def run_pipeline(
     question,
@@ -388,7 +522,7 @@ def run_pipeline(
     print("=" * 80)
 
     print(
-        "NETRASETU -- "
+        "HACKGRID -- "
         + (
             "COMPACT DEMO"
             if demo_mode
@@ -453,9 +587,16 @@ def run_pipeline(
     )
 
     if not results:
-        raise RuntimeError(
-            "RAG returned no evidence for the "
-            f"{jurisdiction} jurisdiction."
+        return _build_empty_evidence_response(
+            question=question,
+            exec_id=exec_id,
+            scenario_id=scenario_id,
+            scenario_title=scenario_title,
+            step_id=step_id,
+            step_title=step_title,
+            workflow_stages=workflow_stages,
+            notes=notes,
+            jurisdiction=jurisdiction,
         )
 
     kb_distribution = {}
@@ -662,15 +803,27 @@ def run_pipeline(
         "\n[1E/9] Evidence role analysis..."
     )
 
-    combined_analysis = analyze_evidence(
-        candidates=combined_candidates,
-        query=question,
-        final_top_k=final_evidence_limit,
-    )
-
-    ranking_evidence_analysis = (
-        combined_analysis.to_dict()
-    )
+    try:
+        combined_analysis = analyze_evidence(
+            candidates=combined_candidates,
+            query=question,
+            final_top_k=final_evidence_limit,
+        )
+        ranking_evidence_analysis = combined_analysis.to_dict()
+        if "status" not in ranking_evidence_analysis:
+            ranking_evidence_analysis["status"] = "COMPLETED"
+    except Exception as exc:
+        print(f"[WARN] Evidence analysis engine failed: {exc}. Providing structured fallback state.")
+        ranking_evidence_analysis = {
+            "status": "ANALYSIS_FAILED",
+            "error": str(exc),
+            "candidate_count": len(combined_candidates),
+            "supporting_evidence": [],
+            "contradicting_evidence": [],
+            "contextual_evidence": [],
+            "evidence_gaps": [f"Evidence analysis engine encountered an error: {exc}"],
+            "contradiction_search_performed": False,
+        }
 
     print(
         "Supporting:",
@@ -918,7 +1071,7 @@ def run_pipeline(
         evidence_records=evidence_records,
 
         search_scope=(
-            "NetraSetu RAG knowledge base; "
+            "HackGrid RAG knowledge base; "
             f"jurisdiction={jurisdiction}; "
             f"{len(results)}-candidate "
             "jurisdiction-filtered retrieval "
@@ -1263,6 +1416,7 @@ def run_pipeline(
         risk_assessment=risk_dict,
         final_synthesis=final,
         classification=evidence_classification,
+        evidence_analysis=ranking_evidence_analysis,
     )
 
     # ========================================================
@@ -1361,6 +1515,16 @@ def run_pipeline(
         model="openai/gpt-oss-120b",
 
         execution_id=exec_id,
+
+        input_fingerprint=_fingerprint_run_inputs(
+            question=question,
+            jurisdiction=jurisdiction,
+            scenario_id=scenario_id,
+            step_id=step_id,
+            demo_mode=demo_mode,
+            retrieval_k=primary_k,
+            passages=evidence_records,
+        ),
 
         event_type=event_type,
 
@@ -1597,7 +1761,7 @@ def main():
     )
 
     print(
-        "NETRASETU FINAL ASSESSMENT"
+        "HACKGRID FINAL ASSESSMENT"
     )
 
     print(

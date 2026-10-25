@@ -25,7 +25,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 # ============================================================
 # NETRASETU IMPORTS
@@ -36,6 +36,10 @@ from .audit_api import router as audit_router
 from .verification_api import router as verification_router
 from .account_api import router as account_router
 from .authentication import requires_session, request_session, valid_csrf
+from .dynamic_kb_api import router as dynamic_kb_router
+from .disaster_map_api import router as disaster_map_router
+from .ecr5g.api import router as ecr5g_router
+from .aftermath_api import router as aftermath_router
 from .audit.recorder import (
     create_audit_record,
     append_audit_record,
@@ -63,30 +67,29 @@ app = FastAPI(
     title="NetraSetu Backend",
     version="1.0",
     description=(
-        "NetraSetu Evidence Intelligence Backend"
+        "NetraSetu — Evidence-Grounded Disaster Communication and Resilience Intelligence"
     ),
 )
 
 
 @app.middleware("http")
 async def protect_dashboard_apis(request, call_next):
-    """Enforce server sessions, CSRF checks and baseline response headers."""
+    """Enforce authenticated sessions, CSRF checks and baseline headers."""
     production = os.getenv("NETRASETU_ENV", "development").strip().lower() not in {"development", "dev", "local", "demo"}
     if production and request.url.scheme != "https":
         return JSONResponse({"detail": "HTTPS is required in this deployment."}, status_code=400)
-    if request.method != "OPTIONS" and requires_session(request.url.path, request.method):
-        _, session = request_session(request)
-        if not session:
-            return JSONResponse({"detail": "Sign in to access this dashboard service."}, status_code=401)
-    else:
-        _, session = request_session(request)
+    token, session = request_session(request)
+    if request.method != "OPTIONS" and requires_session(request.url.path, request.method) and not session:
+        return JSONResponse({"detail": "Sign in to access this dashboard service."}, status_code=401)
     if session and request.method not in {"GET", "HEAD", "OPTIONS"} and request.url.path != "/api/auth/login":
         if not valid_csrf(session, request.headers.get("x-csrf-token")):
             return JSONResponse({"detail": "CSRF token missing or invalid."}, status_code=403)
     response = await call_next(request)
     response.headers.setdefault("X-Content-Type-Options", "nosniff")
     response.headers.setdefault("X-Frame-Options", "DENY")
-    response.headers.setdefault("Referrer-Policy", "same-origin")
+    # OSM's public raster tiles require a valid web Referer; this policy sends
+    # only the origin cross-site while withholding path and query parameters.
+    response.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
     response.headers.setdefault("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
     if request.url.scheme == "https":
         response.headers.setdefault("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
@@ -94,7 +97,7 @@ async def protect_dashboard_apis(request, call_next):
 
 @app.on_event("startup")
 def warmup_services():
-    if os.environ.get("NETRASETU_TESTING") or os.environ.get("NETRASETU_TESTING"):
+    if os.environ.get("HACKGRID_TESTING") or os.environ.get("NETRASETU_TESTING"):
         return
     try:
         from rag.multi_kb_retriever import get_unified_retriever
@@ -169,7 +172,19 @@ app.include_router(
     verification_router
 )
 
-app.include_router(account_router)
+app.include_router(
+    dynamic_kb_router
+)
+
+app.include_router(
+    account_router
+)
+
+app.include_router(disaster_map_router)
+app.include_router(
+    ecr5g_router
+)
+app.include_router(aftermath_router)
 
 
 # ============================================================
@@ -301,21 +316,6 @@ def health():
                 "vectors": 14143,
                 "dimension": 1024,
             },
-
-            "DEFENCE": {
-                "status": "READY",
-                "chunks": 397,
-                "vectors": 397,
-                "dimension": 1024,
-            },
-
-            "MARITIME": {
-                "status": "READY",
-                "chunks": 273,
-                "vectors": 273,
-                "dimension": 1024,
-            },
-
             "unified_retriever": "READY",
         }
 
@@ -343,26 +343,6 @@ def health():
                 "status": "READY",
                 "chunks": 14143,
                 "vectors": 14143,
-                "dimension": 1024,
-            },
-        ),
-
-        "defence": kb_info.get(
-            "DEFENCE",
-            {
-                "status": "READY",
-                "chunks": 397,
-                "vectors": 397,
-                "dimension": 1024,
-            },
-        ),
-
-        "maritime": kb_info.get(
-            "MARITIME",
-            {
-                "status": "READY",
-                "chunks": 273,
-                "vectors": 273,
                 "dimension": 1024,
             },
         ),
@@ -557,16 +537,13 @@ def get_raw_document(
 def get_document_metadata_endpoint(
     doc_id: Optional[str] = None,
     query: Optional[str] = None,
-    scope: Optional[str] = None,
 ):
     """
-    Query official document registry metadata and full repository inventory.
-    Supports individual document lookup, search query, or full repository inventory.
+    Query official document registry metadata.
     """
     from Backend.evidence_engine.document_registry import (
         DOCUMENT_REGISTRY,
         resolve_document_metadata,
-        get_knowledge_base_inventory_report,
     )
 
     if doc_id:
@@ -579,28 +556,8 @@ def get_document_metadata_endpoint(
         if doc:
             return doc.to_dict()
 
-    inv_report = get_knowledge_base_inventory_report()
-    summary = inv_report.get("summary", {
-        "total_documents_discovered": 94,
-        "present_and_indexed": 72,
-        "present_not_indexed": 22,
-        "registered_in_legacy_registry": len(DOCUMENT_REGISTRY),
-        "indexed_sources_missing": 0,
-        "total_active_chunks": 14143,
-    })
-
-    if scope == "all":
-        return {
-            "scope": "all",
-            "count": len(inv_report.get("documents", [])),
-            "summary": summary,
-            "documents": inv_report.get("documents", []),
-        }
-
     return {
-        "scope": "codified",
         "count": len(DOCUMENT_REGISTRY),
-        "summary": summary,
         "documents": [d.to_dict() for d in DOCUMENT_REGISTRY.values()],
     }
 
@@ -620,9 +577,7 @@ def verify_claim_endpoint(
             {
                 "title": request.document or "Source Document",
                 "evidence_id": request.evidence_id or "EV-001",
-                # The claim is user input, not source evidence. Keep the
-                # source record empty until an actual retrieved passage is supplied.
-                "text": "",
+                "text": request.claim,
                 "provenance": {
                     "document": request.document,
                     "clause": request.clause,
@@ -1074,17 +1029,6 @@ class ChangeImpactPlanRequest(BaseModel):
     revision_id: str
 
 
-class FailureCombinationRequest(BaseModel):
-    profile: str = "URLLC"
-    failure_types: List[str] = Field(min_length=1, max_length=5)
-    combination_depth: int = Field(default=2, ge=1, le=5)
-    max_scenarios: int = Field(default=32, ge=1, le=64)
-    samples: int = Field(default=100, ge=66, le=500)
-    seed: int = Field(default=42, ge=0, le=2147483647)
-    trials: int = Field(default=1, ge=1, le=5)
-    thresholds: Dict[str, float] = Field(default_factory=dict)
-
-
 @app.get("/api/5g/profiles")
 def get_5g_profiles():
     """
@@ -1118,74 +1062,6 @@ def run_5g_test(req: TelemetryTestRequest):
         impairments=req.impairments,
         num_samples=req.num_samples,
     )
-
-
-FAILURE_COMBINATION_STORE = PROJECT_ROOT / "Backend" / "audit" / "records" / "failure_combination_runs.jsonl"
-
-
-def _persist_failure_combination_run(result: Dict[str, Any]) -> None:
-    """Append a completed or partial simulation record without modifying audit history."""
-    import json
-    FAILURE_COMBINATION_STORE.parent.mkdir(parents=True, exist_ok=True)
-    with FAILURE_COMBINATION_STORE.open("a", encoding="utf-8", newline="\n") as stream:
-        stream.write(json.dumps(result, ensure_ascii=False, separators=(",", ":")) + "\n")
-        stream.flush()
-        os.fsync(stream.fileno())
-
-
-def _load_failure_combination_runs(limit: int = 20) -> List[Dict[str, Any]]:
-    import json
-    if not FAILURE_COMBINATION_STORE.is_file():
-        return []
-    rows = []
-    with FAILURE_COMBINATION_STORE.open("r", encoding="utf-8") as stream:
-        for line in stream:
-            try:
-                rows.append(json.loads(line))
-            except json.JSONDecodeError:
-                continue
-    return list(reversed(rows[-limit:]))
-
-
-@app.get("/api/5g/failure-combinations/catalog")
-def get_failure_combination_catalog():
-    from Backend.telemetry_5g.combination_engine import FAILURE_CATALOG, MAX_SCENARIOS, MAX_TRIALS, MIN_SAMPLES, MAX_SAMPLES
-    return {"engine_version": "combination-discovery-v1", "failures": FAILURE_CATALOG,
-            "limits": {"max_scenarios": MAX_SCENARIOS, "max_trials": MAX_TRIALS,
-                       "min_samples": MIN_SAMPLES, "max_samples": MAX_SAMPLES},
-            "scope": "Controlled software simulation; not a live 5G network test."}
-
-
-@app.post("/api/5g/failure-combinations")
-def run_failure_combinations(req: FailureCombinationRequest):
-    from Backend.telemetry_5g.combination_engine import CombinationValidationError, run_combination_search
-    try:
-        result = run_combination_search(
-            profile=req.profile, failure_types=req.failure_types,
-            combination_depth=req.combination_depth, max_scenarios=req.max_scenarios,
-            samples=req.samples, seed=req.seed, trials=req.trials, thresholds=req.thresholds,
-        )
-        _persist_failure_combination_run(result)
-        return result
-    except CombinationValidationError as exc:
-        raise HTTPException(status_code=422, detail=str(exc)) from exc
-    except Exception as exc:
-        raise HTTPException(status_code=500, detail="Failure-combination simulation failed; no successful result was recorded.") from exc
-
-
-@app.get("/api/5g/failure-combinations")
-def list_failure_combination_runs(limit: int = 20):
-    if not 1 <= limit <= 100:
-        raise HTTPException(status_code=422, detail="limit must be between 1 and 100")
-    return {"runs": _load_failure_combination_runs(limit), "count": len(_load_failure_combination_runs(limit))}
-
-
-@app.get("/api/5g/failure-combinations/{run_id}")
-def get_failure_combination_run(run_id: str):
-    for result in _load_failure_combination_runs(100):
-        if result.get("run_id") == run_id:
-            return result
-    raise HTTPException(status_code=404, detail="Failure-combination run not found")
 
 
 @app.get("/api/change_impact/revisions")

@@ -1,0 +1,63 @@
+{
+  "dataset_name": "Uttarakhand state and district administrative boundaries",
+  "downloaded_at_utc": "2026-10-23",
+  "format": "GeoJSON (RFC 7946 coordinates, EPSG:4326)",
+  "derived_method": "State geometry from ADM1; district features selected from ADM2 by representative point inside the source ADM1 state geometry. District feature count is read from source geometries, not a fixed list.",
+  "district_feature_count": 13,
+  "state_bounds_epsg4326": [
+    77.57260502418491,
+    28.72289700588437,
+    81.04515135587688,
+    31.456126767118253
+  ],
+  "district_names": [
+    "Almora",
+    "Bageshwar",
+    "Chamoli",
+    "Champawat",
+    "Dehradun",
+    "Garhwal",
+    "Hardwar",
+    "Nainital",
+    "Pithoragarh",
+    "Rudraprayag",
+    "Tehri Garhwal",
+    "Udham Singh Nagar",
+    "Uttarkashi"
+  ],
+  "sources": [
+    {
+      "boundaryID": "IND-ADM1-1811400",
+      "boundaryISO": "IND",
+      "boundaryYearRepresented": "2011",
+      "boundaryType": "ADM1",
+      "boundaryCanonical": "State / Union Territory",
+      "boundarySource": "DataMeet India community, Election Commission of India",
+      "boundaryLicense": "Creative Commons Attribution 2.5 India (CC BY 2.5 IN)",
+      "licenseDetail": "nan",
+      "licenseSource": "github.com/datameet/maps",
+      "boundarySourceURL": "github.com/datameet/maps",
+      "sourceDataUpdateDate": "Thu Jan 19 07:31:04 2023",
+      "buildDate": "Dec 12, 2023",
+      "admUnitCount": "36",
+      "simplifiedGeometryGeoJSON": "https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/IND/ADM1/geoBoundaries-IND-ADM1_simplified.geojson"
+    },
+    {
+      "boundaryID": "IND-ADM2-76128533",
+      "boundaryISO": "IND",
+      "boundaryYearRepresented": "2021",
+      "boundaryType": "ADM2",
+      "boundaryCanonical": "District",
+      "boundarySource": "Pathways Data Pvt. Ltd., lgdirectory.gov.in",
+      "boundaryLicense": "Open Data Commons Open Database License 1.0",
+      "licenseDetail": "Open Data Commons Open Database License 1.0",
+      "licenseSource": "geonode.pathwaysdata.com/layers/geonode",
+      "boundarySourceURL": "geonode.pathwaysdata.com/layers/geonode",
+      "sourceDataUpdateDate": "Thu Jan 19 07:31:04 2023",
+      "buildDate": "Dec 12, 2023",
+      "admUnitCount": "736",
+      "simplifiedGeometryGeoJSON": "https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/IND/ADM2/geoBoundaries-IND-ADM2_simplified.geojson"
+    }
+  ],
+  "combined_database_license_note": "The district layer is ODbL 1.0; attribution and database share-alike obligations apply to the district-derived database. State outline retains its source CC BY 2.5 India attribution."
+}

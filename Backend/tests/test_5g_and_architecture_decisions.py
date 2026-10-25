@@ -28,6 +28,11 @@ from Backend.evidence_engine.qwen_analyzer import QwenEvidenceAnalyzer
 from Backend.change_impact.engine import get_change_impact_engine
 
 
+def csrf_headers(client: TestClient) -> dict[str, str]:
+    token = client.get("/api/auth/session").json()["csrf_token"]
+    return {"X-CSRF-Token": token}
+
+
 def test_5g_slo_evaluator_deterministic_nominal():
     evaluator = SLOEvaluator(NetworkProfileType.URLLC)
     sim = NetworkSimulator5G(seed=42)
@@ -187,18 +192,21 @@ def test_api_5g_and_change_impact_endpoints():
     assert "eMBB" in profiles
     assert "mMTC" in profiles
     assert profiles["URLLC"]["max_latency_ms"] == 5.0
+    assert "not an operator restoration event" in profiles["URLLC"]["recovery_metric_semantics"]
 
     # 2. POST /api/5g/test
     r_test = client.post("/api/5g/test", json={
         "profile": "URLLC",
         "impairments": ["LATENCY_SPIKE", "PACKET_LOSS"],
         "num_samples": 60,
-    })
+    }, headers=csrf_headers(client))
     assert r_test.status_code == 200
     res_data = r_test.json()
     assert res_data["profile"] == "URLLC"
     assert "delivery_success_rate" in res_data
     assert "tail_latency_p95_ms" in res_data
+    assert res_data["simulated_post_impairment_interval_ms"] == res_data["recovery_time_ms"]
+    assert res_data["recovery_time_semantics"]["actual_restoration"] is False
     assert res_data["provenance"]["is_simulated"] is True
     assert res_data["provenance"]["llm_in_decision_loop"] is False
 
@@ -208,7 +216,8 @@ def test_api_5g_and_change_impact_endpoints():
     assert len(r_rev.json()) >= 3
 
     # 4. POST /api/change_impact/plan
-    r_plan = client.post("/api/change_impact/plan", json={"revision_id": "REV-TELECOM-2023"})
+    r_plan = client.post("/api/change_impact/plan", json={"revision_id": "REV-TELECOM-2023"},
+                         headers=csrf_headers(client))
     assert r_plan.status_code == 200
     plan_data = r_plan.json()
     assert plan_data["plan_id"] == "PLAN-REV-TELECOM-2023"

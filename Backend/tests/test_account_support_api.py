@@ -48,7 +48,7 @@ def test_login_configuration_fails_closed_outside_demo(monkeypatch):
     monkeypatch.setenv("NETRASETU_ENV", "production")
     monkeypatch.delenv("NETRASETU_ADMIN_USERNAME", raising=False)
     monkeypatch.delenv("NETRASETU_ADMIN_PASSWORD", raising=False)
-    response = TestClient(app).post("/api/auth/login", json={"username": "admin", "password": "admin123"})
+    response = TestClient(app, base_url="https://testserver").post("/api/auth/login", json={"username": "admin", "password": "admin123"})
     assert response.status_code == 503
 
 

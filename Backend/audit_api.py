@@ -3,7 +3,7 @@ from __future__ import annotations
 import io
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
-from fastapi import APIRouter, HTTPException, Query, Response
+from fastapi import APIRouter, HTTPException, Query, Response, Request
 from pydantic import BaseModel, Field
 
 import openpyxl
@@ -20,6 +20,7 @@ from .audit.recorder import (
     load_audit_records,
 )
 from .demo_scenarios.library import get_scenarios
+from .authentication import request_session
 
 
 router = APIRouter(
@@ -33,6 +34,7 @@ class ReviewActionRequest(BaseModel):
     modification: Optional[str] = Field(None, description="Mandatory qualification text for MODIFIED")
     reason: Optional[str] = Field(None, description="Mandatory explanation text for REJECTED")
     reviewer: Optional[str] = Field("Human reviewer", description="Reviewer label")
+    accountable_authority: Optional[str] = Field(None, max_length=200, description="Reviewer-designated accountable government ministry or agency")
 
 
 def _build_scenario_map() -> Dict[str, Dict[str, Any]]:
@@ -180,6 +182,7 @@ def enrich_audit_record(
         "reviewer_modifications": overlaid.get("reviewer_modifications"),
         "reviewer_reason": overlaid.get("reviewer_reason"),
         "reviewer": overlaid.get("reviewer") or overlaid.get("human_reviewer", ""),
+        "accountable_authority": overlaid.get("accountable_authority", ""),
         "evidence_count": len(r.get("retrieved_evidence") or []),
         "claims_count": len(synth.get("claims") or r.get("claim_evidence_mappings") or []),
         "assessment_excerpt": str(assessment)[:180],
@@ -534,6 +537,7 @@ def get_audit_detail(audit_id: str):
 def review_audit(
     audit_id: str,
     request: ReviewActionRequest,
+    http_request: Request,
 ):
     raw_records = load_audit_records()
     target_record = None
@@ -548,12 +552,20 @@ def review_audit(
             detail=f"Audit record '{audit_id}' not found.",
         )
 
+    _, session = request_session(http_request)
+    if not session:
+        raise HTTPException(status_code=401, detail="Authenticated reviewer session required.")
+
     action = (request.action or "").strip().upper()
     if action not in ("APPROVED", "MODIFIED", "REJECTED", "ESCALATED", "DEFERRED", "INVESTIGATE"):
         raise HTTPException(
             status_code=422,
             detail=f"Invalid action '{request.action}'. Action must be one of: APPROVED, MODIFIED, REJECTED, ESCALATED, DEFERRED, INVESTIGATE.",
         )
+
+    if (target_record.get("event_type") == "FAILURE_COMBINATION_SIMULATION"
+            and action in ("APPROVED", "MODIFIED")):
+        raise HTTPException(status_code=409, detail="This simulation has insufficient, non-applicability-assessed evidence. Approval and modification are blocked until an authorized workflow establishes applicable evidence.")
 
     modification_text = None
     reason_text = None
@@ -574,7 +586,7 @@ def review_audit(
             )
         reason_text = request.reason.strip() if request.reason else None
 
-    reviewer_label = (request.reviewer or "").strip() or "Human reviewer"
+    reviewer_label = str(session.get("display_name") or session.get("username") or "Authenticated reviewer")
     timestamp = datetime.now(timezone.utc).isoformat()
     exec_id = target_record.get("execution_id")
 
@@ -587,6 +599,7 @@ def review_audit(
         "reviewer": reviewer_label,
         "reviewer_modifications": modification_text,
         "reviewer_reason": reason_text,
+        "accountable_authority": request.accountable_authority.strip() if request.accountable_authority else None,
     }
     append_review_event(review_event)
 
@@ -600,6 +613,7 @@ def review_audit(
         human_review_required=False,
         human_reviewer=reviewer_label,
         human_action=action,
+        accountable_authority=request.accountable_authority.strip() if request.accountable_authority else "",
         final_decision=action,
         reviewer_modifications=modification_text or "",
         workflow_stages=["Human Review Console", "Audit Trail Ledger"],
@@ -621,5 +635,6 @@ def review_audit(
         "review_timestamp": effective_state["review_timestamp"],
         "reviewer_modifications": effective_state["reviewer_modifications"],
         "reviewer_reason": effective_state["reviewer_reason"],
+        "accountable_authority": review_event["accountable_authority"],
         "governance_audit_id": gov_record.get("audit_id"),
     }

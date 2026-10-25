@@ -46,6 +46,7 @@ def create_audit_record(
     retrieved_evidence: List[Dict[str, Any]] | None = None,
     evidence_classification: Dict[str, Any] | None = None,
     evidence_assessment: Dict[str, Any] | None = None,
+    evidence_analysis: Dict[str, Any] | None = None,
     absence_verification: List[Dict[str, Any]] | None = None,
     gap_analysis: Dict[str, Any] | None = None,
     risk_assessment: Dict[str, Any] | None = None,
@@ -54,10 +55,12 @@ def create_audit_record(
     human_review_required: bool = False,
     human_reviewer: str = "",
     human_action: str = "",
+    accountable_authority: str = "",
     reviewer_modifications: str = "",
     final_decision: str = "",
     notes: List[str] | None = None,
     execution_id: str | None = None,
+    input_fingerprint: str = "",
     event_type: str = "QUESTION_ANALYSIS",
     execution_status: str = "COMPLETED",
     error_details: str | None = None,
@@ -83,6 +86,8 @@ def create_audit_record(
         "pipeline_version": PIPELINE_VERSION,
         "model": model,
         "execution_id": exec_id,
+        "run_id": exec_id,
+        "input_fingerprint": input_fingerprint or None,
         "event_type": event_type,
         "execution_status": execution_status,
         "error_details": error_details,
@@ -97,6 +102,7 @@ def create_audit_record(
         "retrieved_evidence": retrieved_evidence or [],
         "evidence_classification": evidence_classification or {},
         "evidence_assessment": evidence_assessment or {},
+        "evidence_analysis": evidence_analysis or {},
         "absence_verification": absence_verification or [],
         "gap_analysis": gap_analysis or {},
         "risk_assessment": risk_assessment or {},
@@ -109,6 +115,7 @@ def create_audit_record(
         ),
         "human_reviewer": human_reviewer,
         "human_action": human_action,
+        "accountable_authority": accountable_authority,
         "reviewer_modifications": (
             reviewer_modifications
         ),
@@ -248,6 +255,7 @@ def apply_review_overlay(
         overlay["review_timestamp"] = review_event.get("timestamp")
         overlay["reviewer_modifications"] = review_event.get("reviewer_modifications")
         overlay["reviewer_reason"] = review_event.get("reviewer_reason")
+        overlay["accountable_authority"] = review_event.get("accountable_authority") or overlay.get("accountable_authority")
         if "execution_id" in review_event and not overlay.get("execution_id"):
             overlay["execution_id"] = review_event["execution_id"]
     else:

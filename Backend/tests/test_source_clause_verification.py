@@ -201,7 +201,7 @@ def test_document_metadata_endpoint():
     data = get_document_metadata_endpoint(doc_id="CERTIN-DIR-2022")
     assert data["doc_id"] == "CERTIN-DIR-2022"
     assert "CERT-In" in data["issuing_authority"]
-    assert "para_2_ii" in data["clauses"]
+    assert data["clauses"] == {}  # Exact provisions are supplied only by PDF verification, never registry-written summaries.
 
 
 def test_verify_claim_endpoint():

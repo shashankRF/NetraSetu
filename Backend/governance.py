@@ -18,7 +18,7 @@ This module only applies governance rules to the pipeline outputs.
 """
 
 
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 
 # ---------------------------------------------------------------------------
@@ -342,11 +342,23 @@ def _extract_evidence_roles(
     evidence_assessment: Dict[str, Any],
     final_synthesis: Dict[str, Any],
     classification: Any,
+    evidence_analysis: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     supporting_ids = set()
     contradicting_ids = set()
     limiting_ids = set()
     contextual_ids = set()
+
+    if isinstance(evidence_analysis, dict):
+        for ev in evidence_analysis.get("supporting_evidence") or []:
+            if isinstance(ev, dict) and ev.get("evidence_id"):
+                supporting_ids.add(str(ev["evidence_id"]))
+        for ev in evidence_analysis.get("contradicting_evidence") or []:
+            if isinstance(ev, dict) and ev.get("evidence_id"):
+                contradicting_ids.add(str(ev["evidence_id"]))
+        for ev in evidence_analysis.get("contextual_evidence") or []:
+            if isinstance(ev, dict) and ev.get("evidence_id"):
+                contextual_ids.add(str(ev["evidence_id"]))
 
     if isinstance(classification, dict):
         for c in classification.get("classifications", []):
@@ -904,17 +916,21 @@ def _enrich_with_decision_governance(
     risk_assessment: Dict[str, Any],
     final_synthesis: Dict[str, Any],
     classification: Any,
+    evidence_analysis: Dict[str, Any] | None = None,
 ) -> Dict[str, Any]:
     """
     Enrich the base governance result dictionary with the 8 distinct
     governance layers, automation safety gate, reversibility, scenario
     branching, matrix, and failure-safe safeguards.
     """
+    evidence_analysis = evidence_analysis if isinstance(evidence_analysis, dict) else {}
+
     # 1. Evidence State
     ev_roles = _extract_evidence_roles(
         evidence_assessment=evidence_assessment,
         final_synthesis=final_synthesis,
         classification=classification,
+        evidence_analysis=evidence_analysis,
     )
 
     # 2. Risk State
@@ -1091,6 +1107,10 @@ def _enrich_with_decision_governance(
             "evidence_status": ev_roles["status"],
             "summary": "Evidence evaluated across primary and counter-retrieval passes with absence safeguards.",
             "missing_evidence": ev_roles["missing_evidence"],
+            "analysis_candidate_count": evidence_analysis.get("candidate_count"),
+            "analysis_supporting_count": len(evidence_analysis.get("supporting_evidence") or []),
+            "analysis_contradicting_count": len(evidence_analysis.get("contradicting_evidence") or []),
+            "contradiction_search_performed": evidence_analysis.get("contradiction_search_performed"),
         },
         "risk_state": {
             "risk_level": risk_level,
@@ -1189,6 +1209,8 @@ def evaluate_governance(
     risk_assessment: Dict[str, Any] | None = None,
     final_synthesis: Dict[str, Any] | None = None,
     classification: Any = None,
+    evidence_analysis: Dict[str, Any] | None = None,
+    **kwargs,
 ) -> Dict[str, Any]:
     """
     Apply deterministic governance rules to the pipeline output.
@@ -1231,6 +1253,7 @@ def evaluate_governance(
             risk_assessment=risk_assessment,
             final_synthesis=final_synthesis,
             classification=classification,
+            evidence_analysis=evidence_analysis,
         )
 
     # -----------------------------------------------------------------------
@@ -1606,6 +1629,10 @@ def apply_governance_to_pipeline(
         ),
         classification=pipeline_result.get(
             "classification",
+        ),
+        evidence_analysis=pipeline_result.get(
+            "evidence_analysis",
+            pipeline_result.get("counter_evidence_analysis", {}),
         ),
     )
 

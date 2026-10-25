@@ -1,5 +1,7 @@
 from __future__ import annotations
 import os
+import hashlib
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -15,6 +17,7 @@ from .evidence_engine.clause_verifier import (
 )
 from .evidence_engine.document_registry import (
     DOCUMENT_REGISTRY,
+    find_local_document_path,
     resolve_document_metadata,
 )
 
@@ -51,6 +54,8 @@ def resolve_document_file(doc_path: str) -> Optional[Path]:
     # Strip query parameters or page hashes if accidentally passed
     clean_raw = str(doc_path).split("#")[0].split("?")[0].strip()
     clean_unquoted = urllib.parse.unquote(clean_raw).strip()
+    root = PROJECT_ROOT.resolve()
+    approved_root = (root / "knowledge_base").resolve()
 
     # Normalize paths
     candidates_to_test = []
@@ -93,10 +98,18 @@ def resolve_document_file(doc_path: str) -> Optional[Path]:
         for p in paths_to_check:
             try:
                 resolved = p.resolve()
-                if str(resolved).startswith(str(PROJECT_ROOT.resolve())) and resolved.is_file():
+                if resolved.is_relative_to(approved_root) and resolved.is_file():
                     return resolved
             except Exception:
                 continue
+
+    # Canonical KB resolver handles indexed document basenames with a missing
+    # .pdf suffix, while remaining restricted to a unique file in KB storage.
+    resolved_path = find_local_document_path(clean_unquoted)
+    if resolved_path:
+        candidate = (root / resolved_path).resolve()
+        if candidate.is_relative_to(root) and candidate.is_file() and candidate.suffix.lower() == ".pdf":
+            return candidate
 
     # 3. Fallback: Search by filename in knowledge_base directory
     for test_str in candidates_to_test:
@@ -105,17 +118,21 @@ def resolve_document_file(doc_path: str) -> Optional[Path]:
             matches = list((PROJECT_ROOT / "knowledge_base").rglob(fname))
             if matches and matches[0].is_file():
                 res = matches[0].resolve()
-                if str(res).startswith(str(PROJECT_ROOT.resolve())):
+                if res.is_relative_to(approved_root):
                     return res
             # Also try space/underscore variations of filename
             if "_" in fname:
                 matches_space = list((PROJECT_ROOT / "knowledge_base").rglob(fname.replace("_", " ")))
                 if matches_space and matches_space[0].is_file():
-                    return matches_space[0].resolve()
+                    resolved = matches_space[0].resolve()
+                    if resolved.is_relative_to(approved_root):
+                        return resolved
             if " " in fname:
                 matches_under = list((PROJECT_ROOT / "knowledge_base").rglob(fname.replace(" ", "_")))
                 if matches_under and matches_under[0].is_file():
-                    return matches_under[0].resolve()
+                    resolved = matches_under[0].resolve()
+                    if resolved.is_relative_to(approved_root):
+                        return resolved
 
     return None
 
@@ -133,10 +150,7 @@ def get_document_file_info(
     """
     resolved = resolve_document_file(doc_path)
     if not resolved:
-        raise HTTPException(
-            status_code=404,
-            detail=f"Source document '{doc_path}' not found in knowledge base.",
-        )
+        raise HTTPException(status_code=404, detail="Source document not found in knowledge base.")
 
     total_pages = 1
     is_pdf = resolved.suffix.lower() == ".pdf"
@@ -203,22 +217,60 @@ def get_document_file_info(
             import traceback
             traceback.print_exc()
 
+    page_text = ""
+    if is_pdf and 0 <= zero_page < total_pages:
+        try:
+            import fitz
+            with fitz.open(str(resolved)) as context_doc:
+                page_text = context_doc[zero_page].get_text("text").strip()
+        except Exception:
+            page_text = ""
+
+    context = page_text
+    if target_quote and page_text:
+        idx = page_text.casefold().find(target_quote.casefold())
+        if idx >= 0:
+            context = page_text[max(0, idx - 500):min(len(page_text), idx + len(target_quote) + 500)]
+
+    try:
+        digest = hashlib.sha256()
+        with resolved.open("rb") as source_file:
+            for block in iter(lambda: source_file.read(1024 * 1024), b""):
+                digest.update(block)
+        content_hash = digest.hexdigest()
+    except OSError:
+        content_hash = None
+    relative_key = str(resolved.relative_to(PROJECT_ROOT)).replace("\\", "/")
+    registered_meta = resolve_document_metadata(doc_path) or resolve_document_metadata(resolved.name)
+    stable_doc_id = registered_meta.doc_id if registered_meta else f"KB-{hashlib.sha256(relative_key.casefold().encode('utf-8')).hexdigest()[:16].upper()}"
+
     return {
-        "status": "AVAILABLE",
+        "status": "AVAILABLE" if valid_page else "PAGE_UNAVAILABLE",
+        "canonical_document_id": stable_doc_id,
+        "original_official_source_url": registered_meta.official_url if registered_meta else None,
+        "storage_key": relative_key,
+        "file_available": True,
+        "availability_verified_at_utc": datetime.now(timezone.utc).isoformat(),
+        "content_sha256": content_hash,
         "document_name": resolved.name,
-        "resolved_path": str(resolved.relative_to(PROJECT_ROOT)).replace("\\", "/"),
+        "resolved_path": relative_key,
         "total_pages": total_pages,
         "requested_page": page,
         "valid_page": valid_page,
         "page_error": page_error,
         "viewer_page_number": viewer_page,
         "zero_based_pdf_page_index": zero_page,
+        "pdf_page_number": viewer_page,
+        "page_numbering_convention": "pdf_page_number is 1-based physical PDF page; zero_based_pdf_page_index is 0-based physical PDF page index; source_page_label is printed page label when extracted",
+        "source_page_label": printed_page,
         "printed_page_number": printed_page,
         "exact_source_quote": exact_source_quote,
         "bounding_boxes": bounding_boxes,
         "source_line_numbers": match_res.get("source_line_numbers", []) if target_quote and "match_res" in locals() else [],
         "clause_hierarchy": clause_hierarchy,
         "verification_status": match_status,
+        "surrounding_context": context,
+        "source_context_status": "AVAILABLE" if context else "NOT_RETRIEVED",
     }
 
 
