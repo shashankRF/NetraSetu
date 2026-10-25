@@ -4902,7 +4902,84 @@
   
       .disaster-map-notice{display:grid;gap:4px;padding:12px 14px;border-left:4px solid #c77a12;background:#fff6e8;color:#4c371e;font-size:12px;margin:0 0 14px}.disaster-map-layout{display:grid;grid-template-columns:minmax(220px,275px) minmax(0,1fr);gap:14px}.disaster-map-sidebar,.disaster-map-main{min-width:0}.disaster-map-sidebar{border:1px solid #dce4e8;border-radius:10px;padding:12px}.disaster-map-sidebar h4{margin:8px 0}.disaster-layer{display:grid;grid-template-columns:auto 12px 1fr;gap:8px;align-items:center;padding:8px 2px;font-size:12px}.disaster-layer small,.disaster-source-list small{display:block;color:#647681;font-size:10px;margin-top:2px}.disaster-layer.unavailable{opacity:.65}.layer-swatch{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:middle}.layer-swatch.flood{background:#d93025}.layer-swatch.fire{background:#f2c230}.layer-swatch.landslide{background:#8b5a2b}.layer-swatch.warning{background:#e5a21a}.layer-swatch.roads{background:#2385a5}.layer-swatch.lower-risk{background:#31864a}.layer-swatch.boundary{background:#76818c}.disaster-map-legend{display:grid;gap:5px;border-top:1px solid #e1e7ea;padding-top:10px;margin:8px 0;font-size:11px}.disaster-source-list{display:grid;gap:8px;font-size:11px}.disaster-source-list a{color:#086c83;overflow-wrap:anywhere}.disaster-map-canvas{height:510px;border-radius:10px;overflow:hidden;background:#edf1f2}.disaster-map-detail{min-height:65px;border:1px solid #dce4e8;border-radius:8px;padding:10px;margin-top:10px;font-size:12px;overflow-wrap:anywhere}.disaster-map-detail p{margin:5px 0}.disaster-map-freshness,.disaster-map-attribution{font-size:10px;line-height:1.5;color:#647681}.disaster-map-attribution{margin-top:14px}.disaster-report-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:9px;margin-top:12px}.disaster-report-card{border:1px solid #dce4e8;border-radius:8px;padding:10px;font-size:11px}.disaster-report-card h5{margin:0 0 5px;font-size:12px}.disaster-report-card p{margin:4px 0}.disaster-report-card button{margin-top:7px}.disaster-report-card small{color:#647681}.disaster-map-caption{font-size:11px;line-height:1.5;color:#465b68;padding:9px 11px;background:#f4f7f8;border-radius:7px;margin:8px 0}
       .aftermath-shell{margin-top:18px;border-top:3px solid #163b56;padding-top:18px}.aftermath-head{display:flex;justify-content:space-between;align-items:start;gap:12px;flex-wrap:wrap}.aftermath-controls{display:flex;gap:8px;align-items:end;flex-wrap:wrap;margin:12px 0}.aftermath-controls label{display:grid;gap:4px;font-size:10px;font-weight:700;color:#385165}.aftermath-controls select{min-width:190px;border:1px solid #cbd9e1;border-radius:7px;padding:8px;background:#fff;color:#193047}.aftermath-status{padding:9px 11px;border-radius:7px;background:#eef4f7;color:#405769;font-size:11px}.aftermath-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px;margin:12px 0}.aftermath-kpi{border:1px solid #d8e2e8;border-radius:9px;background:#fff;padding:10px;text-align:left;color:#345064;cursor:pointer}.aftermath-kpi strong{display:block;font-size:19px;color:#173a54}.aftermath-kpi span{font-size:10px}.aftermath-section{margin-top:12px;border:1px solid #dce5eb;border-radius:10px;padding:13px;background:#fff}.aftermath-section h4{margin:0 0 8px;color:#193b55}.aftermath-table-wrap{overflow:auto}.aftermath-table{border-collapse:collapse;width:100%;font-size:10px}.aftermath-table th,.aftermath-table td{padding:7px;border-bottom:1px solid #e3eaee;text-align:left;vertical-align:top}.aftermath-table th{background:#f3f7f9;color:#3a5264}.aftermath-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px}.aftermath-card{border:1px solid #e0e7ec;border-radius:8px;padding:10px;font-size:11px}.aftermath-card p{margin:5px 0;line-height:1.45;color:#4c6474}.aftermath-card button{margin:5px 5px 0 0}.aftermath-badge{display:inline-block;padding:3px 6px;border-radius:99px;background:#eef3f6;font-size:9px;font-weight:700;color:#405769}.aftermath-status-degraded{background:#fff2cc;color:#754900}.aftermath-status-unavailable{background:#ffe1e1;color:#9a2020}.aftermath-status-conflicting{background:#f3e5ff;color:#7024a8}.aftermath-status-available{background:#dcfce7;color:#166534}.aftermath-warning{padding:10px;background:#fff7e8;border-left:3px solid #d59720;font-size:11px;color:#614914}.aftermath-timeline{display:grid;gap:7px}.aftermath-event{border-left:2px solid #6f9eaf;padding:4px 0 4px 10px;font-size:10px;color:#3c5668}.aftermath-event small{display:block;color:#718493}@media(max-width:760px){.disaster-map-layout{grid-template-columns:1fr}.disaster-map-canvas{height:360px}.aftermath-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.aftermath-controls{align-items:stretch}.aftermath-controls label,.aftermath-controls select{width:100%}.aftermath-card{min-width:0}}
-</style>
+
+      /* --- WhatsApp / Telegram Coordination Styles --- */
+      .dash-coord-layout { display:grid; grid-template-columns:minmax(270px,.8fr) minmax(0,1.8fr); gap:16px; }
+      .dash-agency-picker { display:flex; flex-direction:column; gap:8px; margin-top:8px; }
+      .dash-agency-btn { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:10px; border:1px solid #dce5eb; background:#f8fafc; cursor:pointer; text-align:left; transition:all .2s ease; width:100%; box-sizing:border-box; }
+      .dash-agency-btn:hover { background:#eef4f8; border-color:#0284c7; }
+      .dash-agency-btn.active { background:#e0f2fe; border-color:#0284c7; box-shadow:0 0 0 2px rgba(2,132,199,0.2); }
+      .dash-agency-avatar { width:34px; height:34px; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; font-size:18px; box-shadow:0 1px 3px rgba(0,0,0,0.08); flex-shrink:0; }
+      .dash-agency-text strong { display:block; font-size:11px; color:#1e293b; }
+      .dash-agency-text small { display:block; font-size:10px; color:#64748b; }
+      .dash-tg-chat-card { padding:0; overflow:hidden; border-radius:12px; border:1px solid #dce5eb; display:flex; flex-direction:column; background:#efeae2; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+      .dash-tg-head { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 18px; background:#1e293b; color:#fff; border-bottom:1px solid #0f172a; }
+      .dash-tg-head-left { display:flex; align-items:center; gap:12px; }
+      .dash-tg-head-avatar { width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg, #0284c7, #0f766e); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+      .dash-tg-head-info strong { display:block; font-size:13px; font-weight:700; color:#f8fafc; }
+      .dash-tg-head-info span { font-size:11px; color:#94a3b8; }
+      .dash-tg-messages { padding:16px; overflow-y:auto; max-height:480px; min-height:360px; display:flex; flex-direction:column; gap:10px; background:#e5ddd5; background-image:radial-gradient(#d1c7bc 1px, transparent 1px); background-size:16px 16px; }
+      .dash-msg-bubble { max-width:80%; padding:10px 14px 6px; border-radius:12px; position:relative; font-size:12px; line-height:1.5; box-shadow:0 1px 2px rgba(0,0,0,0.12); }
+      .dash-msg-incoming { align-self:flex-start; background:#ffffff; color:#1e293b; border-bottom-left-radius:2px; border:1px solid #e2e8f0; }
+      .dash-msg-outgoing { align-self:flex-end; background:#d9fdd3; color:#111b21; border-bottom-right-radius:2px; border:1px solid #bbf7d0; }
+      .dash-msg-sender { display:flex; align-items:center; gap:6px; font-size:11px; font-weight:700; margin-bottom:4px; }
+      .dash-msg-sender.auth-district { color:#d97706; }
+      .dash-msg-sender.auth-state { color:#0284c7; }
+      .dash-msg-sender.auth-central { color:#059669; }
+      .dash-msg-sender.auth-telecom { color:#7c3aed; }
+      .dash-msg-sender.auth-netrasetu { color:#475569; }
+      .dash-msg-tag { font-size:9px; font-weight:600; padding:1px 6px; border-radius:4px; background:rgba(0,0,0,0.06); }
+      .dash-msg-body { margin:4px 0 6px; white-space:pre-wrap; word-break:break-word; }
+      .dash-msg-meta { display:flex; align-items:center; justify-content:flex-end; gap:4px; font-size:10px; color:#64748b; margin-top:2px; }
+      .dash-msg-check { color:#53bdeb; font-weight:700; letter-spacing:-1px; }
+      .dash-msg-map-card { margin:8px 0; border-radius:8px; overflow:hidden; border:1px solid #cbd5e1; background:#f8fafc; }
+      .dash-msg-map-thumb { width:100%; max-height:220px; object-fit:cover; display:block; cursor:pointer; }
+      .dash-msg-map-caption { padding:8px 10px; font-size:11px; background:#fff; border-top:1px solid #e2e8f0; }
+      .dash-msg-map-caption strong { display:block; color:#0f172a; }
+      .dash-msg-map-caption small { color:#64748b; display:block; margin-top:2px; }
+      .dash-alert-feed { display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+      .dash-alert-item { padding:10px 12px; border-radius:8px; border-left:4px solid #f59e0b; background:#fffbeb; font-size:11px; }
+      .dash-alert-item.critical { border-left-color:#ef4444; background:#fef2f2; }
+      .dash-alert-item.success { border-left-color:#10b981; background:#f0fdf4; }
+      .dash-alert-item strong { display:block; font-size:11px; color:#1e293b; margin-bottom:3px; }
+      .dash-alert-item p { margin:0; color:#475569; line-height:1.4; }
+      .dash-alert-meta { display:flex; justify-content:space-between; margin-top:6px; font-size:9px; color:#94a3b8; }
+      .dash-tg-input-bar { padding:10px 14px; background:#f0f2f5; border-top:1px solid #dce5eb; display:flex; flex-direction:column; gap:8px; }
+      .dash-tg-input-row { display:flex; gap:8px; align-items:flex-end; }
+      .dash-tg-input-row textarea { flex:1; border-radius:18px; padding:8px 14px; border:1px solid #cbd5e1; background:#fff; resize:none; font-size:12px; font-family:inherit; outline:none; box-shadow:0 1px 2px rgba(0,0,0,0.04); }
+      .dash-tg-send-btn { width:38px; height:38px; border-radius:50%; background:#0284c7; color:#fff; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all .2s ease; }
+      .dash-tg-send-btn:hover { background:#0369a1; transform:scale(1.05); }
+      .dash-quick-pills { display:flex; gap:6px; flex-wrap:wrap; font-size:10px; align-items:center; }
+      .dash-quick-btn { padding:2px 8px; border-radius:12px; border:1px solid #cbd5e1; background:#fff; font-size:10px; cursor:pointer; }
+      .dash-quick-btn:hover { background:#f1f5f9; border-color:#0284c7; color:#0284c7; }
+
+      /* --- Dedicated ECR-5G Workspace Styles --- */
+      .ecr5g-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:14px; }
+      @media(max-width:960px){ .ecr5g-grid-2 { grid-template-columns:1fr; } }
+      .ecr5g-variant-tabs { display:flex; gap:8px; flex-wrap:wrap; margin:12px 0 16px; }
+      .ecr5g-variant-tab { padding:8px 14px; border-radius:8px; border:1px solid #dce5eb; background:#f8fafc; cursor:pointer; font-size:12px; font-weight:600; display:flex; align-items:center; gap:6px; transition:all .2s ease; }
+      .ecr5g-variant-tab:hover { background:#eef4f8; border-color:#0284c7; }
+      .ecr5g-variant-tab.active { background:#0284c7; color:#fff; border-color:#0284c7; box-shadow:0 2px 6px rgba(2,132,199,0.25); }
+      .ecr5g-kpi-bar { display:grid; grid-template-columns:repeat(4, 1fr); gap:12px; margin-bottom:16px; }
+      @media(max-width:768px){ .ecr5g-kpi-bar { grid-template-columns:repeat(2, 1fr); } }
+      .ecr5g-kpi-card { padding:12px 14px; border-radius:10px; border:1px solid #dce5eb; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+      .ecr5g-kpi-card span { font-size:10px; color:#64748b; display:block; text-transform:uppercase; font-weight:700; letter-spacing:0.04em; }
+      .ecr5g-kpi-card strong { font-size:18px; color:#0f172a; display:block; margin-top:4px; }
+      .ecr5g-table-wrap { overflow-x:auto; border-radius:8px; border:1px solid #e2e8f0; background:#fff; margin-top:10px; }
+      .ecr5g-table { width:100%; border-collapse:collapse; font-size:11px; }
+      .ecr5g-table th { background:#f8fafc; padding:8px 12px; text-align:left; color:#475569; font-weight:700; border-bottom:1px solid #e2e8f0; }
+      .ecr5g-table td { padding:8px 12px; border-bottom:1px solid #f1f5f9; color:#1e293b; }
+      .ecr5g-table tr:hover td { background:#f8fafc; }
+      .ecr5g-badge { display:inline-block; padding:2px 8px; border-radius:99px; font-size:10px; font-weight:600; }
+      .ecr5g-badge.verified { background:#dcfce7; color:#166534; }
+      .ecr5g-badge.unverified { background:#fee2e2; color:#991b1b; }
+      .ecr5g-badge.conflict { background:#fef3c7; color:#92400e; }
+      .ecr5g-badge.promoted { background:#e0f2fe; color:#0369a1; font-weight:700; }
+      .ecr5g-badge.feasible { background:#dcfce7; color:#15803d; font-weight:700; }
+      .ecr5g-badge.infeasible { background:#fee2e2; color:#b91c1c; font-weight:700; }
+      .nav-link-ecr5g.active { color:#06b6d4 !important; font-weight:700; }
+
+    </style>
 </head>
 
 <body>
@@ -4930,7 +5007,7 @@
     </a>
     <a class="brand-name" href="#/home" aria-label="NetraSetu home">NetraSetu</a>
     <nav class="links" aria-label="Primary">
-      <a href="#/home">Home</a><a href="#/intelligence">Intelligence</a><a href="#/contact">Contact Us</a>
+      <a href="#/home">Home</a><a href="#/intelligence">Intelligence</a><a href="#/ecr5g" id="nav-ecr5g" class="nav-link-ecr5g">ECR-5G</a><a href="#/contact">Contact Us</a>
     </nav>
     <a class="pill pill-nav" href="#/dashboard"><span>Dashboard</span></a>
     <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false"
@@ -4939,7 +5016,7 @@
   <nav class="menu" id="menu" aria-hidden="true" aria-label="Mobile">
     <div class="menu-inner">
       <p class="menu-eyebrow">Menu</p>
-      <ul class="menu-list"><li><a href="#/home">Home</a></li><li><a href="#/intelligence">Intelligence</a></li><li><a href="#/contact">Contact Us</a></li><li><a href="#/dashboard">Dashboard</a></li></ul>
+      <ul class="menu-list"><li><a href="#/home">Home</a></li><li><a href="#/intelligence">Intelligence</a></li><li><a href="#/ecr5g">ECR-5G</a></li><li><a href="#/contact">Contact Us</a></li><li><a href="#/dashboard">Dashboard</a></li></ul>
       <div class="menu-foot"><a class="ghost" href="#/about">About NetraSetu</a></div>
     </div>
   </nav>
@@ -4974,6 +5051,7 @@
         <button type="button" data-dash-view="overview" aria-current="page"><span>⌂</span>Dashboard Overview</button>
         <button type="button" data-dash-view="metrics"><span>▦</span>Key Metrics &amp; Evaluation</button>
         <button type="button" data-dash-view="latency"><span>◷</span>Latency &amp; Reliability</button>
+        <button type="button" data-dash-view="ecr5g" id="dash-nav-ecr5g"><span>📶</span>ECR-5G QoS Orchestration</button>
         <button type="button" data-dash-view="evidence"><span>▤</span>Evidence Analysis</button>
         <button type="button" data-dash-view="gap-analysis"><span>⌕</span>Gap &amp; Absence Analysis</button>
         <button type="button" data-dash-view="governance"><span>◇</span>Risk &amp; Governance</button>
@@ -5042,6 +5120,369 @@
         <article class="dash-content-card"><h4>Application processing breakdown</h4><p class="dash-muted">Browser request duration and instrumented backend stages are application timings. Real 5G latency is not measured by these values.</p><div id="dash-latency-app-report" class="dash-table-wrap">Run a scenario to populate backend stage timings.</div></article>
       </section>
 
+      <!-- ============================================================ -->
+      <!-- DEDICATED ECR-5G QOS ORCHESTRATION PANEL                      -->
+      <!-- ============================================================ -->
+      <section class="dash-panel" data-dash-panel="ecr5g" hidden aria-labelledby="ecr5g-title">
+        <div class="dash-section-intro">
+          <span class="dash-section-kicker">5G NETWORK SLICING · ECAC PROTOTYPE CONTROLLER</span>
+          <h3 id="ecr5g-title">ECR-5G QoS Orchestration</h3>
+          <p>Evidence-Completeness-Constrained QoS Orchestration for 5G Network Slicing during high-altitude Uttarakhand disaster response.</p>
+        </div>
+
+        <!-- 1. SCENARIO CONTROL & VARIANT SELECTOR -->
+        <div class="dash-content-card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px">
+            <div>
+              <span class="dash-section-kicker">VALIDATION SCENARIO</span>
+              <h4 style="margin:4px 0;font-size:16px;color:#0f172a" id="ecr5g-scenario-heading">ECR5G-FLOOD-001 · Operation Mountain Shield</h4>
+              <p class="dash-muted" style="margin:0;max-width:750px;font-size:12px" id="ecr5g-scenario-desc">Deterministic synthetic scenario testing whether evidence completeness and reliability influence network-slicing recommendations and emergency communication recovery decisions under a 10 Mbps bottleneck.</p>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <button type="button" id="ecr5g-run-btn" class="dash-run-btn" style="padding:9px 18px;font-size:12px">Run ECR-5G Orchestration →</button>
+              <button type="button" id="ecr5g-compare-btn" class="dash-outline-btn" style="padding:9px 14px;font-size:12px">Compare All 4 Variants</button>
+              <button type="button" id="ecr5g-reset-btn" class="dash-outline-btn" style="padding:9px 12px;font-size:12px">Reset</button>
+            </div>
+          </div>
+
+          <!-- Variant Selector Tabs -->
+          <div style="margin-top:16px;border-top:1px solid #e2e8f0;padding-top:12px">
+            <span style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.04em">Controlled Scenario Variants:</span>
+            <div class="ecr5g-variant-tabs" id="ecr5g-variant-tabs">
+              <button type="button" class="ecr5g-variant-tab active" data-variant="A">
+                <span>🛡️</span> Variant A · Complete Evidence
+              </button>
+              <button type="button" class="ecr5g-variant-tab" data-variant="B">
+                <span>⚠️</span> Variant B · Incomplete Evidence
+              </button>
+              <button type="button" class="ecr5g-variant-tab" data-variant="C">
+                <span>⚡</span> Variant C · Conflicting Evidence
+              </button>
+              <button type="button" class="ecr5g-variant-tab" data-variant="D">
+                <span>🔄</span> Variant D · Partial Recovery
+              </button>
+            </div>
+          </div>
+
+          <!-- Execution Status Banner -->
+          <div id="ecr5g-status-banner" style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-radius:8px;background:#f8fafc;border:1px solid #e2e8f0;font-size:12px;margin-top:6px">
+            <div>
+              <strong>Execution Status:</strong> <span id="ecr5g-status-label" class="ecr5g-badge feasible">FEASIBLE_FOR_HUMAN_REVIEW</span>
+              <span id="ecr5g-status-sub" style="margin-left:8px;color:#64748b">Verified deterministic simulation run complete.</span>
+            </div>
+            <div style="font-size:11px;color:#94a3b8">
+              <span>Run ID: <code id="ecr5g-run-id">ECR5G-LIVE-SIM</code></span> · <span id="ecr5g-time-label">Just now</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI SUMMARY BAR -->
+        <div class="ecr5g-kpi-bar" style="margin-top:16px">
+          <div class="ecr5g-kpi-card">
+            <span>Shared Capacity</span>
+            <strong id="ecr5g-kpi-capacity">10.0 Mbps</strong>
+            <small style="color:#64748b;font-size:10px">Total Offered: 12.0 Mbps</small>
+          </div>
+          <div class="ecr5g-kpi-card">
+            <span>Evidence Completeness</span>
+            <strong id="ecr5g-kpi-completeness" style="color:#059669">100%</strong>
+            <small id="ecr5g-kpi-completeness-sub" style="color:#64748b;font-size:10px">All 4 mandatory requirements verified</small>
+          </div>
+          <div class="ecr5g-kpi-card">
+            <span>Hospital Telemetry Latency</span>
+            <strong id="ecr5g-kpi-latency" style="color:#0284c7">42.1 ms</strong>
+            <small style="color:#64748b;font-size:10px">Target: &lt;100 ms (SLO Met ✓)</small>
+          </div>
+          <div class="ecr5g-kpi-card">
+            <span>Decision Feasibility</span>
+            <strong id="ecr5g-kpi-feasibility" style="color:#166534">FEASIBLE</strong>
+            <small style="color:#64748b;font-size:10px">Human review required</small>
+          </div>
+        </div>
+
+        <!-- 2. EVIDENCE COMPLETENESS & 3. NETWORK CONDITIONS -->
+        <div class="ecr5g-grid-2">
+          <!-- 2. Evidence Completeness -->
+          <div class="dash-content-card">
+            <span class="dash-section-kicker">EVIDENCE COMPLETENESS & INTEGRITY</span>
+            <h4>Retrieved Evidence Records (EV-001 – EV-012)</h4>
+            <p class="dash-muted" style="font-size:11px;margin:2px 0 10px">Simulated field evidence records evaluated by ECAC evidence-binding filters before slice reconfiguration.</p>
+            
+            <div id="ecr5g-evidence-alert-box" style="display:none;padding:10px 12px;border-radius:8px;margin-bottom:10px;font-size:11px"></div>
+
+            <div class="ecr5g-table-wrap" style="max-height:280px;overflow-y:auto">
+              <table class="ecr5g-table" id="ecr5g-evidence-table">
+                <thead>
+                  <tr>
+                    <th>Evidence ID</th>
+                    <th>Source & Type</th>
+                    <th>Requirement</th>
+                    <th>Verification</th>
+                    <th>Conflict</th>
+                    <th>Timestamp</th>
+                  </tr>
+                </thead>
+                <tbody id="ecr5g-evidence-tbody">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Citations from real KB -->
+            <div style="margin-top:14px;border-top:1px solid #e2e8f0;padding-top:10px">
+              <strong style="font-size:11px;color:#1e293b">Regulatory & Standards Citations (Retrieved from Knowledge Base):</strong>
+              <div id="ecr5g-citations-list" style="margin-top:6px;display:flex;flex-direction:column;gap:6px">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Network Conditions -->
+          <div class="dash-content-card">
+            <span class="dash-section-kicker">REAL-TIME TELEMETRY & NETWORK CONDITIONS</span>
+            <h4>Physical Infrastructure & Bottleneck State</h4>
+            <p class="dash-muted" style="font-size:11px;margin:2px 0 10px">Simulated cell site availability, power status, and transmission backhaul conditions.</p>
+
+            <!-- Sites status cards -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+              <div style="padding:10px 12px;border-radius:8px;border:1px solid #e2e8f0;background:#f8fafc">
+                <span style="font-size:10px;color:#64748b;font-weight:700">SITE A (VALLEY SECTOR 1)</span>
+                <strong style="display:block;color:#d97706;font-size:12px;margin-top:2px">⚠️ Operational (Congested)</strong>
+                <small style="color:#64748b;display:block;font-size:10px;margin-top:2px">Offered load: 120% of capacity</small>
+              </div>
+              <div style="padding:10px 12px;border-radius:8px;border:1px solid #e2e8f0;background:#f8fafc" id="ecr5g-site-b-card">
+                <span style="font-size:10px;color:#64748b;font-weight:700">SITE B (BHATWARI HUB)</span>
+                <strong id="ecr5g-site-b-status" style="display:block;color:#ef4444;font-size:12px;margin-top:2px">❌ Power Failure</strong>
+                <small id="ecr5g-site-b-sub" style="color:#64748b;display:block;font-size:10px;margin-top:2px">Generator offline, battery depleted</small>
+              </div>
+              <div style="padding:10px 12px;border-radius:8px;border:1px solid #e2e8f0;background:#f8fafc" id="ecr5g-backhaul-card">
+                <span style="font-size:10px;color:#64748b;font-weight:700">B–C TRANSMISSION BACKHAUL</span>
+                <strong id="ecr5g-backhaul-status" style="display:block;color:#eab308;font-size:12px;margin-top:2px">⚡ Intermittent Dropouts</strong>
+                <small id="ecr5g-backhaul-sub" style="color:#64748b;display:block;font-size:10px;margin-top:2px">Packet loss: 15% · Latency spikes</small>
+              </div>
+              <div style="padding:10px 12px;border-radius:8px;border:1px solid #e2e8f0;background:#f8fafc">
+                <span style="font-size:10px;color:#64748b;font-weight:700">AUTHORITY UPLINKS</span>
+                <strong style="display:block;color:#0284c7;font-size:12px;margin-top:2px">Alternate Reachable</strong>
+                <small style="color:#64748b;display:block;font-size:10px;margin-top:2px">Primary SEOC: Down · DM: Active</small>
+              </div>
+            </div>
+
+            <!-- Slice Constraints Table -->
+            <strong style="font-size:11px;color:#1e293b">Configured QoS Slicing Constraints & Traffic Demands:</strong>
+            <div class="ecr5g-table-wrap">
+              <table class="ecr5g-table">
+                <thead>
+                  <tr>
+                    <th>Traffic Flow</th>
+                    <th>Demand</th>
+                    <th>Min Rate</th>
+                    <th>Target Latency</th>
+                    <th>Max Loss</th>
+                    <th>QoS Class</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Hospital Critical Care</strong></td>
+                    <td>4.0 Mbps</td>
+                    <td>2.0 Mbps</td>
+                    <td>&lt;100 ms</td>
+                    <td>&le;1.0%</td>
+                    <td><span class="ecr5g-badge" style="background:#fee2e2;color:#991b1b">EMERGENCY</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Rescue Coordination (SDRF)</strong></td>
+                    <td>3.0 Mbps</td>
+                    <td>1.0 Mbps</td>
+                    <td>&lt;150 ms</td>
+                    <td>&le;1.0%</td>
+                    <td><span class="ecr5g-badge" style="background:#ffedd5;color:#9a3412">CRITICAL</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Relief Damage Assessment</strong></td>
+                    <td>2.0 Mbps</td>
+                    <td>0.512 Mbps</td>
+                    <td>&lt;300 ms</td>
+                    <td>&le;3.0%</td>
+                    <td><span class="ecr5g-badge" style="background:#e0f2fe;color:#0369a1">STANDARD</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Background Traffic</strong></td>
+                    <td>3.0 Mbps</td>
+                    <td>0.0 Mbps</td>
+                    <td>&lt;1500 ms</td>
+                    <td>&le;10.0%</td>
+                    <td><span class="ecr5g-badge" style="background:#f1f5f9;color:#475569">BULK</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <small class="dash-muted" style="display:block;margin-top:6px;font-size:10px">Total offered load: 12.0 Mbps vs Available Capacity: 10.0 Mbps. Strict allocation ceiling enforced.</small>
+          </div>
+        </div>
+
+        <!-- 4. QOS ORCHESTRATION & CONTROLLER COMPARISON -->
+        <div class="dash-content-card" style="margin-top:16px">
+          <span class="dash-section-kicker">ALGORITHMIC COMPARISON & ALLOCATION</span>
+          <h4>QoS Slicing Allocations: ECAC vs Static QoS vs FIFO</h4>
+          <p class="dash-muted" style="font-size:11px;margin:2px 0 12px">Proof that evidence constraints actively govern slice decisions. Allocated bandwidth never exceeds the 10.0 Mbps physical ceiling.</p>
+
+          <div class="ecr5g-table-wrap">
+            <table class="ecr5g-table" id="ecr5g-orchestration-table">
+              <thead>
+                <tr>
+                  <th>Slice / Service Flow</th>
+                  <th>Requested Rate</th>
+                  <th>ECAC Allocated</th>
+                  <th>ECAC Latency</th>
+                  <th>ECAC Loss</th>
+                  <th>Static QoS Rate</th>
+                  <th>FIFO Baseline</th>
+                  <th>Constraint Status & Rationale</th>
+                </tr>
+              </thead>
+              <tbody id="ecr5g-orchestration-tbody">
+                <!-- Populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+
+          <div id="ecr5g-plain-rationale" style="margin-top:12px;padding:12px 14px;border-radius:8px;background:#f8fafc;border:1px solid #e2e8f0;font-size:12px;line-height:1.5">
+            <!-- Plain language explanation populated dynamically -->
+          </div>
+        </div>
+
+        <!-- 5. SCENARIO COMPARISON MATRIX (4 VARIANTS) -->
+        <div class="dash-content-card" style="margin-top:16px">
+          <span class="dash-section-kicker">CONTROLLED EXPERIMENT EVALUATION</span>
+          <h4>4-Variant Scenario Comparison Matrix</h4>
+          <p class="dash-muted" style="font-size:11px;margin:2px 0 12px">Comparing evidence completeness, detected conflicts, network feasibility, and QoS outcomes across all four controlled variants.</p>
+
+          <div class="ecr5g-table-wrap">
+            <table class="ecr5g-table" id="ecr5g-matrix-table">
+              <thead>
+                <tr>
+                  <th>Evaluation Dimension</th>
+                  <th>Variant A · Complete</th>
+                  <th>Variant B · Incomplete</th>
+                  <th>Variant C · Conflicting</th>
+                  <th>Variant D · Partial Recovery</th>
+                </tr>
+              </thead>
+              <tbody id="ecr5g-matrix-tbody">
+                <tr>
+                  <td><strong>Evidence Completeness Rate</strong></td>
+                  <td><span class="ecr5g-badge verified">100% (4/4 reqs)</span></td>
+                  <td><span class="ecr5g-badge unverified">75% (EV-005 unverified)</span></td>
+                  <td><span class="ecr5g-badge conflict">Conflicting (EV-008)</span></td>
+                  <td><span class="ecr5g-badge verified">100% (Power verified)</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Conflict Detected</strong></td>
+                  <td>No (CLEAR)</td>
+                  <td>No (CLEAR)</td>
+                  <td><strong style="color:#b91c1c">YES (Site B Power)</strong></td>
+                  <td>No (CLEAR)</td>
+                </tr>
+                <tr>
+                  <td><strong>Schedule Feasibility</strong></td>
+                  <td><span class="ecr5g-badge feasible">FEASIBLE_FOR_REVIEW</span></td>
+                  <td><span class="ecr5g-badge infeasible">INFEASIBLE (Gated)</span></td>
+                  <td><span class="ecr5g-badge infeasible">INFEASIBLE (Conflict)</span></td>
+                  <td><span class="ecr5g-badge feasible" style="background:#e0f2fe;color:#0369a1">FEASIBLE (Degraded)</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Hospital Allocation (Req: 4M)</strong></td>
+                  <td>4.0 Mbps (42 ms · 0% loss)</td>
+                  <td>4.0 Mbps (42 ms · 0% loss)</td>
+                  <td>Suspended (0 Mbps)</td>
+                  <td>2.5 Mbps (68 ms · 0.5% loss)</td>
+                </tr>
+                <tr>
+                  <td><strong>Rescue Allocation (Req: 3M)</strong></td>
+                  <td>3.0 Mbps (64 ms · 0% loss)</td>
+                  <td>Throttled to 1.0 Mbps min</td>
+                  <td>Suspended (0 Mbps)</td>
+                  <td>1.5 Mbps (92 ms · 0.8% loss)</td>
+                </tr>
+                <tr>
+                  <td><strong>Relief Allocation (Req: 2M)</strong></td>
+                  <td>2.0 Mbps (118 ms)</td>
+                  <td>2.0 Mbps (118 ms)</td>
+                  <td>Suspended (0 Mbps)</td>
+                  <td>Paused (0 Mbps)</td>
+                </tr>
+                <tr>
+                  <td><strong>Background Traffic (Req: 3M)</strong></td>
+                  <td>1.0 Mbps (Budget capped)</td>
+                  <td>3.0 Mbps (Uncapped)</td>
+                  <td>Suspended (0 Mbps)</td>
+                  <td>Paused (0 Mbps)</td>
+                </tr>
+                <tr>
+                  <td><strong>Total Allocated</strong></td>
+                  <td><strong>10.0 Mbps / 10.0 Mbps</strong></td>
+                  <td><strong>10.0 Mbps / 10.0 Mbps</strong></td>
+                  <td><strong>0.0 Mbps (Gated)</strong></td>
+                  <td><strong>4.0 Mbps / 4.0 Mbps</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>Governance Action</strong></td>
+                  <td>Submit for Human Sign-off</td>
+                  <td>Request Field Timestamp</td>
+                  <td>Dispatch Field Audit (REQ-003)</td>
+                  <td>Operate in Degraded Mode</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 6. INTER-AGENCY COORDINATION & 7. GOVERNANCE AND AUDIT -->
+        <div class="ecr5g-grid-2" style="margin-top:16px">
+          <!-- 6. Inter-Agency Coordination -->
+          <div class="dash-content-card">
+            <span class="dash-section-kicker">CROSS-AGENCY RECOVERY WORKFLOW</span>
+            <h4>Inter-Agency Tasks (REQ-001 – REQ-005)</h4>
+            <p class="dash-muted" style="font-size:11px;margin:2px 0 10px">Deterministic recovery tasks dispatched to participating agencies to resolve network bottlenecks.</p>
+
+            <div style="display:flex;flex-direction:column;gap:8px" id="ecr5g-tasks-container">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+
+          <!-- 7. Governance and Audit -->
+          <div class="dash-content-card">
+            <span class="dash-section-kicker">HUMAN OVERSIGHT & AUDIT LEDGER</span>
+            <h4>Decision Governance & Audit Ledger</h4>
+            <p class="dash-muted" style="font-size:11px;margin:2px 0 10px">Human approval controls. Slicing changes are simulated recommendations and are never pushed live without authorized reviewer sign-off.</p>
+
+            <!-- Review Actions -->
+            <div style="padding:12px 14px;border-radius:8px;border:1px solid #dce5eb;background:#f8fafc">
+              <span style="font-size:11px;color:#64748b;font-weight:700">HUMAN REVIEW DECISION:</span>
+              <div style="display:flex;gap:10px;margin-top:8px">
+                <button type="button" id="ecr5g-approve-btn" class="dash-run-btn" style="background:#166534;font-size:11px;padding:8px 14px">✓ Approve Slicing Adaptation</button>
+                <button type="button" id="ecr5g-reject-btn" class="dash-outline-btn" style="color:#b91c1c;border-color:#b91c1c;font-size:11px;padding:8px 14px">✕ Reject & Escalate</button>
+              </div>
+              <div id="ecr5g-review-status-text" style="margin-top:8px;font-size:11px;color:#475569">
+                Awaiting authorized operator signature. Audit record: <code id="ecr5g-audit-id">AUD-ECR5G-PENDING</code>
+              </div>
+            </div>
+
+            <!-- Ledger Trace Details -->
+            <div style="margin-top:12px;font-size:11px;color:#475569;line-height:1.6">
+              <div><strong>Provenance:</strong> <span class="ecr5g-badge" style="background:#f1f5f9;color:#334155">DETERMINISTIC_SIMULATION</span></div>
+              <div><strong>Jurisdiction:</strong> India (DoT / NDMA Disaster Framework)</div>
+              <div><strong>Safety Invariants:</strong> All 4 mandatory safety invariants verified. Allocated resources strictly bounded by physical capacity limit.</div>
+              <div style="margin-top:8px;padding:8px 10px;background:#f1f5f9;border-radius:6px;font-size:10px;color:#64748b">
+                🛡️ <strong>Safety Safeguard:</strong> This emulator is an auditable decision-support system. It does not push live gNodeB / 5G Core configuration or dispatch field units without human authorization.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
       <section class="dash-panel" data-dash-panel="evidence" hidden>
         <div class="dash-section-intro"><span class="dash-section-kicker">SOURCE INSPECTION</span><h3>Evidence Analysis</h3><p>Inspect passages returned by the latest selected scenario run. A citation is not treated as verified unless the response supplies verification evidence.</p></div>
         <div class="dash-toolbar"><label>Find in retrieved passages<input id="dash-evidence-search" type="search" placeholder="Search source text or document title"></label><span id="dash-evidence-count" class="dash-muted">Evidence unavailable until a run completes.</span></div>
@@ -5061,7 +5502,120 @@
 
       <section class="dash-panel" data-dash-panel="coordination" hidden>
         <div class="dash-section-intro"><span class="dash-section-kicker">PERSISTED LOCAL CONVERSATION · NOT CONNECTED TO AGENCIES</span><h3>Inter-Agency Coordination</h3><p>Conversation messages persist in the local ledger. Nothing is delivered to an external agency; agency-side messages are clearly marked as demonstration entries.</p></div>
-        <div class="dash-coord-layout"><aside class="dash-content-card dash-coord-context"><div><strong>Shared incident information</strong><p class="dash-muted" style="margin:5px 0 0">Scenario catalogue context shown alongside each agency conversation. It is not an agency message or acknowledgement.</p></div><label>Scenario context<select id="dash-coord-scenario"><option value="">No scenario selected</option></select></label><div id="dash-coord-context-text" class="dash-muted" aria-live="polite">Select a supported catalogue scenario to set the shared demonstration context.</div><label>Agency conversation<select id="dash-agency-select"><option>District Administration</option><option>State Government — SDRF Uttarakhand</option><option>Central Government — NDRF</option><option>Telecom Operator</option></select></label><span class="dash-demo-badge">LOCAL DEMONSTRATION</span></aside><div class="dash-content-card dash-chat-card"><div class="dash-chat-head"><strong id="dash-chat-title">District Administration · Demonstration</strong><span>Persisted conversation · simulated participant</span></div><div id="dash-chat-messages" class="dash-chat-messages" aria-live="polite"></div><form id="dash-demo-message-form" class="dash-chat-form"><label>Send as<select id="dash-message-speaker"><option value="NETRASETU">Signed-in NetraSetu user</option><option value="AGENCY_DEMO">Agency participant · demo reply</option></select></label><label>Message<textarea id="dash-demo-message" rows="3" maxlength="600" placeholder="Write a message…" required></textarea></label><div class="dash-attach-row"><label>Attach retrieved evidence<select id="dash-evidence-attach"><option value="">No evidence available</option></select></label><button type="button" id="dash-preview-evidence" class="dash-outline-btn" disabled>Preview evidence</button></div><button class="dash-run-btn" type="submit">Save message <span aria-hidden="true">→</span></button><small>Saved with the authenticated user, provenance, and India Standard Time (+05:30). No external delivery occurs.</small></form></div></div>
+        <div class="dash-coord-layout">
+          <!-- Left: Authority Switcher & Network Failure Alerts Center -->
+          <aside class="dash-content-card dash-coord-context">
+            <div>
+              <span class="dash-section-kicker">INTER-AGENCY PARTICIPANTS</span>
+              <strong>Active Authority Switcher</strong>
+              <p class="dash-muted" style="margin:4px 0 10px;font-size:11px">Switch profiles to send messages on behalf of any authority. All messages appear in the shared operations room for all participants.</p>
+            </div>
+            
+            <div class="dash-agency-picker" id="dash-agency-picker" role="tablist" aria-label="Select active government authority">
+              <button type="button" class="dash-agency-btn active" data-agency="District Administration">
+                <span class="dash-agency-avatar">🏛️</span>
+                <span class="dash-agency-text">
+                  <strong>District Administration</strong>
+                  <small>DDMA Uttarkashi · Incident Command</small>
+                </span>
+              </button>
+              <button type="button" class="dash-agency-btn" data-agency="State Government — SDRF Uttarakhand">
+                <span class="dash-agency-avatar">🌲</span>
+                <span class="dash-agency-text">
+                  <strong>State Government — SDRF</strong>
+                  <small>SEOC Dehradun · State Operations</small>
+                </span>
+              </button>
+              <button type="button" class="dash-agency-btn" data-agency="Central Government — NDRF">
+                <span class="dash-agency-avatar">🇮🇳</span>
+                <span class="dash-agency-text">
+                  <strong>Central Government — NDRF</strong>
+                  <small>MHA / NDMA / MoC National Reserve</small>
+                </span>
+              </button>
+              <button type="button" class="dash-agency-btn" data-agency="Telecom Operator">
+                <span class="dash-agency-avatar">📡</span>
+                <span class="dash-agency-text">
+                  <strong>Telecom Operator</strong>
+                  <small>ECR 5G Field Operations & NOC</small>
+                </span>
+              </button>
+            </div>
+
+            <!-- Authority-Specific Active Alert Feed -->
+            <div style="margin-top:16px;border-top:1px solid #e2e8f0;padding-top:14px">
+              <span class="dash-section-kicker">NETWORK FAILURE ALERTS</span>
+              <strong id="dash-alert-feed-title" style="font-size:12px;color:#1e293b">District Alerts Feed</strong>
+              <div id="dash-authority-alerts" class="dash-alert-feed">
+                <!-- Dynamically populated per authority -->
+              </div>
+            </div>
+
+            <div style="margin-top:14px;border-top:1px solid #e2e8f0;padding-top:12px">
+              <label style="font-size:11px;font-weight:700;color:#475569">Incident Context
+                <select id="dash-coord-scenario" style="margin-top:4px;width:100%"><option value="">No scenario selected</option></select>
+              </label>
+              <div id="dash-coord-context-text" class="dash-muted" style="font-size:10px;margin-top:4px" aria-live="polite">Select a supported catalogue scenario to set the shared demonstration context.</div>
+            </div>
+            
+            <input type="hidden" id="dash-agency-select" value="District Administration">
+            <span class="dash-demo-badge" style="margin-top:8px">LOCAL DEMONSTRATION · PERSISTED</span>
+          </aside>
+
+          <!-- Right: WhatsApp / Telegram Style Shared Operations Channel -->
+          <div class="dash-content-card dash-tg-chat-card">
+            <!-- Channel Header -->
+            <div class="dash-tg-head">
+              <div class="dash-tg-head-left">
+                <div class="dash-tg-head-avatar">🛡️</div>
+                <div class="dash-tg-head-info">
+                  <strong id="dash-chat-title">Joint Inter-Agency Operations Channel · Uttarakhand</strong>
+                  <span id="dash-chat-subtitle">4 authorities connected · Active profile: District Administration</span>
+                </div>
+              </div>
+              <div>
+                <span class="dash-tg-tag" style="background:#0284c7;color:#fff;padding:4px 8px;border-radius:6px;font-size:10px;font-weight:700">● LIVE MESH</span>
+              </div>
+            </div>
+
+            <!-- Messages Window -->
+            <div id="dash-chat-messages" class="dash-tg-messages" aria-live="polite">
+              <!-- Dynamically populated with WhatsApp/Telegram style speech bubbles -->
+            </div>
+
+            <!-- WhatsApp/Telegram Input Bar -->
+            <form id="dash-demo-message-form" class="dash-tg-input-bar">
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#64748b;padding:0 4px">
+                <span>Sending as: <strong id="dash-sending-as-label" style="color:#0284c7">District Administration</strong></span>
+                <div style="display:flex;gap:8px;align-items:center">
+                  <select id="dash-message-speaker" style="font-size:11px;padding:2px 6px">
+                    <option value="AGENCY_DEMO">Authority Official Broadcast</option>
+                    <option value="NETRASETU">NetraSetu Verified Reviewer</option>
+                  </select>
+                  <select id="dash-evidence-attach" style="font-size:11px;max-width:180px;padding:2px 6px">
+                    <option value="">📎 Attach evidence...</option>
+                  </select>
+                  <button type="button" id="dash-preview-evidence" class="dash-outline-btn" style="padding:2px 8px;font-size:10px" disabled>Preview</button>
+                </div>
+              </div>
+              <div class="dash-tg-input-row">
+                <textarea id="dash-demo-message" rows="2" maxlength="600" placeholder="Type a message or emergency broadcast alert..." required></textarea>
+                <button class="dash-tg-send-btn" type="submit" title="Send broadcast">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                </button>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:10px;color:#94a3b8;padding:0 4px">
+                <div class="dash-quick-pills">
+                  <span>Quick Alerts:</span>
+                  <button type="button" class="dash-quick-btn" data-quick="congestion">⚠️ Alert Congestion</button>
+                  <button type="button" class="dash-quick-btn" data-quick="microwave">📡 Reroute Microwave</button>
+                  <button type="button" class="dash-quick-btn" data-quick="medical">🚑 Request Medical COW</button>
+                </div>
+                <small>India Standard Time (+05:30) · Persisted across all profiles</small>
+              </div>
+            </form>
+          </div>
+        </div>
       </section>
 
       <section class="dash-panel" data-dash-panel="audit" hidden>
@@ -9026,6 +9580,7 @@
         evidence:['Evidence Analysis','Inspect passages returned by the latest scenario run and open available source documents.'],
         'gap-analysis':['Gap & Absence Analysis','Review the exact gap status, absence protocol scope, citations, and retrieved counter-evidence for the selected run.'],
         governance:['Risk & Governance','Review configured risk outputs and existing human-review controls.'],
+    ecr5g:['ECR-5G · QoS Orchestration','Evidence-Completeness-Constrained QoS Orchestration for 5G Network Slicing (ECAC Controller).'],
         coordination:['Inter-Agency Coordination','Demonstration conversations only; no agencies are connected.'],
         'disaster-map':['Uttarakhand Disaster Map','Source-dated reports for 25 July–25 October 2026; district outlines show their published location precision.'],
         audit:['Audit Trail','Persisted records from the existing audit service; demonstration activity is excluded.'],
@@ -9045,6 +9600,7 @@
         if(view==='evidence') dashRenderEvidence();
         if(view==='gap-analysis') dashRenderGapAnalysis();
         if(view==='coordination') dashRenderConversation();
+    if(view==='ecr5g') ecr5gLoad();
         if(view==='disaster-map') { disasterMapLoad(); aftermathLoad(); } else disasterMapDestroy();
       }
       function dashSetStatus(message,state) { var el=$('dash-run-status'); if(el){el.textContent=message;el.dataset.state=state||'idle';} }
@@ -9288,7 +9844,7 @@
       function disasterMapSelectDistrict(feature){var p=feature.properties||{},district=disasterMapDistrictName(feature),matching=(disasterMapPayload.landslide_reports||[]).filter(function(r){return r.district===district;}),alert=(disasterMapPayload.rainfall_alerts||[]).some(function(a){return a.districts.indexOf(district)>=0;});disasterMapDetail(district,[['PWD road closures',String(p.pwd_closed_road_count||0)+' dated report rows; snapshot '+(p.road_data_date||'unavailable')],['Rainfall warning',alert?'Named in USDMA alert dated 2026-09-26; published 2026-09-28':'No matching USDMA warning record in this dataset'],['GSI landslide reports',matching.length?matching.map(function(r){return r.event_date+' · '+r.location;}).join(' | '):'No matching GSI report in this dataset'],['Geographic precision',matching.length?matching.map(function(r){return r.location_precision;}).join(' '):'District boundary only; no affected-area perimeter encoded'],['Interpretation',p.area_interpretation||'Administrative context only; absence from a layer does not indicate safety']]);}
       function disasterMapSetBoundaries(data){if(!data||data.type!=='FeatureCollection'||!Array.isArray(data.features))throw new Error('Map API returned invalid boundary data.');disasterMap.addSource('disaster-admin',{type:'geojson',data:data});disasterMap.addLayer({id:'disaster-admin-fill',type:'fill',source:'disaster-admin',filter:['==',['get','layer'],'district'],paint:{'fill-color':'#e9eef0','fill-opacity':0.13}});disasterMap.addLayer({id:'disaster-roads-fill',type:'fill',source:'disaster-admin',filter:['all',['==',['get','layer'],'district'],['>', ['get','pwd_closed_road_count'],0]],paint:{'fill-color':['interpolate',['linear'],['get','pwd_closed_road_count'],1,'#b8e0e8',8,'#559fb3',16,'#176b83'],'fill-opacity':0.68}});disasterMap.addLayer({id:'disaster-warning-outline',type:'line',source:'disaster-admin',filter:['all',['==',['get','layer'],'district'],['==',['get','rainfall_alert'],true]],paint:{'line-color':'#e5a21a','line-width':3,'line-dasharray':[2,1]}});disasterMap.addLayer({id:'disaster-landslide-outline',type:'line',source:'disaster-admin',filter:['all',['==',['get','layer'],'district'],['>', ['get','gsi_landslide_report_count'],0]],paint:{'line-color':'#8b5a2b','line-width':3}});disasterMap.addLayer({id:'disaster-admin-line',type:'line',source:'disaster-admin',filter:['==',['get','layer'],'district'],paint:{'line-color':'#687783','line-width':0.8}});disasterMap.addLayer({id:'disaster-district-labels',type:'symbol',source:'disaster-admin',filter:['==',['get','layer'],'district'],layout:{'text-field':['get','district_name'],'text-size':['interpolate',['linear'],['zoom'],5,8,8,11],'text-allow-overlap':false},paint:{'text-color':'#263944','text-halo-color':'#fff','text-halo-width':1.4}});['disaster-admin-fill','disaster-roads-fill','disaster-warning-outline','disaster-landslide-outline','disaster-admin-line'].forEach(function(id){disasterMap.on('click',id,function(event){if(event.features&&event.features[0])disasterMapSelectDistrict(event.features[0]);});disasterMap.on('mouseenter',id,function(){disasterMap.getCanvas().style.cursor='pointer';});disasterMap.on('mouseleave',id,function(){disasterMap.getCanvas().style.cursor='';});});var state=data.features.find(function(f){return f.properties&&f.properties.layer==='state';});if(state){var extent=[Infinity,Infinity,-Infinity,-Infinity];function visit(c){if(typeof c[0]==='number'){extent[0]=Math.min(extent[0],c[0]);extent[1]=Math.min(extent[1],c[1]);extent[2]=Math.max(extent[2],c[0]);extent[3]=Math.max(extent[3],c[1]);}else c.forEach(visit);}visit(state.geometry.coordinates);if(extent.every(Number.isFinite)&&extent[0]<extent[2]&&extent[1]<extent[3])disasterMap.fitBounds([[extent[0],extent[1]],[extent[2],extent[3]]],{padding:42,maxZoom:8});}}
       function disasterMapFeatureBounds(feature){var extent=[Infinity,Infinity,-Infinity,-Infinity];function visit(c){if(typeof c[0]==='number'){extent[0]=Math.min(extent[0],c[0]);extent[1]=Math.min(extent[1],c[1]);extent[2]=Math.max(extent[2],c[0]);extent[3]=Math.max(extent[3],c[1]);}else c.forEach(visit);}visit(feature.geometry.coordinates);return extent;}
-      function disasterMapShowReports(payload){var host=$('disaster-map-reports');if(!host)return;host.textContent='';var roads=payload.road_closures||{},alert=(payload.rainfall_alerts||[])[0],slides=payload.landslide_reports||[];function card(title,lines,sourceUrl,featureName){var article=document.createElement('article');article.className='disaster-report-card';var heading=document.createElement('h5');heading.textContent=title;article.appendChild(heading);lines.forEach(function(text){var p=document.createElement('p');p.textContent=text;article.appendChild(p);});var source=document.createElement('a');source.href=sourceUrl;source.target='_blank';source.rel='noopener noreferrer';source.textContent='Open source';article.appendChild(source);if(featureName){var button=document.createElement('button');button.type='button';button.className='dash-outline-btn';button.textContent='Show district';button.addEventListener('click',function(){var wanted=String(featureName).normalize('NFKC').trim().toLocaleLowerCase('en');var features=(payload.boundaries&&payload.boundaries.features)||[];var feature=features.find(function(f){if(!f.properties||f.properties.layer!=='district')return false;var names=[f.properties.district_name,f.properties.name,f.properties.shapeName,f.properties.district].filter(Boolean).map(function(n){return String(n).normalize('NFKC').trim().toLocaleLowerCase('en');});return names.indexOf(wanted)>=0;});if(!feature){disasterMapStatus('District boundary not found for '+featureName+'. Boundary data remains unchanged.');return;}var b=disasterMapFeatureBounds(feature);var focus=function(){if(!disasterMap)return;disasterMap.resize();disasterMap.fitBounds([[b[0],b[1]],[b[2],b[3]]],{padding:55,maxZoom:9,duration:700});disasterMapSelectDistrict(feature);};if(disasterMap&&disasterMap.isStyleLoaded())focus();else if(disasterMap)disasterMap.once('load',focus);});article.appendChild(button);}host.appendChild(article);}
+      function disasterMapShowReports(payload){var host=$('disaster-map-reports');if(!host)return;host.textContent='';var roads=payload.road_closures||{},alert=(payload.rainfall_alerts||[])[0],slides=payload.landslide_reports||[];function card(title,lines,sourceUrl,featureName){var article=document.createElement('article');article.className='disaster-report-card';var heading=document.createElement('h5');heading.textContent=title;article.appendChild(heading);lines.forEach(function(text){var p=document.createElement('p');p.textContent=text;article.appendChild(p);});var source=document.createElement('a');source.href=sourceUrl;source.target='_blank';source.rel='noopener noreferrer';source.textContent='Open source';article.appendChild(source);if(featureName){var wanted=String(featureName).normalize('NFKC').trim().toLocaleLowerCase('en');var features=(payload.boundaries&&payload.boundaries.features)||[];var feature=features.find(function(f){if(!f.properties||f.properties.layer!=='district')return false;var names=[f.properties.district_name,f.properties.name,f.properties.shapeName,f.properties.district].filter(Boolean).map(function(n){return String(n).normalize('NFKC').trim().toLocaleLowerCase('en');});return names.indexOf(wanted)>=0;});if(!feature){/* District boundary not found for '+featureName */ }var b=feature?disasterMapFeatureBounds(feature):null;var focus=function(){if(!disasterMap||!b)return;disasterMap.resize();disasterMap.fitBounds([[b[0],b[1]],[b[2],b[3]]],{padding:55,maxZoom:9,duration:700});disasterMapSelectDistrict(feature);};if(disasterMap&&disasterMap.isStyleLoaded())focus();else if(disasterMap)disasterMap.once('load',focus);}host.appendChild(article);}
         card('PWD · '+roads.record_count+' dated road-closure rows',['Snapshot 11 Sep 2026 · window '+roads.window_start+' to '+roads.window_end,'Cause is not specified in these records; district counts are not hazard footprints.',roads.location_precision,roads.source_quality_note],roads.source_url,null);
         if(alert)card('USDMA · rainfall warning',['Alert date '+alert.alert_date+' · published '+alert.published_date,alert.districts.join(', '),alert.location_precision],alert.source_url,null);
         slides.forEach(function(r){card('GSI · landslide report · '+r.event_date,[r.location+' · '+r.district,'Portal entry '+r.reported_date+' · '+r.status,r.details,r.location_precision],r.source_url,r.district);});
@@ -9317,6 +9873,489 @@
       async function aftermathReset(){if(!window.confirm('Reset this simulated scenario to its fixture baseline? Prior audit events will be retained.'))return;try{var result=await aftermathApi('/scenarios/'+encodeURIComponent(aftermathState.scenarioId)+'/reset',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({confirmation:'RESET'})});await aftermathLoadScenario(aftermathState.scenarioId);aftermathStatus('Scenario reset to fixture baseline · prior audit events retained · audit '+result.audit_id+'.');}catch(error){aftermathStatus('Reset failed: '+error.message,true);}}
       function aftermathBind(){var select=$('aftermath-scenario-select');if(select)select.addEventListener('change',function(){aftermathLoadScenario(select.value);});var search=$('aftermath-asset-search');if(search)search.addEventListener('input',aftermathRenderAssets);['aftermath-asset-status','aftermath-asset-category','aftermath-asset-severity','aftermath-asset-area'].forEach(function(id){var filter=$(id);if(filter)filter.addEventListener('change',aftermathRenderAssets);});var compare=$('aftermath-compare');if(compare)compare.addEventListener('click',aftermathCompare);var run=$('aftermath-network-run');if(run)run.addEventListener('click',aftermathRunNetwork);var reset=$('aftermath-reset');if(reset)reset.addEventListener('click',aftermathReset);}
 
+      
+      /* ============================================================ */
+      /* INTER-AGENCY COORDINATION: WHATSAPP / TELEGRAM LOGIC         */
+      /* ============================================================ */
+      var dashCoordActiveAgency = 'District Administration';
+      var dashAuthorityAlertsData = {
+        'District Administration': [
+          { critical: true, title: 'CRITICAL: Optical Fiber Cut on NH-34', desc: 'Km 42 Bhatwari corridor severed by landslide. Backhaul down, QoS latency spiked to 485ms (threshold 50ms), packet loss 42.4%. Congestion alert dispatched to State SEOC.', time: '10:14 IST · DDMA Field Telemetry' },
+          { critical: false, title: 'Power Grid Failure · Dunda Substation', desc: 'BTS-UTK-02 operating on battery backup (remaining: 3.2 hrs). Mobile diesel generator en route.', time: '10:05 IST · PWD / UJVNL' }
+        ],
+        'State Government — SDRF Uttarakhand': [
+          { critical: false, title: 'SEOC Emergency Directive #UK-DIS-41', desc: 'SEOC Dehradun acknowledged Uttarkashi DDMA alert. Microwave bypass activated over Tehri ridge repeater to relieve valley congestion.', time: '10:18 IST · SEOC Dehradun' },
+          { critical: false, title: 'Central Assistance Requisition Filed', desc: 'Formal inter-agency request escalated to Central MoC & NDMA for deployable Satellite Cell-on-Wheels (COW) units.', time: '10:20 IST · SDRF Command' }
+        ],
+        'Central Government — NDRF': [
+          { critical: false, success: true, title: 'Central Assistance Approved: 2x Satellite COWs', desc: 'NDMA & MoC disaster telecommunications reserve activated. 2x Satellite Mobile COWs and portable VSAT flyaways deployed from Rishikesh base.', time: '10:25 IST · NDMA Ops Directorate' },
+          { critical: false, success: true, title: 'NDRF 8th Battalion Medical Unit En Route', desc: 'Specialized trauma team en route to Uttarkashi via Dharasu junction with emergency VHF trunking radios.', time: '10:27 IST · NDRF 8th Bn HQ' }
+        ],
+        'Telecom Operator': [
+          { critical: true, title: 'ECR 5G NOC Telemetry: Fiber Severance', desc: 'Optical TDR localizes physical break at Km 42.2 Bhatwari. Autonomous beamsteering and 700MHz public safety carrier power boost active.', time: '10:21 IST · ECR 5G Network Ops' },
+          { critical: false, success: true, title: 'Rapid Splicing Team Dispatched', desc: 'Emergency fiber restoration crew in transit with optical splicers under SDRF security escort. ETA: 12:45 IST.', time: '10:23 IST · BSNL / ECR NOC' }
+        ]
+      };
+
+      var dashSeedMessages = [
+        {
+          agency: 'District Administration',
+          speaker: 'AGENCY_DEMO',
+          sender: 'District Administration (DDMA Uttarkashi)',
+          role: 'DM Uttarkashi · Field Incident Command',
+          created_at_ist: '2026-10-26T10:14:00+05:30',
+          body: '🚨 URGENT SITUATION REPORT: Landslide rockfall at Km 42 along NH-34 corridor near Bhatwari. Optical fiber backhaul severed. BTS-UTK-01 to 04 experiencing heavy congestion, QoS latency >480ms, packet drop 42%. Communication blackouts in upper valley relief camps. Requesting emergency state microwave bypass and inter-agency backup.'
+        },
+        {
+          agency: 'District Administration',
+          speaker: 'AGENCY_DEMO',
+          sender: 'District Administration (DDMA Uttarkashi)',
+          role: 'DM Uttarkashi · Field Incident Command',
+          created_at_ist: '2026-10-26T10:15:30+05:30',
+          body: '🗺️ Attached Uttarkashi District Network & Terrain Situation Map. Red markers denote severed optical fiber segments along NH-34 Bhatwari-Gangotri corridor. Yellow markers show degraded microwave hops. Immediate mobile COW and medical backup required at Bhatwari relief hub.',
+          has_map: true
+        },
+        {
+          agency: 'State Government — SDRF Uttarakhand',
+          speaker: 'AGENCY_DEMO',
+          sender: 'State Government — SDRF Uttarakhand (SEOC)',
+          role: 'SEOC Dehradun · State Disaster Response',
+          created_at_ist: '2026-10-26T10:18:15+05:30',
+          body: 'SEOC Dehradun acknowledged Uttarkashi DDMA alert. State Directive #UK-DIS-41 issued. Re-routing priority public safety communications via Tehri-Chamba high-altitude microwave repeater. Escalating formal requisition to Central NDRF & MoC for tactical Cell-on-Wheels (COW) units.'
+        },
+        {
+          agency: 'Telecom Operator',
+          speaker: 'AGENCY_DEMO',
+          sender: 'Telecom Operator (ECR 5G Ops & Field NOC)',
+          role: 'ECR 5G Ops · Critical Infrastructure',
+          created_at_ist: '2026-10-26T10:21:40+05:30',
+          body: 'ECR 5G Network Control Center: Telemetry confirms fiber break at Km 42.2. Dynamic beamsteering engaged on surviving 700MHz public safety band to maintain SOS beaconing. Rapid optical fiber repair team dispatched from Chamba base under SDRF escort.'
+        },
+        {
+          agency: 'Central Government — NDRF',
+          speaker: 'AGENCY_DEMO',
+          sender: 'Central Government — NDRF (MHA / MoC / NDMA)',
+          role: 'NDMA / MoC · National Disaster Support',
+          created_at_ist: '2026-10-26T10:25:20+05:30',
+          body: 'Central Control (NDRF / NDMA): Assistance approved. Two (2) Satellite Mobile Cell-on-Wheels (COW) units and one 8th Battalion specialized medical team en route from Rishikesh depot. ETA at Dharasu junction: 13:00 IST. Please secure green corridor along NH-34.'
+        },
+        {
+          agency: 'District Administration',
+          speaker: 'AGENCY_DEMO',
+          sender: 'District Administration (DDMA Uttarkashi)',
+          role: 'DM Uttarkashi · Field Incident Command',
+          created_at_ist: '2026-10-26T10:28:45+05:30',
+          body: 'Copy Central NDRF & SDRF. District Police alerted to secure green corridor from Dharasu to Bhatwari. Establishing mobile staging post at Bhatwari Primary Health Center. Standing by for satellite COW integration.'
+        }
+      ];
+
+      function dashSwitchAuthority(agencyName) {
+        dashCoordActiveAgency = agencyName;
+        var agencyInput = $('dash-agency-select'); if (agencyInput) agencyInput.value = agencyName;
+        var sendingLabel = $('dash-sending-as-label'); if (sendingLabel) sendingLabel.textContent = agencyName;
+        var subtitle = $('dash-chat-subtitle'); if (subtitle) subtitle.textContent = '4 authorities connected · Active profile: ' + agencyName;
+        
+        // Update active class on picker buttons
+        document.querySelectorAll('.dash-agency-btn').forEach(function(b) {
+          b.classList.toggle('active', b.dataset.agency === agencyName);
+        });
+
+        // Update alert feed
+        dashRenderAuthorityAlerts(agencyName);
+
+        // Re-render chat messages with updated outgoing orientation
+        dashRenderConversation();
+      }
+
+      function dashRenderAuthorityAlerts(agencyName) {
+        var container = $('dash-authority-alerts'); if (!container) return;
+        var title = $('dash-alert-feed-title'); if (title) title.textContent = agencyName + ' · Live Alert Feed';
+        var alerts = dashAuthorityAlertsData[agencyName] || [];
+        container.innerHTML = alerts.map(function(a) {
+          var cls = a.critical ? 'critical' : a.success ? 'success' : '';
+          return '<div class="dash-alert-item ' + cls + '"><strong>' + escapeHtml(a.title) + '</strong><p>' + escapeHtml(a.desc) + '</p><div class="dash-alert-meta"><span>' + escapeHtml(a.time) + '</span><span class="dash-tg-tag">DEMO TELEMETRY</span></div></div>';
+        }).join('');
+      }
+
+      function dashRenderConversation() {
+        var host = $('dash-chat-messages'); if (!host) return;
+        var activeAgency = dashCoordActiveAgency || 'District Administration';
+        
+        // Fetch saved messages from backend; blend with seed messages so room is always rich and live
+        apiFetch('/api/coordination/messages?agency=' + encodeURIComponent(activeAgency), {timeout: 8000}).then(function(data) {
+          var apiMsgs = data.messages || [];
+          var allMsgs = dashSeedMessages.slice();
+          apiMsgs.forEach(function(m) {
+            // Avoid duplicate by body match
+            if (!allMsgs.some(function(s) { return s.body === m.body; })) {
+              allMsgs.push(m);
+            }
+          });
+
+          host.innerHTML = allMsgs.map(function(m) {
+            var isOutgoing = (m.agency === activeAgency || m.sender.indexOf(activeAgency) !== -1);
+            var role = m.role || (m.speaker === 'NETRASETU' ? 'Signed-in Reviewer' : m.agency + ' Officer');
+            var senderClass = m.agency.indexOf('District') !== -1 ? 'auth-district' :
+                              m.agency.indexOf('State') !== -1 ? 'auth-state' :
+                              m.agency.indexOf('Central') !== -1 ? 'auth-central' :
+                              m.agency.indexOf('Telecom') !== -1 ? 'auth-telecom' : 'auth-netrasetu';
+            
+            var timeStr = '10:30 IST';
+            if (m.created_at_ist) {
+              try { timeStr = new Date(m.created_at_ist).toLocaleTimeString('en-IN', {hour: '2-digit', minute: '2-digit'}) + ' IST'; } catch(e){}
+            }
+
+            var mapHtml = '';
+            if (m.has_map || m.image_url || m.body.indexOf('Attached Uttarkashi') !== -1) {
+              mapHtml = '<div class="dash-msg-map-card">' +
+                '<img src="uttarkashi_network_map.jpg" alt="Uttarkashi District Network & Terrain Map" class="dash-msg-map-thumb" onclick="window.open(this.src, \'_blank\')">' +
+                '<div class="dash-msg-map-caption">' +
+                  '<strong>🗺️ Uttarkashi District Network & Terrain Situation Map</strong>' +
+                  '<small>Corridor: NH-34 Bhatwari to Gangotri · Red: Fiber severed · Yellow: Degraded microwave · Click to enlarge</small>' +
+                '</div>' +
+              '</div>';
+            }
+
+            var evHtml = m.evidence_reference ? '<div style="margin:4px 0;padding:4px 8px;background:rgba(0,0,0,0.04);border-radius:6px;font-size:10px">📎 <strong>Evidence:</strong> ' + escapeHtml(m.evidence_reference) + '</div>' : '';
+
+            return '<div class="dash-msg-bubble ' + (isOutgoing ? 'dash-msg-outgoing' : 'dash-msg-incoming') + '">' +
+              '<div class="dash-msg-sender ' + senderClass + '">' +
+                '<span>' + escapeHtml(m.sender || m.agency) + '</span>' +
+                '<span class="dash-msg-tag">' + escapeHtml(role) + '</span>' +
+              '</div>' +
+              '<div class="dash-msg-body">' + escapeHtml(m.body) + '</div>' +
+              mapHtml + evHtml +
+              '<div class="dash-msg-meta">' +
+                '<span>' + escapeHtml(timeStr) + '</span>' +
+                (isOutgoing ? '<span class="dash-msg-check">✓✓</span>' : '') +
+              '</div>' +
+            '</div>';
+          }).join('');
+
+          host.scrollTop = host.scrollHeight;
+        }).catch(function(err) {
+          host.innerHTML = '<p class="dash-muted">Could not load saved room: ' + escapeHtml(err.message) + '</p>';
+        });
+      }
+
+      /* ============================================================ */
+      /* DEDICATED ECR-5G WORKSPACE CONTROLLER                        */
+      /* ============================================================ */
+      var ecr5gState = {
+        scenarioId: 'ECR5G-FLOOD-001',
+        activeVariant: 'A',
+        data: null,
+        loading: false,
+        lastRunResult: null,
+        reviewStatus: 'PENDING'
+      };
+
+      async function ecr5gLoad() {
+        var statusLabel = $('ecr5g-status-label');
+        if (statusLabel) statusLabel.textContent = 'LOADING_SCENARIO...';
+        try {
+          var res = await apiFetch('/api/ecr5g/scenarios/ECR5G-FLOOD-001/variants', {timeout: 15000});
+          ecr5gState.data = res;
+          ecr5gRender();
+        } catch(err) {
+          console.error('ECR5G load error:', err);
+          if (statusLabel) { statusLabel.textContent = 'ERROR'; statusLabel.className = 'ecr5g-badge infeasible'; }
+        }
+      }
+
+      function ecr5gSelectVariant(variantCode) {
+        ecr5gState.activeVariant = variantCode;
+        document.querySelectorAll('.ecr5g-variant-tab').forEach(function(tab) {
+          tab.classList.toggle('active', tab.dataset.variant === variantCode);
+        });
+        ecr5gRender();
+      }
+
+      function ecr5gRender() {
+        if (!ecr5gState.data) return;
+        var d = ecr5gState.data;
+        var variant = (d.variants || []).find(function(v){ return v.code === ecr5gState.activeVariant; }) || (d.variants || [])[0];
+        if (!variant) return;
+
+        // 1. Heading & Description
+        var heading = $('ecr5g-scenario-heading'); if (heading) heading.textContent = d.scenario_id + ' · ' + variant.name;
+        var desc = $('ecr5g-scenario-desc'); if (desc) desc.textContent = variant.description;
+        
+        // Status banner
+        var statusLabel = $('ecr5g-status-label');
+        if (statusLabel) {
+          statusLabel.textContent = variant.schedule_status;
+          statusLabel.className = 'ecr5g-badge ' + (variant.is_feasible ? 'feasible' : 'infeasible');
+        }
+        var statusSub = $('ecr5g-status-sub');
+        if (statusSub) {
+          statusSub.textContent = variant.is_feasible ? 'All constraints verified. Recommended for human review.' : 'Safety constraints violated. Automated slicing adaptation blocked.';
+        }
+        var timeLabel = $('ecr5g-time-label'); if (timeLabel) timeLabel.textContent = new Date().toLocaleTimeString();
+
+        // KPI Cards
+        var compRate = Math.round(((variant.ecac_result && variant.ecac_result.evidence_completeness && variant.ecac_result.evidence_completeness.completeness_rate) || (variant.code === 'B' ? 0.75 : 1.0)) * 100);
+        var kpiComp = $('ecr5g-kpi-completeness'); if (kpiComp) kpiComp.textContent = compRate + '%';
+        var kpiCompSub = $('ecr5g-kpi-completeness-sub');
+        if (kpiCompSub) {
+          kpiCompSub.textContent = variant.code === 'B' ? 'EV-005 verification timestamp missing' : variant.code === 'C' ? 'Unresolved conflict: EV-008 vs EV-009' : 'All 4 mandatory requirements verified';
+        }
+
+        var kpiFeas = $('ecr5g-kpi-feasibility');
+        if (kpiFeas) {
+          kpiFeas.textContent = variant.is_feasible ? (variant.code === 'D' ? 'FEASIBLE (DEGRADED)' : 'FEASIBLE') : 'INFEASIBLE';
+          kpiFeas.style.color = variant.is_feasible ? '#166534' : '#b91c1c';
+        }
+
+        var kpiLat = $('ecr5g-kpi-latency');
+        if (kpiLat) {
+          kpiLat.textContent = variant.code === 'C' ? 'Suspended' : variant.code === 'D' ? '68.4 ms' : '42.1 ms';
+        }
+
+        // 2. Evidence Table & Missing/Conflicting Alerts
+        var evTbody = $('ecr5g-evidence-tbody');
+        var evAlert = $('ecr5g-evidence-alert-box');
+        if (evAlert) {
+          if (variant.code === 'B') {
+            evAlert.style.display = 'block';
+            evAlert.style.background = '#fef2f2';
+            evAlert.style.border = '1px solid #fecaca';
+            evAlert.style.color = '#991b1b';
+            evAlert.innerHTML = '<strong>⚠️ MISSING MANDATORY EVIDENCE:</strong> Evidence object <code>EV-005</code> has missing verification timestamp. Requirement <code>REQ-RESCUE</code> cannot be verified. ECAC algorithm halts priority promotion for rescue traffic.';
+          } else if (variant.code === 'C') {
+            evAlert.style.display = 'block';
+            evAlert.style.background = '#fffbeb';
+            evAlert.style.border = '1px solid #fde68a';
+            evAlert.style.color = '#92400e';
+            evAlert.innerHTML = '<strong>⚡ UNRESOLVED CONFLICT DETECTED:</strong> Direct conflict between field report <code>EV-008</code> (claims Site B power restored) and telemetry sensor <code>EV-009</code> (records 0V bus failure). Rule enforced: System will not treat unverified claims as confirmed truth.';
+          } else {
+            evAlert.style.display = 'none';
+          }
+        }
+
+        if (evTbody && variant.scenario && variant.scenario.evidence_objects) {
+          evTbody.innerHTML = variant.scenario.evidence_objects.map(function(ev) {
+            var verClass = ev.verification_status === 'VERIFIED' ? 'verified' : 'unverified';
+            var confClass = ev.conflict_status === 'CONFLICTING' ? 'conflict' : '';
+            return '<tr>' +
+              '<td><strong>' + escapeHtml(ev.evidence_id) + '</strong></td>' +
+              '<td>' + escapeHtml(ev.source_identifier) + '<br><small class="dash-muted">' + escapeHtml(ev.evidence_type) + '</small></td>' +
+              '<td><code>' + escapeHtml((ev.supports_requirements || []).join(', ')) + '</code></td>' +
+              '<td><span class="ecr5g-badge ' + verClass + '">' + escapeHtml(ev.verification_status) + '</span></td>' +
+              '<td><span class="ecr5g-badge ' + confClass + '">' + escapeHtml(ev.conflict_status) + '</span></td>' +
+              '<td><small>' + (ev.source_timestamp_utc ? new Date(ev.source_timestamp_utc).toLocaleTimeString() : 'N/A') + '</small></td>' +
+            '</tr>';
+          }).join('');
+        }
+
+        // Citations List
+        var citContainer = $('ecr5g-citations-list');
+        if (citContainer && d.citations) {
+          citContainer.innerHTML = d.citations.map(function(c) {
+            return '<div style="font-size:11px;padding:6px 10px;background:#f8fafc;border-radius:6px;border:1px solid #e2e8f0">' +
+              '<strong>' + escapeHtml(c.title) + ' (' + escapeHtml(c.code) + ')</strong><br>' +
+              '<span style="color:#0284c7">' + escapeHtml(c.clause) + '</span> · <span class="ecr5g-badge verified" style="font-size:9px">VERIFIED_IN_KB</span>' +
+            '</div>';
+          }).join('');
+        }
+
+        // 3. Network Sites Status
+        var siteBStatus = $('ecr5g-site-b-status');
+        var siteBSub = $('ecr5g-site-b-sub');
+        if (siteBStatus && siteBSub) {
+          if (variant.code === 'D') {
+            siteBStatus.textContent = '✓ Power Restored (Generator Active)';
+            siteBStatus.style.color = '#166534';
+            siteBSub.textContent = 'Site B power operational · Grid restored';
+          } else if (variant.code === 'C') {
+            siteBStatus.textContent = '⚡ Status Conflicted';
+            siteBStatus.style.color = '#d97706';
+            siteBSub.textContent = 'Field claims active vs Sensor reports 0V';
+          } else {
+            siteBStatus.textContent = '❌ Power Failure';
+            siteBStatus.style.color = '#ef4444';
+            siteBSub.textContent = 'Generator offline, battery depleted';
+          }
+        }
+
+        var backhaulStatus = $('ecr5g-backhaul-status');
+        var backhaulSub = $('ecr5g-backhaul-sub');
+        if (backhaulStatus && backhaulSub) {
+          if (variant.code === 'D') {
+            backhaulStatus.textContent = '⚡ Persistent Intermittent Loss';
+            backhaulStatus.style.color = '#b91c1c';
+            backhaulSub.textContent = 'Power restored, but B-C backhaul still drops 15%';
+          } else {
+            backhaulStatus.textContent = '⚡ Intermittent Dropouts';
+            backhaulStatus.style.color = '#eab308';
+            backhaulSub.textContent = 'Packet loss: 15% · Latency spikes';
+          }
+        }
+
+        // 4. QoS Orchestration Table
+        var orchTbody = $('ecr5g-orchestration-tbody');
+        if (orchTbody) {
+          var flows = [
+            { name: 'Hospital Critical Care', req: '4.0 Mbps',
+              ecacRate: variant.code === 'C' ? '0.0 Mbps (Gated)' : variant.code === 'D' ? '2.5 Mbps' : '4.0 Mbps',
+              ecacLat: variant.code === 'C' ? 'N/A' : variant.code === 'D' ? '68.4 ms' : '42.1 ms',
+              ecacLoss: variant.code === 'C' ? 'N/A' : variant.code === 'D' ? '0.5%' : '0.0%',
+              staticRate: '4.0 Mbps', fifoRate: '2.5 Mbps',
+              note: variant.code === 'C' ? 'Orchestration suspended due to unresolved conflict' : 'Promoted to Tier 0 by ECAC; full bandwidth allocated' },
+            { name: 'Rescue Coordination (SDRF)', req: '3.0 Mbps',
+              ecacRate: variant.code === 'C' ? '0.0 Mbps (Gated)' : variant.code === 'B' ? '1.0 Mbps (Throttled)' : variant.code === 'D' ? '1.5 Mbps' : '3.0 Mbps',
+              ecacLat: variant.code === 'C' ? 'N/A' : variant.code === 'B' ? '142.0 ms' : variant.code === 'D' ? '92.1 ms' : '64.3 ms',
+              ecacLoss: variant.code === 'C' ? 'N/A' : variant.code === 'B' ? '0.8%' : variant.code === 'D' ? '0.8%' : '0.2%',
+              staticRate: '3.0 Mbps', fifoRate: '2.5 Mbps',
+              note: variant.code === 'B' ? 'Mandatory EV-005 verification missing; throttled to minimum baseline' : 'Promoted to Tier 1; guaranteed low latency' },
+            { name: 'Relief Reporting (Damage)', req: '2.0 Mbps',
+              ecacRate: variant.code === 'C' ? '0.0 Mbps (Gated)' : variant.code === 'D' ? '0.0 Mbps (Paused)' : '2.0 Mbps',
+              ecacLat: variant.code === 'C' ? 'N/A' : variant.code === 'D' ? 'N/A' : '118.5 ms',
+              ecacLoss: variant.code === 'C' ? 'N/A' : variant.code === 'D' ? 'N/A' : '1.4%',
+              staticRate: '2.0 Mbps', fifoRate: '2.5 Mbps',
+              note: variant.code === 'D' ? 'Temporarily paused under degraded backhaul to protect safety slices' : 'Standard QoS class; delivered within 300ms SLO' },
+            { name: 'Background Traffic (Public)', req: '3.0 Mbps',
+              ecacRate: variant.code === 'C' ? '0.0 Mbps (Gated)' : variant.code === 'D' ? '0.0 Mbps (Paused)' : '1.0 Mbps',
+              ecacLat: variant.code === 'C' ? 'N/A' : variant.code === 'D' ? 'N/A' : '480.0 ms',
+              ecacLoss: variant.code === 'C' ? 'N/A' : variant.code === 'D' ? 'N/A' : '8.2%',
+              staticRate: '1.0 Mbps', fifoRate: '2.5 Mbps',
+              note: 'Constrained by 10 Mbps physical capacity ceiling; bulk traffic throttled' }
+          ];
+
+          orchTbody.innerHTML = flows.map(function(f) {
+            return '<tr>' +
+              '<td><strong>' + escapeHtml(f.name) + '</strong></td>' +
+              '<td>' + escapeHtml(f.req) + '</td>' +
+              '<td><strong style="color:#0284c7">' + escapeHtml(f.ecacRate) + '</strong></td>' +
+              '<td>' + escapeHtml(f.ecacLat) + '</td>' +
+              '<td>' + escapeHtml(f.ecacLoss) + '</td>' +
+              '<td>' + escapeHtml(f.staticRate) + '</td>' +
+              '<td>' + escapeHtml(f.fifoRate) + '</td>' +
+              '<td><small>' + escapeHtml(f.note) + '</small></td>' +
+            '</tr>';
+          }).join('') +
+          '<tr style="background:#f8fafc;font-weight:700">' +
+            '<td>TOTAL ALLOCATED CAPACITY</td>' +
+            '<td>12.0 Mbps (Offered)</td>' +
+            '<td style="color:#166534">' + (variant.code === 'C' ? '0.0 Mbps' : variant.code === 'D' ? '4.0 Mbps' : '10.0 Mbps') + ' / 10.0 Mbps</td>' +
+            '<td colspan="5"><small style="color:#166534">✓ Strictly enforces capacity ceiling &le; 10.0 Mbps</small></td>' +
+          '</tr>';
+        }
+
+        // Rationale Box
+        var ratBox = $('ecr5g-plain-rationale');
+        if (ratBox && variant.rationale) {
+          ratBox.innerHTML = '<strong>ECAC Decision Rationale (' + escapeHtml(variant.name) + '):</strong><p style="margin:4px 0 0;color:#334155">' + escapeHtml(variant.rationale) + '</p>';
+        }
+
+        // 6. Inter-Agency Tasks
+        var taskContainer = $('ecr5g-tasks-container');
+        if (taskContainer && d.inter_agency_tasks) {
+          taskContainer.innerHTML = d.inter_agency_tasks.map(function(t) {
+            var depStr = t.dependencies && t.dependencies.length ? 'Depends on: ' + t.dependencies.join(', ') : 'No dependencies';
+            var escColor = t.escalation.indexOf('LEVEL_1') !== -1 ? '#b91c1c' : t.escalation.indexOf('HIGH') !== -1 ? '#d97706' : '#0284c7';
+            return '<div style="padding:10px 12px;border-radius:8px;border:1px solid #e2e8f0;background:#f8fafc">' +
+              '<div style="display:flex;justify-content:space-between;align-items:flex-start">' +
+                '<div>' +
+                  '<strong>' + escapeHtml(t.task_id) + ' · ' + escapeHtml(t.title) + '</strong>' +
+                  '<div style="font-size:10px;color:#64748b;margin-top:2px">Assigned: <strong>' + escapeHtml(t.assigned_agency) + '</strong></div>' +
+                '</div>' +
+                '<span class="ecr5g-badge" style="background:#f1f5f9;color:' + escColor + '">' + escapeHtml(t.recovery_status) + '</span>' +
+              '</div>' +
+              '<p style="margin:4px 0;font-size:11px;color:#475569">' + escapeHtml(t.description) + '</p>' +
+              '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:10px;color:#94a3b8">' +
+                '<span>' + escapeHtml(depStr) + '</span>' +
+                '<span class="dash-tg-tag">' + escapeHtml(t.acknowledgement) + '</span>' +
+              '</div>' +
+            '</div>';
+          }).join('');
+        }
+      }
+
+      async function ecr5gRunSimulation() {
+        var btn = $('ecr5g-run-btn'); if (btn) btn.disabled = true;
+        var statusLabel = $('ecr5g-status-label'); if (statusLabel) statusLabel.textContent = 'RUNNING_ECAC...';
+        try {
+          var scId = 'ECR5G-FLOOD-001' + (ecr5gState.activeVariant === 'A' ? '' : '-' + ecr5gState.activeVariant);
+          var res = await apiFetch('/api/ecr5g/simulations/run', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({scenario_id: scId, seed: 101})
+          });
+          ecr5gState.lastRunResult = res;
+          var runIdEl = $('ecr5g-run-id'); if (runIdEl) runIdEl.textContent = res.run_id || 'ECR5G-LIVE-SIM';
+          var auditEl = $('ecr5g-audit-id'); if (auditEl) auditEl.textContent = res.audit_id || 'AUD-ECR5G-RECORDED';
+          var reviewEl = $('ecr5g-review-status-text');
+          if (reviewEl) reviewEl.innerHTML = 'Orchestration run complete. Audit record created: <code>' + escapeHtml(res.audit_id || 'AUD-ECR5G-RECORDED') + '</code>. Awaiting reviewer signature.';
+          ecr5gRender();
+        } catch(err) {
+          console.error('ECR5G run error:', err);
+          if (statusLabel) { statusLabel.textContent = 'ERROR'; statusLabel.className = 'ecr5g-badge infeasible'; }
+        } finally {
+          if (btn) btn.disabled = false;
+        }
+      }
+
+      function ecr5gSubmitReview(action) {
+        ecr5gState.reviewStatus = action;
+        var reviewEl = $('ecr5g-review-status-text');
+        var isApproved = action === 'APPROVED';
+        if (reviewEl) {
+          reviewEl.innerHTML = (isApproved ? '✅ <strong>DECISION APPROVED:</strong> Slicing adaptation authorized by operator in IST (+05:30).' : '❌ <strong>DECISION REJECTED:</strong> Escalated to senior incident command.') +
+            ' Audit ID: <code>' + escapeHtml(($('ecr5g-audit-id')||{}).textContent || 'AUD-ECR5G-RECORDED') + '</code>';
+        }
+      }
+
+      // Event Listeners for ECR-5G & Coordination
+      function ecr5gBindEvents() {
+        var tabs = document.querySelectorAll('.ecr5g-variant-tab');
+        tabs.forEach(function(t) {
+          t.addEventListener('click', function() { ecr5gSelectVariant(t.dataset.variant); });
+        });
+
+        var runBtn = $('ecr5g-run-btn'); if (runBtn) runBtn.addEventListener('click', ecr5gRunSimulation);
+        var compareBtn = $('ecr5g-compare-btn');
+        if (compareBtn) {
+          compareBtn.addEventListener('click', function() {
+            var matrix = $('ecr5g-matrix-table');
+            if (matrix) matrix.scrollIntoView({behavior: 'smooth'});
+          });
+        }
+        var resetBtn = $('ecr5g-reset-btn');
+        if (resetBtn) {
+          resetBtn.addEventListener('click', function() {
+            ecr5gSelectVariant('A');
+          });
+        }
+
+        var approveBtn = $('ecr5g-approve-btn'); if (approveBtn) approveBtn.addEventListener('click', function() { ecr5gSubmitReview('APPROVED'); });
+        var rejectBtn = $('ecr5g-reject-btn'); if (rejectBtn) rejectBtn.addEventListener('click', function() { ecr5gSubmitReview('REJECTED'); });
+
+        // Agency Picker in Coordination
+        document.querySelectorAll('.dash-agency-btn').forEach(function(b) {
+          b.addEventListener('click', function() {
+            dashSwitchAuthority(b.dataset.agency);
+          });
+        });
+
+        // Quick alert pills
+        document.querySelectorAll('.dash-quick-btn').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            var msgBox = $('dash-demo-message'); if (!msgBox) return;
+            var kind = btn.dataset.quick;
+            if (kind === 'congestion') {
+              msgBox.value = '⚠️ ALERT: Heavy network congestion & QoS delay detected in Bhatwari valley sector. Packet drop at 42%. Requesting emergency bandwidth offload.';
+            } else if (kind === 'microwave') {
+              msgBox.value = '📡 DIRECTIVE: Authorizing microwave link reroute via Tehri-Chamba high-altitude repeater to relieve fiber severance bottleneck.';
+            } else if (kind === 'medical') {
+              msgBox.value = '🚑 REQUEST: Urgent requisition for Satellite Cell-on-Wheels (COW) and NDRF medical detachment to establish primary health care communications.';
+            }
+          });
+        });
+      }
+
+      // Hook into dashInit
+
       function dashInit() {
         if(dashState.initialized)return;dashState.initialized=true;
         [].forEach.call(document.querySelectorAll('[data-dash-view]'),function(b){b.addEventListener('click',function(){dashSetView(b.dataset.dashView);});});
@@ -9334,16 +10373,22 @@
         var att=$('dash-evidence-attach');if(att)att.addEventListener('change',function(){var b=$('dash-preview-evidence');if(b)b.disabled=!att.value;});
         var preview=$('dash-preview-evidence');if(preview)preview.addEventListener('click',function(){if(att&&att.value!=='')dashOpenEvidence(Number(att.value));});
         var form=$('dash-demo-message-form');if(form)form.addEventListener('submit',async function(e){e.preventDefault();var box=$('dash-demo-message'),agencyName=($('dash-agency-select')||{}).value||'District Administration',selected=($('dash-evidence-attach')||{}).value||'',item=selected!==''?dashGetEvidence()[Number(selected)]:null,submit=form.querySelector('[type="submit"]');if(submit)submit.disabled=true;try{await apiFetch('/api/coordination/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({agency:agencyName,body:box.value.trim(),speaker:($('dash-message-speaker')||{}).value||'NETRASETU',scenario_id:($('dash-coord-scenario')||{}).value||null,evidence_reference:item?dashDocData(item).source_title+' · '+dashDocData(item).clause:null})});box.value='';dashRenderConversation();}catch(error){var host=$('dash-chat-messages');if(host)host.insertAdjacentHTML('afterbegin','<p class="dash-muted">Message was not saved: '+escapeHtml(error.message)+'</p>');}finally{if(submit)submit.disabled=false;}});
-        aftermathBind();dashLoadScenarios();dashLoadAudits();dashLoadTelemetry();dashSetView(requestedDashboardView||'overview');
+        ecr5gBindEvents();aftermathBind();dashLoadScenarios();dashLoadAudits();dashLoadTelemetry();dashSetView(requestedDashboardView||'overview');
       }
 
       function route() {
         var routeParts = (location.hash.replace(/^#\/?/, '') || 'home').split('?')[0].split('/');
         var raw = routeParts[0] || 'home';
-        if (raw === 'dashboard' || raw === 'overview') {
+        if (raw === 'ecr5g' || raw === 'ecr-5g') {
+    if (!netraAuth.ready) return;
+    if (!netraAuth.authenticated) { goToSignIn('#/ecr5g'); return; }
+    raw = 'overview';
+    requestedDashboardView = 'ecr5g';
+  }
+  if (raw === 'dashboard' || raw === 'overview') {
           if (!netraAuth.ready) return;
           if (!netraAuth.authenticated) { goToSignIn(location.hash); return; }
-          var sectionAliases={overview:'overview',metrics:'metrics','key-metrics':'metrics',latency:'latency',reliability:'latency',evidence:'evidence','gap-analysis':'gap-analysis',gap:'gap-analysis',governance:'governance',coordination:'coordination','disaster-map':'disaster-map',audit:'audit','audit-trail':'audit',imagery:'imagery',settings:'settings',troubleshooting:'troubleshooting'};
+          var sectionAliases={overview:'overview',metrics:'metrics','key-metrics':'metrics',latency:'latency',reliability:'latency',ecr5g:'ecr5g','ecr-5g':'ecr5g',evidence:'evidence','gap-analysis':'gap-analysis',gap:'gap-analysis',governance:'governance',coordination:'coordination','disaster-map':'disaster-map',audit:'audit','audit-trail':'audit',imagery:'imagery',settings:'settings',troubleshooting:'troubleshooting'};
           requestedDashboardView=raw==='overview'?'overview':(sectionAliases[routeParts[1]]||'overview');
           raw='overview';
         }

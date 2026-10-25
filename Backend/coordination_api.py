@@ -35,10 +35,12 @@ def _load() -> list[dict]:
 
 
 @router.get("/messages")
-def list_messages(agency: str = Query(...)):
-    if agency not in AGENCIES:
+def list_messages(agency: str = Query(...), filter_agency: bool = Query(False)):
+    if agency not in AGENCIES and agency != "ALL":
         raise HTTPException(422, "Unknown coordination participant.")
-    rows = [row for row in _load() if row["agency"] == agency]
+    all_rows = _load()
+    # Shared inter-agency response room: all participating authorities share the incident thread
+    rows = [row for row in all_rows if row.get("agency") == agency] if filter_agency else all_rows
     return {"messages": rows, "timezone": "Asia/Kolkata", "notice": "Local demonstration conversation; messages are not delivered to an external agency."}
 
 

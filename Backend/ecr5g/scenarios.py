@@ -238,9 +238,308 @@ def build_scenarios() -> dict[str, ECR5GScenario]:
 SCENARIOS = build_scenarios()
 
 
+def build_mountain_shield_scenario(variant: str = "A") -> ECR5GScenario:
+    """Build the integrated Operation Mountain Shield validation scenario (ECR5G-FLOOD-001).
+    
+    Variants:
+    - Variant A (Complete evidence): verified, fresh evidence across all requirements.
+    - Variant B (Incomplete evidence): EV-005 verification timestamp missing / unverified.
+    - Variant C (Conflicting evidence): field report EV-008 conflicts with NOC sensor EV-009 on Site B.
+    - Variant D (Partial recovery): Site B power restored, but B-C backhaul remains intermittent.
+    """
+    epoch = _EPOCH
+    
+    # 5 Evidence Requirements
+    reqs = [
+        EvidenceRequirement(
+            requirement_id="REQ-HOSPITAL",
+            evidence_type="HOSPITAL_TELEMETRY",
+            mandatory=True,
+            freshness_limit_seconds=120,
+            deadline_utc=_dt(2500),
+            permitted_source_identifiers=["agency:hospital-telemetry"],
+            applicable_actions=["ACTION-ORCHESTRATE"],
+        ),
+        EvidenceRequirement(
+            requirement_id="REQ-RESCUE",
+            evidence_type="ROUTE_STATUS",
+            mandatory=True,
+            freshness_limit_seconds=90,
+            deadline_utc=_dt(2200),
+            permitted_source_identifiers=["agency:rescue-coordination", "agency:field-unit"],
+            requires_conflict_resolution=(variant == "C"),
+            applicable_actions=["ACTION-ORCHESTRATE"],
+        ),
+        EvidenceRequirement(
+            requirement_id="REQ-SITE-STATUS",
+            evidence_type="SITE_HEALTH",
+            mandatory=True,
+            freshness_limit_seconds=60,
+            deadline_utc=_dt(2800),
+            permitted_source_identifiers=["operator:noc", "agency:district-admin"],
+            requires_conflict_resolution=(variant == "C"),
+            applicable_actions=["ACTION-ORCHESTRATE"],
+        ),
+        EvidenceRequirement(
+            requirement_id="REQ-BACKHAUL",
+            evidence_type="BACKHAUL_TELEMETRY",
+            mandatory=True,
+            freshness_limit_seconds=60,
+            deadline_utc=_dt(2800),
+            permitted_source_identifiers=["operator:noc"],
+            applicable_actions=["ACTION-ORCHESTRATE"],
+        ),
+        EvidenceRequirement(
+            requirement_id="REQ-RELIEF",
+            evidence_type="RELIEF_ASSESSMENT",
+            mandatory=False,
+            freshness_limit_seconds=180,
+            deadline_utc=_dt(3000),
+            permitted_source_identifiers=["agency:relief-reporting"],
+            applicable_actions=["ACTION-ORCHESTRATE"],
+        ),
+    ]
+
+    # Synthetic Evidence Records EV-001 through EV-012
+    ev_5_verified = VerificationStatus.VERIFIED if variant != "B" else VerificationStatus.UNVERIFIED
+    ev_5_integrity = IntegrityStatus.VERIFIED if variant != "B" else IntegrityStatus.UNVERIFIED
+    ev_8_conflict = ConflictStatus.CLEAR if variant != "C" else ConflictStatus.CONFLICTING
+    
+    ev_objects = [
+        EvidenceObject(
+            evidence_id="EV-001", incident_id="INC-FLOOD-001", evidence_type="HOSPITAL_TELEMETRY",
+            source_identifier="agency:hospital-telemetry", source_timestamp_utc=epoch - timedelta(seconds=15),
+            ingestion_timestamp_utc=epoch - timedelta(seconds=10), version_identifier="v1.0-simulated",
+            integrity_status=IntegrityStatus.VERIFIED, integrity_metadata={"method": "SIMULATED_SHA256", "real_document_digest": False},
+            payload_size_bytes=512, supports_requirements=["REQ-HOSPITAL"], verification_status=VerificationStatus.VERIFIED,
+            conflict_status=ConflictStatus.CLEAR, origin="SIMULATED_SCENARIO_FIXTURE",
+        ),
+        EvidenceObject(
+            evidence_id="EV-002", incident_id="INC-FLOOD-001", evidence_type="ROUTE_STATUS",
+            source_identifier="agency:rescue-coordination", source_timestamp_utc=epoch - timedelta(seconds=20),
+            ingestion_timestamp_utc=epoch - timedelta(seconds=12), version_identifier="v1.0-simulated",
+            integrity_status=IntegrityStatus.VERIFIED, integrity_metadata={"method": "SIMULATED_SHA256", "real_document_digest": False},
+            payload_size_bytes=512, supports_requirements=["REQ-RESCUE"], verification_status=VerificationStatus.VERIFIED,
+            conflict_status=ConflictStatus.CLEAR, origin="SIMULATED_SCENARIO_FIXTURE",
+        ),
+        EvidenceObject(
+            evidence_id="EV-003", incident_id="INC-FLOOD-001", evidence_type="ROUTE_STATUS",
+            source_identifier="agency:field-unit", source_timestamp_utc=epoch - timedelta(seconds=25),
+            ingestion_timestamp_utc=epoch - timedelta(seconds=18), version_identifier="v1.0-simulated",
+            integrity_status=IntegrityStatus.VERIFIED, integrity_metadata={"method": "SIMULATED_SHA256", "real_document_digest": False},
+            payload_size_bytes=512, supports_requirements=["REQ-RESCUE"], verification_status=VerificationStatus.VERIFIED,
+            conflict_status=ConflictStatus.CLEAR, origin="SIMULATED_SCENARIO_FIXTURE",
+        ),
+        EvidenceObject(
+            evidence_id="EV-004", incident_id="INC-FLOOD-001", evidence_type="HOSPITAL_TELEMETRY",
+            source_identifier="agency:hospital-telemetry", source_timestamp_utc=epoch - timedelta(seconds=30),
+            ingestion_timestamp_utc=epoch - timedelta(seconds=20), version_identifier="v1.0-simulated",
+            integrity_status=IntegrityStatus.VERIFIED, integrity_metadata={"method": "SIMULATED_SHA256", "real_document_digest": False},
+            payload_size_bytes=512, supports_requirements=["REQ-HOSPITAL"], verification_status=VerificationStatus.VERIFIED,
+            conflict_status=ConflictStatus.CLEAR, origin="SIMULATED_SCENARIO_FIXTURE",
+        ),
+        EvidenceObject(
+            evidence_id="EV-005", incident_id="INC-FLOOD-001", evidence_type="ROUTE_STATUS",
+            source_identifier="agency:field-unit", source_timestamp_utc=epoch - timedelta(seconds=35),
+            ingestion_timestamp_utc=epoch - timedelta(seconds=25), version_identifier="v1.0-simulated",
+            integrity_status=ev_5_integrity, integrity_metadata={"method": "SIMULATED_SHA256", "real_document_digest": False},
+            payload_size_bytes=512, supports_requirements=["REQ-RESCUE"], verification_status=ev_5_verified,
+            conflict_status=ConflictStatus.CLEAR, origin="SIMULATED_SCENARIO_FIXTURE",
+        ),
+        EvidenceObject(
+            evidence_id="EV-006", incident_id="INC-FLOOD-001", evidence_type="RELIEF_ASSESSMENT",
+            source_identifier="agency:relief-reporting", source_timestamp_utc=epoch - timedelta(seconds=40),
+            ingestion_timestamp_utc=epoch - timedelta(seconds=30), version_identifier="v1.0-simulated",
+            integrity_status=IntegrityStatus.VERIFIED, integrity_metadata={"method": "SIMULATED_SHA256", "real_document_digest": False},
+            payload_size_bytes=512, supports_requirements=["REQ-RELIEF"], verification_status=VerificationStatus.VERIFIED,
+            conflict_status=ConflictStatus.CLEAR, origin="SIMULATED_SCENARIO_FIXTURE",
+        ),
+        EvidenceObject(
+            evidence_id="EV-007", incident_id="INC-FLOOD-001", evidence_type="RELIEF_ASSESSMENT",
+            source_identifier="agency:relief-reporting", source_timestamp_utc=epoch - timedelta(seconds=45),
+            ingestion_timestamp_utc=epoch - timedelta(seconds=35), version_identifier="v1.0-simulated",
+            integrity_status=IntegrityStatus.VERIFIED, integrity_metadata={"method": "SIMULATED_SHA256", "real_document_digest": False},
+            payload_size_bytes=512, supports_requirements=["REQ-RELIEF"], verification_status=VerificationStatus.VERIFIED,
+            conflict_status=ConflictStatus.CLEAR, origin="SIMULATED_SCENARIO_FIXTURE",
+        ),
+        EvidenceObject(
+            evidence_id="EV-008", incident_id="INC-FLOOD-001", evidence_type="SITE_HEALTH",
+            source_identifier="agency:district-admin", source_timestamp_utc=epoch - timedelta(seconds=10),
+            ingestion_timestamp_utc=epoch - timedelta(seconds=5), version_identifier="v1.0-simulated",
+            integrity_status=IntegrityStatus.VERIFIED, integrity_metadata={"method": "SIMULATED_SHA256", "real_document_digest": False},
+            payload_size_bytes=512, supports_requirements=["REQ-SITE-STATUS"], verification_status=VerificationStatus.VERIFIED,
+            conflict_status=ev_8_conflict, origin="SIMULATED_SCENARIO_FIXTURE",
+        ),
+        EvidenceObject(
+            evidence_id="EV-009", incident_id="INC-FLOOD-001", evidence_type="SITE_HEALTH",
+            source_identifier="operator:noc", source_timestamp_utc=epoch - timedelta(seconds=8),
+            ingestion_timestamp_utc=epoch - timedelta(seconds=4), version_identifier="v1.0-simulated",
+            integrity_status=IntegrityStatus.VERIFIED, integrity_metadata={"method": "SIMULATED_SHA256", "real_document_digest": False},
+            payload_size_bytes=512, supports_requirements=["REQ-SITE-STATUS"], verification_status=VerificationStatus.VERIFIED,
+            conflict_status=ConflictStatus.CLEAR, origin="SIMULATED_SCENARIO_FIXTURE",
+        ),
+        EvidenceObject(
+            evidence_id="EV-010", incident_id="INC-FLOOD-001", evidence_type="BACKHAUL_TELEMETRY",
+            source_identifier="operator:noc", source_timestamp_utc=epoch - timedelta(seconds=12),
+            ingestion_timestamp_utc=epoch - timedelta(seconds=6), version_identifier="v1.0-simulated",
+            integrity_status=IntegrityStatus.VERIFIED, integrity_metadata={"method": "SIMULATED_SHA256", "real_document_digest": False},
+            payload_size_bytes=512, supports_requirements=["REQ-BACKHAUL"], verification_status=VerificationStatus.VERIFIED,
+            conflict_status=ConflictStatus.CLEAR, origin="SIMULATED_SCENARIO_FIXTURE",
+        ),
+        EvidenceObject(
+            evidence_id="EV-011", incident_id="INC-FLOOD-001", evidence_type="SITE_HEALTH",
+            source_identifier="agency:district-admin", source_timestamp_utc=epoch - timedelta(seconds=18),
+            ingestion_timestamp_utc=epoch - timedelta(seconds=9), version_identifier="v1.0-simulated",
+            integrity_status=IntegrityStatus.VERIFIED, integrity_metadata={"method": "SIMULATED_SHA256", "real_document_digest": False},
+            payload_size_bytes=512, supports_requirements=["REQ-SITE-STATUS"], verification_status=VerificationStatus.VERIFIED,
+            conflict_status=ConflictStatus.CLEAR, origin="SIMULATED_SCENARIO_FIXTURE",
+        ),
+        EvidenceObject(
+            evidence_id="EV-012", incident_id="INC-FLOOD-001", evidence_type="BACKHAUL_TELEMETRY",
+            source_identifier="operator:noc", source_timestamp_utc=epoch - timedelta(seconds=14),
+            ingestion_timestamp_utc=epoch - timedelta(seconds=7), version_identifier="v1.0-simulated",
+            integrity_status=IntegrityStatus.VERIFIED, integrity_metadata={"method": "SIMULATED_SHA256", "real_document_digest": False},
+            payload_size_bytes=512, supports_requirements=["REQ-BACKHAUL"], verification_status=VerificationStatus.VERIFIED,
+            conflict_status=ConflictStatus.CLEAR, origin="SIMULATED_SCENARIO_FIXTURE",
+        ),
+    ]
+
+    flows = [
+        TrafficFlow(
+            flow_id="FLOW-HOSPITAL", incident_id="INC-FLOOD-001",
+            agency_application_identity="agency:hospital-telemetry/critical-care",
+            offered_load_mbps=4.0, payload_size_bytes=2048,
+            deadline_utc=_dt(3000), qos_class=QoSClass.EMERGENCY,
+            max_latency_ms=100, reliability_target=0.99,
+            evidence_ids=["EV-001", "EV-004"],
+        ),
+        TrafficFlow(
+            flow_id="FLOW-RESCUE", incident_id="INC-FLOOD-001",
+            agency_application_identity="agency:rescue-coordination/sdrf-dispatch",
+            offered_load_mbps=3.0, payload_size_bytes=2048,
+            deadline_utc=_dt(3000), qos_class=QoSClass.CRITICAL,
+            max_latency_ms=150, reliability_target=0.99,
+            evidence_ids=["EV-002", "EV-003", "EV-005"],
+        ),
+        TrafficFlow(
+            flow_id="FLOW-RELIEF", incident_id="INC-FLOOD-001",
+            agency_application_identity="agency:relief-reporting/damage-assessment",
+            offered_load_mbps=2.0, payload_size_bytes=2048,
+            deadline_utc=_dt(3000), qos_class=QoSClass.STANDARD,
+            max_latency_ms=300, reliability_target=0.97,
+            evidence_ids=["EV-006", "EV-007"],
+        ),
+        TrafficFlow(
+            flow_id="FLOW-BACKGROUND", incident_id="INC-FLOOD-001",
+            agency_application_identity="operator:noc/public-traffic",
+            offered_load_mbps=3.0, payload_size_bytes=2048,
+            deadline_utc=_dt(3000), qos_class=QoSClass.BULK,
+            max_latency_ms=1500, reliability_target=0.90,
+            evidence_ids=["EV-010"],
+        ),
+    ]
+
+    network_changes = []
+    initial_cap = 10.0
+    initial_loss = 0.005
+    initial_lat = 35.0
+    
+    if variant == "D":
+        network_changes = [
+            NetworkChange(
+                start_offset_ms=0, end_offset_ms=600,
+                bottleneck_capacity_mbps=10.0, latency_ms=35.0, packet_loss_probability=0.005,
+                congestion_state="CONGESTED", link_available=True,
+            ),
+            NetworkChange(
+                start_offset_ms=600, end_offset_ms=2200,
+                bottleneck_capacity_mbps=4.0, latency_ms=140.0, packet_loss_probability=0.15,
+                congestion_state="INTERMITTENT_DEGRADED", link_available=True,
+            ),
+            NetworkChange(
+                start_offset_ms=2200, end_offset_ms=3000,
+                bottleneck_capacity_mbps=6.0, latency_ms=80.0, packet_loss_probability=0.04,
+                congestion_state="RECOVERING", link_available=True,
+            ),
+        ]
+
+    failures = ["CAPACITY_BOTTLENECK_10MBPS", "OFFERED_LOAD_12MBPS"]
+    if variant == "B":
+        failures.append("MISSING_MANDATORY_VERIFICATION_EV005")
+    elif variant == "C":
+        failures.append("UNRESOLVED_POWER_TELEMETRY_CONFLICT")
+    elif variant == "D":
+        failures.append("BACKHAUL_INTERMITTENT_PACKET_LOSS")
+
+    sc_id = "ECR5G-FLOOD-001" if variant == "A" else f"ECR5G-FLOOD-001-{variant}"
+    title_suffix = {
+        "A": "Variant A — Complete Evidence",
+        "B": "Variant B — Incomplete Evidence",
+        "C": "Variant C — Conflicting Evidence",
+        "D": "Variant D — Partial Recovery",
+    }[variant]
+
+    return ECR5GScenario(
+        scenario_id=sc_id,
+        version=SCENARIO_VERSION,
+        title=f"Operation Mountain Shield ({title_suffix})",
+        description="Deterministic synthetic scenario testing whether evidence completeness and reliability influence network-slicing recommendations.",
+        simulation_epoch_utc=epoch,
+        simulation_duration_ms=3000,
+        seed=101,
+        initial_network_state=NetworkState(
+            simulation_timestamp_utc=epoch,
+            bottleneck_capacity_mbps=initial_cap,
+            latency_ms=initial_lat,
+            processing_delay_ms=5.0,
+            packet_loss_probability=initial_loss,
+            congestion_state="CONGESTED",
+            link_available=True,
+        ),
+        network_changes=network_changes,
+        traffic_flows=flows,
+        evidence_requirements=reqs,
+        evidence_objects=ev_objects,
+        decision_requirements=[DecisionRequirement(
+            action_id="ACTION-ORCHESTRATE",
+            incident_id="INC-FLOOD-001",
+            mandatory_evidence_requirements=["REQ-HOSPITAL", "REQ-RESCUE", "REQ-SITE-STATUS", "REQ-BACKHAUL"],
+            optional_evidence_requirements=["REQ-RELIEF"],
+            requires_conflict_resolution=(variant == "C"),
+            human_approval_required=True,
+        )],
+        failure_conditions=failures,
+        expected_safety_invariants=list(_SAFETY),
+        evaluation_objectives=[
+            "Compare all selected strategies on the same generated traffic trace.",
+            f"Test ECR-5G evidence constraint enforcement under {title_suffix}.",
+        ],
+    )
+
+
+INTEGRATED_SCENARIOS = {
+    "ECR5G-FLOOD-001": build_mountain_shield_scenario("A"),
+    "ECR5G-FLOOD-001-A": build_mountain_shield_scenario("A"),
+    "ECR5G-FLOOD-001-B": build_mountain_shield_scenario("B"),
+    "ECR5G-FLOOD-001-C": build_mountain_shield_scenario("C"),
+    "ECR5G-FLOOD-001-D": build_mountain_shield_scenario("D"),
+}
+
+
 def list_scenarios() -> list[ECR5GScenario]:
     return list(SCENARIOS.values())
 
 
+def list_integrated_scenarios() -> list[ECR5GScenario]:
+    return [
+        INTEGRATED_SCENARIOS["ECR5G-FLOOD-001-A"],
+        INTEGRATED_SCENARIOS["ECR5G-FLOOD-001-B"],
+        INTEGRATED_SCENARIOS["ECR5G-FLOOD-001-C"],
+        INTEGRATED_SCENARIOS["ECR5G-FLOOD-001-D"],
+    ]
+
+
 def get_scenario(scenario_id: str) -> ECR5GScenario | None:
+    if scenario_id in INTEGRATED_SCENARIOS:
+        return INTEGRATED_SCENARIOS[scenario_id]
     return SCENARIOS.get(scenario_id)

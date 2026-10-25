@@ -434,6 +434,62 @@ SCENARIOS = [
             ScenarioStep("E3", "Review continuity and recovery options", "Proposed communications-continuity measures are presented for authorized human and agency review.", "Which verified emergency-communications plans or standards inform the options, what uncertainty remains, and who must approve the next step?"),
         ],
     ),
+
+    # ============================================================
+    # ECR-5G INTEGRATED SCENARIO
+    # ============================================================
+
+    Scenario(
+        scenario_id="ECR5G-FLOOD-001",
+        title="Operation Mountain Shield — Evidence-Constrained 5G QoS Orchestration",
+        domain="Emergency Communications / 5G",
+        jurisdiction="India",
+        description=(
+            "Simulated Uttarakhand flash-flood emergency testing whether evidence completeness and "
+            "reliability influence network-slicing recommendations and emergency communication "
+            "recovery decisions under a 10 Mbps shared capacity bottleneck."
+        ),
+        simulated=True,
+        steps=[
+            ScenarioStep(
+                step_id="S1",
+                title="Bottleneck & Emergency Demand Influx",
+                event=(
+                    "Flash flood in Bhagirathi valley knocks out Site B grid power and causes backhaul intermittency. "
+                    "12 Mbps total traffic offered across hospital (4 Mbps), rescue (3 Mbps), relief (2 Mbps), "
+                    "and background (3 Mbps) flows on a 10 Mbps shared capacity bottleneck."
+                ),
+                evidence_prompt=(
+                    "What regulatory QoS standards, 3GPP network slicing rules, and NDMA disaster telecommunications "
+                    "SOPs govern emergency bandwidth allocation during backhaul failure?"
+                ),
+            ),
+            ScenarioStep(
+                step_id="S2",
+                title="Evidence Completeness & Conflict Gate",
+                event=(
+                    "Field teams submit route and site status reports. Incomplete verification and conflicting telemetry "
+                    "are evaluated before slice reconfiguration."
+                ),
+                evidence_prompt=(
+                    "How do evidence-completeness constraints and conflicting field reports affect automated "
+                    "QoS controller recommendations and human review requirements?"
+                ),
+            ),
+            ScenarioStep(
+                step_id="S3",
+                title="Adaptive Slice Orchestration & Recovery",
+                event=(
+                    "ECAC executes evidence-constrained slice prioritization, protecting hospital and rescue communication "
+                    "while enforcing the 10 Mbps capacity ceiling and dispatching inter-agency recovery tasks."
+                ),
+                evidence_prompt=(
+                    "Which verified emergency telecommunication recovery procedures and human oversight approvals "
+                    "are required to transition the 5G slice policy from degraded to restored status?"
+                ),
+            ),
+        ],
+    ),
 ]
 
 

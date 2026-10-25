@@ -161,9 +161,10 @@ FULL_CONFIG = {
 DEMO_CONFIG = {
     # Compact execution for live frontend scenarios (<40s target).
     "retrieval_k": 6,
-    # Include lexical-only candidates in the cross-encoder pool; limiting this
-    # to the first three dense results discarded clause-specific BM25 hits.
-    "rerank_candidate_limit": 12,
+    # Hybrid retrieval has already fused semantic and BM25 candidates. Rerank
+    # six fused candidates to keep clause-focused lexical matches while
+    # bounding CPU cross-encoder time for an interactive scenario.
+    "rerank_candidate_limit": 6,
     "rerank_top_k": 3,
     "counter_retrieval_k": 3,
     "counter_rerank_candidate_limit": 8,
