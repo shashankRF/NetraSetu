@@ -6861,9 +6861,9 @@
         var timeoutMs = options.timeout !== undefined
           ? options.timeout
           : endpoint.indexOf('/run') !== -1
-            ? 42000
+            ? 120000
             : endpoint.indexOf('/query') !== -1
-              ? 42000
+              ? 120000
               : 10000;
         var controller = new AbortController();
         var timer;
@@ -6877,7 +6877,7 @@
           res = await fetch(url, options);
         } catch (err) {
           if (err.name === 'AbortError' || (controller && controller.signal.aborted)) {
-            var abortErr = new Error('Request reached 40s live demo deadline. Verified evidence retrieved.');
+            var abortErr = new Error('Request timed out after ' + Math.ceil(timeoutMs / 1000) + ' seconds. Backend completion was not confirmed; check the audit trail before retrying.');
             abortErr.name = 'AbortError';
             throw abortErr;
           }
@@ -9094,7 +9094,7 @@
         dashState.latest=null;dashState.persistedRecord=null;dashState.persistedAuditId=null;dashResetLatest();
         var resultArea=$('dash-result-summary');if(resultArea)resultArea.textContent='Waiting for the backend response. No outcome is assumed.';
         try {
-          var result=await apiFetch('/api/scenarios/run',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({scenario_id:scId,step_id:stepId,jurisdiction:$('dash-jurisdiction').value||scenario.jurisdiction}),timeout:42000});
+          var result=await apiFetch('/api/scenarios/run',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({scenario_id:scId,step_id:stepId,jurisdiction:$('dash-jurisdiction').value||scenario.jurisdiction}),timeout:120000});
           var elapsed=Math.round(performance.now()-started);
           if(result&&result.blocked){dashState.latest={blocked:true,result:result,scenario:scenario,step:stepId,elapsed:elapsed,at:new Date().toISOString()};dashSetStatus(result.reason||'Scenario workflow is gated by its existing step or review requirements.','error');dashUpdateLatest();await dashLoadAudits(true);return;}
           dashState.latest={blocked:false,result:result,scenario:scenario,step:stepId,elapsed:elapsed,at:new Date().toISOString()};

@@ -45,6 +45,12 @@ test('viewer uses the dashboard same-origin API and quotes are verified before t
   assert.match(html, /api\/documents\/preview\?doc_path=/);
 });
 
+test('analysis requests allow the backend more than the former 40-second browser cutoff and report timeouts honestly', () => {
+  assert.match(html, /timeout:120000/);
+  assert.match(html, /Request timed out after .*Backend completion was not confirmed/);
+  assert.doesNotMatch(html, /Request reached 40s live demo deadline/);
+});
+
 test('demo markers are removed and remaining inline scripts parse', () => {
   assert.doesNotMatch(html, /DEMO MARKERS — NOT OBSERVED OR VERIFIED INCIDENTS|disasterMapSetDemos|demo_features|Demo flood marker/);
   assert.doesNotMatch(html, /data-dash-panel="terrain"|data-dash-view="terrain"|api\/terrain\/|terrainRunEvaluation|HG-TERRAIN-009/);
