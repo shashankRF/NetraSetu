@@ -51,6 +51,12 @@ test('analysis requests allow the backend more than the former 40-second browser
   assert.doesNotMatch(html, /Request reached 40s live demo deadline/);
 });
 
+test('dashboard builds its API origin from the served frontend origin and posts analysis to the registered scenario route', () => {
+  assert.match(html, /var sameOriginBackend = window\.location\.pathname\.indexOf\('\/frontend\/'\) === 0 && !frontendDevPort/);
+  assert.match(html, /var API_BASE = sameOriginBackend \? window\.location\.origin/);
+  assert.match(html, /apiFetch\('\/api\/scenarios\/run',\{method:'POST'/);
+});
+
 test('demo markers are removed and remaining inline scripts parse', () => {
   assert.doesNotMatch(html, /DEMO MARKERS — NOT OBSERVED OR VERIFIED INCIDENTS|disasterMapSetDemos|demo_features|Demo flood marker/);
   assert.doesNotMatch(html, /data-dash-panel="terrain"|data-dash-view="terrain"|api\/terrain\/|terrainRunEvaluation|HG-TERRAIN-009/);
