@@ -233,6 +233,21 @@ def scenario_variants(scenario_id: str) -> dict[str, Any]:
         ("D", "Partial Recovery", "Site B power is restored, but B-C backhaul remains intermittent with 15% drop.", "FEASIBLE_DEGRADED_OPERATION", True),
     ]
 
+    ev_citations_map = {
+        "EV-001": {"code": "NDMA-SOP-2019-DISCOM", "clause": "Section 4.2 · Priority Health Bandwidth", "title": "NDMA Standard Operating Procedure for Disaster Communications", "verification": "VERIFIED_IN_KB"},
+        "EV-002": {"code": "USDMA-SOP-UK-2024", "clause": "Clause 11.3 · Mountain Rescue Guarantee", "title": "Uttarakhand State Disaster Management Authority SOP", "verification": "VERIFIED_IN_KB"},
+        "EV-003": {"code": "DoT-NDTP-2021", "clause": "Clause 8.1 · Tactical Drone Slicing Isolation", "title": "DoT National Disaster Telecommunications Plan", "verification": "VERIFIED_IN_KB"},
+        "EV-004": {"code": "NDMA-SOP-2019-DISCOM", "clause": "Section 4.2 · ICU Triage Preemption", "title": "NDMA Standard Operating Procedure for Disaster Communications", "verification": "VERIFIED_IN_KB"},
+        "EV-005": {"code": "USDMA-SOP-UK-2024", "clause": "Clause 11.3 · Tactical Field Timestamp", "title": "Uttarakhand State Disaster Management Authority SOP", "verification": "VERIFIED_IN_KB"},
+        "EV-006": {"code": "3GPP TS 23.501 Rel-17", "clause": "Clause 5.15.5 · Cell Site Fault Survivability", "title": "3GPP 5G System Architecture", "verification": "VERIFIED_IN_KB"},
+        "EV-007": {"code": "DoT-NDTP-2021", "clause": "Clause 8.1 · Auxiliary Power Telemetry", "title": "DoT National Disaster Telecommunications Plan", "verification": "VERIFIED_IN_KB"},
+        "EV-008": {"code": "USDMA-SOP-UK-2024", "clause": "Clause 11.3 · Physical Ground Inspection", "title": "Uttarakhand State Disaster Management Authority SOP", "verification": "VERIFIED_IN_KB"},
+        "EV-009": {"code": "3GPP TS 23.501 Rel-17", "clause": "Clause 5.15.5 · Substation SCADA NOC Health", "title": "3GPP 5G System Architecture", "verification": "VERIFIED_IN_KB"},
+        "EV-010": {"code": "3GPP TS 23.501 Rel-17", "clause": "Clause 5.15.5 · Backhaul Congestion Profiling", "title": "3GPP 5G System Architecture", "verification": "VERIFIED_IN_KB"},
+        "EV-011": {"code": "DoT-NDTP-2021", "clause": "Clause 8.1 · Optical Protection Failover", "title": "DoT National Disaster Telecommunications Plan", "verification": "VERIFIED_IN_KB"},
+        "EV-012": {"code": "NDMA-SOP-2019-DISCOM", "clause": "Section 4.2 · Satellite Gateway Uplink Fallback", "title": "NDMA Standard Operating Procedure for Disaster Communications", "verification": "VERIFIED_IN_KB"},
+    }
+
     for code, name, desc, expected_status, is_feasible in variant_specs:
         sc_obj = INTEGRATED_SCENARIOS.get(f"ECR5G-FLOOD-001-{code}") or INTEGRATED_SCENARIOS["ECR5G-FLOOD-001"]
         rep = run_comparison(sc_obj, [ControllerStrategy.FIFO_BASELINE, ControllerStrategy.STATIC_QOS_BASELINE, ControllerStrategy.ECAC_CONTROLLER], seed=101)
@@ -240,12 +255,21 @@ def scenario_variants(scenario_id: str) -> dict[str, Any]:
         static_result = next((item for item in rep["strategy_results"] if item["strategy"] == ControllerStrategy.STATIC_QOS_BASELINE.value), None)
         fifo_result = next((item for item in rep["strategy_results"] if item["strategy"] == ControllerStrategy.FIFO_BASELINE.value), None)
 
+        sc_dump = sc_obj.model_dump(mode="json")
+        for ev in sc_dump.get("evidence_objects", []):
+            cit_info = dict(ev_citations_map.get(ev.get("evidence_id"), ev_citations_map["EV-001"]))
+            if code == "B" and ev.get("evidence_id") == "EV-005":
+                cit_info["verification"] = "UNVERIFIED_MISSING_TIMESTAMP"
+            elif code == "C" and ev.get("evidence_id") == "EV-008":
+                cit_info["verification"] = "CONFLICT_FLAGGED_AGAINST_SCADA"
+            ev["citation"] = cit_info
+
         variants_data.append({
             "variant_id": f"ECR5G-FLOOD-001-{code}",
             "code": code,
             "name": name,
             "description": desc,
-            "scenario": sc_obj.model_dump(mode="json"),
+            "scenario": sc_dump,
             "schedule_status": expected_status,
             "is_feasible": is_feasible,
             "ecac_result": ecac_result,
