@@ -24,6 +24,7 @@ Thumbs.db
 
 # Scratch directory
 scratch/
+tmp/
 # Cache
 .ocr_cache/
 **/.ocr_cache/

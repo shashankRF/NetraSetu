@@ -6,6 +6,16 @@ NetraSetu is a research and demonstration platform for analyzing incident eviden
 
 > Evidence supports the analysis. The Risk & Governance Engine sets review gates. Authorized people make consequential decisions.
 
+## Jury review guide
+
+| Deliverable | What to look at |
+|---|---|
+| Setup and environment variables | [Run locally](#run-locally) and [Environment variables](#environment-variables) |
+| Technical Design Document | [docs/TECHNICAL_DESIGN.md](docs/TECHNICAL_DESIGN.md) — components, trust boundaries, data flows, and diagrams |
+| Sample data and test cases | [docs/SAMPLE_DATA_AND_TESTS.md](docs/SAMPLE_DATA_AND_TESTS.md) — fixtures, official sources, tests, and commands |
+| License | [LICENSE](LICENSE) — Apache License 2.0 |
+| Security limits | [Backend/SECURITY_DEPLOYMENT.md](Backend/SECURITY_DEPLOYMENT.md) |
+
 ## Current capabilities
 
 | Area | What is implemented | Boundary |
@@ -55,12 +65,14 @@ Focused backend tests: Backend/tests/
 
 Core components include Python, FastAPI, Pydantic, BGE-M3, FAISS, BGE reranking, PyMuPDF, and the existing NetraSetu Risk & Governance Engine. LLM synthesis uses the configured Groq provider when enabled. The failure simulator is deterministic and does not use an LLM in its decision loop.
 
+See the [Technical Design Document](docs/TECHNICAL_DESIGN.md) for component and request-flow diagrams. See [Sample Data and Test Cases](docs/SAMPLE_DATA_AND_TESTS.md) for fixture provenance and executable checks.
+
 ## Run locally
 
 Requirements: Python 3.11 or newer. From the repository root on Windows:
 
 ```powershell
-py -3.11 -m venv .venv
+py -3 -m venv .venv
 .venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
@@ -69,6 +81,25 @@ Copy-Item .env.example .env
 ```
 
 Set `GROQ_API_KEY` in the local `.env` file to enable provider-backed synthesis. Keep secrets out of Git. The deterministic simulator, map, and source-PDF search do not require a Groq key.
+
+### Environment variables
+
+Copy `.env.example` to `.env`. Unset optional values retain the defaults shown below.
+
+| Variable | Purpose / default |
+|---|---|
+| `NETRASETU_ENV` | `development` for a local demo; set to `production` to disable demo authentication and enforce production checks. |
+| `GROQ_API_KEY` | Optional provider key for Groq-backed classification and synthesis. Keep it private. |
+| `NETRASETU_ADMIN_USERNAME` | Production sign-in name; required with the password hash. |
+| `NETRASETU_ADMIN_PASSWORD_HASH` | Production Argon2id PHC hash. See [security deployment instructions](Backend/SECURITY_DEPLOYMENT.md). |
+| `NETRASETU_ADMIN_PASSWORD` | Development-only password override. Never set in production. Local fallback: `admin` / `admin123`. |
+| `NETRASETU_EVIDENCE_MODEL` | Set to `qwen` to select the local Qwen evidence classifier path. |
+| `USE_LOCAL_QWEN` | Set to `1` to select local Qwen classification. |
+| `NETRASETU_QWEN_MODEL` | Local model ID; defaults to `Qwen/Qwen2.5-0.5B-Instruct`. Model files must be available to the runtime. |
+| `NETRASETU_SUPPORT_EMAIL`, `NETRASETU_SMTP_HOST`, `NETRASETU_SMTP_FROM` | Optional support-report email delivery configuration. |
+| `NETRASETU_SMTP_PORT`, `NETRASETU_SMTP_USERNAME`, `NETRASETU_SMTP_PASSWORD`, `NETRASETU_SMTP_TIMEOUT`, `NETRASETU_SMTP_USE_SSL` | Optional SMTP transport settings; defaults are port `587`, timeout `10` seconds, and SSL `false`. Store secrets outside Git. |
+
+`NETRASETU_RUN_LIVE_API_TESTS=1` opts into the live Groq test and requires `GROQ_API_KEY`. `NETRASETU_TESTING` is test-only. The provided Windows launchers use fixed local ports: API `8000`, frontend `5500`; deployment proxy ports are configured outside the application.
 
 Start the local development dashboard:
 
@@ -118,4 +149,4 @@ Some integration tests initialize retrieval/model components and may take longer
 
 ## License
 
-See [LICENSE](LICENSE) for the project license.
+See [LICENSE](LICENSE) for the Apache License 2.0 applying to project code. Bundled government publications, maps, and other third-party material retain any source-specific rights and terms; the repository license does not override them.
