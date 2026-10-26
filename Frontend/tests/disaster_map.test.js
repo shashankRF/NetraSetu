@@ -49,6 +49,12 @@ test('analysis requests allow the backend more than the former 40-second browser
   assert.match(html, /timeout:120000/);
   assert.match(html, /Request timed out after .*Backend completion was not confirmed/);
   assert.doesNotMatch(html, /Request reached 40s live demo deadline/);
+  assert.match(html, /'X-Request-ID':requestId/);
+  for (const status of ['RUNNING', 'COMPLETED', 'FAILED', 'TIMED_OUT']) assert.match(html, new RegExp(status));
+  assert.match(html, /Evidence status: Not returned/);
+  assert.match(html, /dash-latency-retrieval/);
+  assert.match(html, /claim_citation_verification_ms/);
+  assert.doesNotMatch(html, /Not separately instrumented in the current scenario response/);
 });
 
 test('dashboard builds its API origin from the served frontend origin and posts analysis to the registered scenario route', () => {
@@ -69,8 +75,9 @@ test('demo markers are removed and remaining inline scripts parse', () => {
 
 test('aftermath system is integrated only into Uttarakhand map with backend API and controls wired', () => {
   assert.match(html, /data-dash-panel="disaster-map"[\s\S]*?id="aftermath-title"/);
-  assert.match(html, /if\(view==='disaster-map'\) \{ disasterMapLoad\(\); aftermathLoad\(\); \}/);
+  assert.match(html, /if\(view==='disaster-map'\)\s*\{\s*disasterMapLoad\(\);\s*aftermathLoadIncidentSources\(\);\s*\}/);
   assert.match(html, /aftermathBind\(\);dashLoadScenarios\(\)/);
+  assert.match(html, /if\(sandbox\.open\)aftermathLoad\(\)/);
   assert.match(html, /api\/aftermath/);
   for (const control of ['aftermath-scenario-select', 'aftermath-compare', 'aftermath-network-run', 'aftermath-reset', 'aftermath-asset-search', 'aftermath-asset-status', 'aftermath-asset-category', 'aftermath-asset-severity', 'aftermath-asset-area']) {
     assert.match(html, new RegExp('id="' + control + '"'));

@@ -1,6 +1,15 @@
 from __future__ import annotations
 
-from Backend.orchestrator import run_pipeline
+from Backend.orchestrator import _get_execution_config, run_pipeline
+
+
+def test_demo_profile_bounds_cpu_reranking_without_removing_hybrid_retrieval():
+    demo = _get_execution_config(demo_mode=True)
+    full = _get_execution_config(demo_mode=False)
+
+    assert demo["rerank_candidate_limit"] == 4
+    assert demo["rerank_top_k"] == 3
+    assert full["rerank_candidate_limit"] is None
 
 
 REQUIRED_KEYS = {

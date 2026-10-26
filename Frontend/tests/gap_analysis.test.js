@@ -91,7 +91,8 @@ test('human review does not solicit or transmit guessed ministry accountability'
   const panel = html.slice(html.indexOf('id="dash-human-review"'), html.indexOf('</div>', html.indexOf('id="dash-human-review"')));
   assert.doesNotMatch(panel, /dash-accountable-authority|Accountable Government ministry \/ agency<input/i);
   assert.match(panel, /Accountability from cited evidence/);
-  assert.match(html, /Accountability: not retrieved from cited evidence/);
+  assert.match(html, /Accountability from cited evidence:/);
+  assert.match(html, /id="dash-review-accountability">Not retrieved/);
   const submitStart = html.indexOf('async function dashSubmitReview(');
   const submitEnd = html.indexOf(String.fromCharCode(10), submitStart);
   const submitFunction = html.slice(submitStart, submitEnd);

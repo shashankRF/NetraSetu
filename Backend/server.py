@@ -1,6 +1,8 @@
 import os
 os.environ["HF_HUB_OFFLINE"] = "1"
 os.environ["TRANSFORMERS_OFFLINE"] = "1"
+import re
+import time
 import uuid
 from typing import Optional, List, Dict, Any
 from pathlib import Path
@@ -21,11 +23,11 @@ load_dotenv(
 # FASTAPI
 # ============================================================
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 # ============================================================
 # NETRASETU IMPORTS
@@ -46,6 +48,7 @@ from .audit.recorder import (
     append_audit_record,
     load_audit_records,
     get_latest_review_event,
+    generate_audit_id,
 )
 
 from .orchestrator import run_pipeline
@@ -598,7 +601,11 @@ def scenario_detail(
 @app.post("/api/scenarios/run")
 def run_scenario(
     request: ScenarioRunRequest,
+    http_request: Request,
 ):
+    request_started = time.perf_counter()
+    supplied_trace_id = (http_request.headers.get("x-request-id") or "").strip()
+    exec_id = supplied_trace_id if re.fullmatch(r"[A-Za-z0-9._-]{1,80}", supplied_trace_id) else f"RUN-{uuid.uuid4().hex[:12]}"
 
     # --------------------------------------------------------
     # Validate jurisdiction
@@ -836,7 +843,7 @@ def run_scenario(
     # unnecessary CPU time on large reranking sets.
     # --------------------------------------------------------
 
-    exec_id = f"RUN-{uuid.uuid4().hex[:12]}"
+    scenario_validation_ms = round((time.perf_counter() - request_started) * 1000, 2)
     try:
 
         pipeline_result = run_pipeline(
@@ -866,11 +873,20 @@ def run_scenario(
             time_budget_seconds=38.0,
         )
 
+        route_elapsed_ms = round((time.perf_counter() - request_started) * 1000, 2)
+        pipeline_result.setdefault("performance", {})["scenario_validation_ms"] = scenario_validation_ms
+        pipeline_result["performance"]["scenario_route_total_ms"] = route_elapsed_ms
+        print(
+            f"[SCENARIO_RUN] trace_id={exec_id} status=COMPLETED "
+            f"elapsed_ms={route_elapsed_ms} stage_ms={pipeline_result.get('performance', {})}"
+        )
+
         # ----------------------------------------------------
         # Return scenario + pipeline result
         # ----------------------------------------------------
 
         return {
+            "trace_id": exec_id,
 
             "scenario": {
 
@@ -923,6 +939,7 @@ def run_scenario(
         }
 
     except ValueError as exc:
+        print(f"[SCENARIO_RUN] trace_id={exec_id} status=FAILED category=VALIDATION elapsed_ms={round((time.perf_counter() - request_started) * 1000, 2)} error={type(exc).__name__}")
         failure_rec = create_audit_record(
             question=question,
             execution_id=exec_id,
@@ -944,6 +961,7 @@ def run_scenario(
         )
 
     except Exception as exc:
+        print(f"[SCENARIO_RUN] trace_id={exec_id} status=FAILED category=ANALYSIS elapsed_ms={round((time.perf_counter() - request_started) * 1000, 2)} error={type(exc).__name__}")
         failure_rec = create_audit_record(
             question=question,
             execution_id=exec_id,
@@ -975,6 +993,19 @@ class TelemetryTestRequest(BaseModel):
     profile: str = "URLLC"
     impairments: List[str] = []
     num_samples: int = 100
+
+
+class FailureCombinationRequest(BaseModel):
+    profile: str = "URLLC"
+    failure_types: List[str] = Field(min_length=1, max_length=5)
+    combination_depth: int = Field(default=2, ge=1, le=5)
+    max_scenarios: int = Field(default=32, ge=1, le=64)
+    samples: int = Field(default=100, ge=66, le=500)
+    seed: int = Field(default=42, ge=0, le=2147483647)
+    trials: int = Field(default=1, ge=1, le=5)
+    thresholds: Dict[str, float] = Field(default_factory=dict)
+    jurisdiction: Optional[str] = None
+    evidence_query: Optional[str] = Field(default=None, max_length=1200)
 
 
 class ChangeImpactPlanRequest(BaseModel):
@@ -1014,6 +1045,158 @@ def run_5g_test(req: TelemetryTestRequest):
         impairments=req.impairments,
         num_samples=req.num_samples,
     )
+
+
+FAILURE_COMBINATION_STORE = PROJECT_ROOT / "Backend" / "audit" / "records" / "failure_combination_runs.jsonl"
+
+
+def _persist_failure_combination_run(result: Dict[str, Any]) -> None:
+    """Append one completed or failed simulator run without rewriting history."""
+    import json
+
+    FAILURE_COMBINATION_STORE.parent.mkdir(parents=True, exist_ok=True)
+    with FAILURE_COMBINATION_STORE.open("a", encoding="utf-8", newline="\n") as stream:
+        stream.write(json.dumps(result, ensure_ascii=False, separators=(",", ":"), default=str) + "\n")
+        stream.flush()
+        os.fsync(stream.fileno())
+
+
+def _load_failure_combination_runs(limit: int = 20) -> List[Dict[str, Any]]:
+    import json
+
+    if not FAILURE_COMBINATION_STORE.is_file():
+        return []
+    rows: List[Dict[str, Any]] = []
+    with FAILURE_COMBINATION_STORE.open("r", encoding="utf-8") as stream:
+        for line in stream:
+            try:
+                rows.append(json.loads(line))
+            except json.JSONDecodeError:
+                continue
+    return list(reversed(rows[-limit:]))
+
+
+def _integrate_failure_combination_run(result: Dict[str, Any], request: FailureCombinationRequest) -> None:
+    """Attach existing evidence, risk, coordination and audit services to a run."""
+    from Backend.telemetry_5g.governance_integration import (
+        SimulationRiskInput,
+        assess_simulation_row,
+        retrieve_and_verify_simulation_sources,
+    )
+    from Backend.telemetry_5g.coordination import build_agency_messages
+
+    source_assessment = retrieve_and_verify_simulation_sources(
+        query=request.evidence_query or " ".join(["5G reliability failure combination", *request.failure_types]),
+        jurisdiction=request.jurisdiction,
+        limit=5,
+    )
+    result["evidence_assessment"] = {
+        "status": "EVIDENCE_PENDING" if source_assessment.get("status") == "EVIDENCE_PENDING" else source_assessment.get("status"),
+        "scope": "Retrieved policy sources are not evidence that synthetic simulator metrics satisfy or violate a real-world requirement.",
+        "source_assessment": source_assessment,
+    }
+
+    for row in result.get("results", []):
+        if row.get("status") != "COMPLETED":
+            row["governance_assessment"] = {"engine": "Backend.risk_engine.RiskEngine", "review_status": "NOT_EVALUATED", "reason": "Simulator case did not complete; no successful metric assessment was produced."}
+            continue
+        config = row.get("configuration", {})
+        risk_input = SimulationRiskInput(
+            run_id=result["run_id"], scenario_id=request.evidence_query,
+            profile=str(config.get("profile", request.profile)),
+            failure_types=list(config.get("failure_types", [])),
+            seed=int(config.get("seed", request.seed)), samples=int(config.get("samples", request.samples)),
+            simulator_version=str(row.get("simulator_version") or result.get("engine_version") or "unknown"),
+            metrics=dict(row.get("metrics") or {}),
+            simulator_provenance=dict(row.get("provenance") or result.get("provenance") or {}),
+        )
+        row["governance_assessment"] = assess_simulation_row(risk_input, source_assessment)
+
+    completed = [row for row in result.get("results", []) if row.get("status") == "COMPLETED"]
+    representative = completed[-1] if completed else None
+    risk = representative.get("governance_assessment", {}) if representative else {}
+    blocking = any(row.get("governance_assessment", {}).get("blocking_conditions") for row in completed)
+    result["integration"] = {
+        "risk_engine": "Backend.risk_engine.RiskEngine",
+        "review_gate": "BLOCKED" if blocking else "REVIEW_REQUIRED" if completed else "NOT_EVALUATED",
+        "evidence": result["evidence_assessment"],
+        "coordination_messages": [],
+    }
+    if representative:
+        result["integration"]["coordination_messages"] = build_agency_messages(
+            run_id=result["run_id"], scenario_id=request.evidence_query,
+            simulation_case_id=representative.get("scenario_id"),
+            profile=str(representative.get("configuration", {}).get("profile", request.profile)),
+            failures=list(representative.get("configuration", {}).get("failure_types", [])),
+            metrics=dict(representative.get("metrics") or {}),
+            slo_status=str(representative.get("profile_evaluation", {}).get("status", "NOT_EVALUATED")),
+            recovery_recommendations=list(representative.get("recovery_recommendations", [])),
+            risk=risk, evidence=source_assessment,
+        )
+
+    audit = create_audit_record(
+        question=request.evidence_query or "Run bounded failure-combination simulator",
+        execution_id=result["run_id"], event_type="FAILURE_COMBINATION_SIMULATION",
+        execution_status=str(result.get("status", "UNKNOWN")),
+        provenance="SIMULATION; not a live network action", domain="Telecom/5G reliability simulation",
+        jurisdiction=request.jurisdiction, human_review_required=bool(completed),
+        evidence_assessment=result["evidence_assessment"],
+        risk_assessment=risk,
+        notes=["Simulator results are synthetic and do not measure a live network.", "No operational or coordination action was executed."],
+    )
+    audit["integration_record"] = {"full_run": result}
+    audit.pop("audit_id", None)
+    audit["audit_id"] = generate_audit_id(audit)
+    append_audit_record(audit)
+    result["audit_id"] = audit["audit_id"]
+    result["review"] = {"human_action": "PENDING", "reviewer": "", "statement": "", "audit_id": audit["audit_id"]}
+
+
+@app.get("/api/5g/failure-combinations/catalog")
+def get_failure_combination_catalog():
+    from Backend.telemetry_5g.combination_engine import FAILURE_CATALOG, MAX_SCENARIOS, MAX_TRIALS, MIN_SAMPLES, MAX_SAMPLES
+    return {"engine_version": "combination-discovery-v1", "failures": FAILURE_CATALOG,
+            "limits": {"max_scenarios": MAX_SCENARIOS, "max_trials": MAX_TRIALS,
+                       "min_samples": MIN_SAMPLES, "max_samples": MAX_SAMPLES},
+            "scope": "Controlled software simulation; not a live 5G network test."}
+
+
+@app.post("/api/5g/failure-combinations")
+def run_failure_combinations(req: FailureCombinationRequest):
+    from Backend.telemetry_5g.combination_engine import CombinationValidationError, run_combination_search
+    try:
+        result = run_combination_search(
+            profile=req.profile, failure_types=req.failure_types,
+            combination_depth=req.combination_depth, max_scenarios=req.max_scenarios,
+            samples=req.samples, seed=req.seed, trials=req.trials, thresholds=req.thresholds,
+        )
+    except CombinationValidationError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    try:
+        _integrate_failure_combination_run(result, req)
+        _persist_failure_combination_run(result)
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail="Failure-combination result could not be fully integrated and persisted; no success was recorded.") from exc
+    return result
+
+
+@app.get("/api/5g/failure-combinations")
+def list_failure_combination_runs(limit: int = 20):
+    if not 1 <= limit <= 100:
+        raise HTTPException(status_code=422, detail="limit must be between 1 and 100")
+    runs = _load_failure_combination_runs(limit)
+    return {"runs": runs, "count": len(runs)}
+
+
+@app.get("/api/5g/failure-combinations/{run_id}")
+def get_failure_combination_run(run_id: str):
+    for result in _load_failure_combination_runs(100):
+        if result.get("run_id") == run_id:
+            audit_id = result.get("audit_id")
+            review = get_latest_review_event(audit_id) if audit_id else None
+            result["review"] = review or result.get("review", {"human_action": "PENDING"})
+            return result
+    raise HTTPException(status_code=404, detail="Failure-combination run not found")
 
 
 @app.get("/api/change_impact/revisions")
