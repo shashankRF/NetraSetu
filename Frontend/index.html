@@ -5007,7 +5007,7 @@
     </a>
     <a class="brand-name" href="#/home" aria-label="NetraSetu home">NetraSetu</a>
     <nav class="links" aria-label="Primary">
-      <a href="#/home">Home</a><a href="#/intelligence">Intelligence</a><a href="#/ecr5g" id="nav-ecr5g" class="nav-link-ecr5g">ECR-5G</a><a href="#/contact">Contact Us</a>
+      <a href="#/home">Home</a><a href="#/about">About</a><a href="#/intelligence">Intelligence</a><a href="#/ecr5g" id="nav-ecr5g" class="nav-link-ecr5g">ECR-5G</a><a href="#/contact">Contact Us</a>
     </nav>
     <a class="pill pill-nav" href="#/dashboard"><span>Dashboard</span></a>
     <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false"
@@ -5016,7 +5016,7 @@
   <nav class="menu" id="menu" aria-hidden="true" aria-label="Mobile">
     <div class="menu-inner">
       <p class="menu-eyebrow">Menu</p>
-      <ul class="menu-list"><li><a href="#/home">Home</a></li><li><a href="#/intelligence">Intelligence</a></li><li><a href="#/ecr5g">ECR-5G</a></li><li><a href="#/contact">Contact Us</a></li><li><a href="#/dashboard">Dashboard</a></li></ul>
+      <ul class="menu-list"><li><a href="#/home">Home</a></li><li><a href="#/about">About</a></li><li><a href="#/intelligence">Intelligence</a></li><li><a href="#/ecr5g">ECR-5G</a></li><li><a href="#/contact">Contact Us</a></li><li><a href="#/dashboard">Dashboard</a></li></ul>
       <div class="menu-foot"><a class="ghost" href="#/about">About NetraSetu</a></div>
     </div>
   </nav>
@@ -6225,6 +6225,7 @@
           <option value="SIMULATED SCENARIO">Simulated Scenario</option>
         </select>
         <select class="audit-select" id="audit-sort" aria-label="Sort Records">
+          <option value="important" selected>Important First</option>
           <option value="newest">Newest First</option>
           <option value="oldest">Oldest First</option>
           <option value="highest_risk">Highest Risk</option>
@@ -9782,13 +9783,13 @@
         if(dashState.audits.length&&!force){dashRenderAudit();dashRenderMetrics();dashRenderGovernance();return;}
         var status=$('dash-audit-status');if(status)status.textContent='Loading persisted audit records…';
         try {
-          var data=await apiFetch('/api/audits?limit=500&sort=newest',{timeout:10000});dashState.auditData=data;dashState.audits=data.audits||[];dashState.auditError=null;await dashLoadLatestRecord();
-          if(status)status.textContent='Loaded '+dashState.audits.length+' of '+(data.total||0)+' persisted records.';
+          var data=await apiFetch('/api/audits?limit=30&provenance=RUNTIME_EXECUTION&sort=important',{timeout:10000});dashState.auditData=data;dashState.audits=data.audits||[];dashState.auditError=null;await dashLoadLatestRecord();
+          if(status)status.textContent='Loaded '+dashState.audits.length+' prioritized prototype runtime records. Full ledger: '+(data.total||0)+'.';
           dashRenderMetrics();dashRenderAudit();dashRenderGovernance();
         } catch(err) {dashState.auditError=err;if(status)status.textContent='Audit service unavailable: '+err.message;var m=$('dash-metric-total');if(m)m.textContent='Unavailable';}
       }
       async function dashLoadLatestRecord() {
-        var latestId=dashState.audits[0]&&dashState.audits[0].audit_id;if(!latestId||dashState.persistedAuditId===latestId)return;
+        var latestId='';try{var latestData=await apiFetch('/api/audits?limit=1&provenance=RUNTIME_EXECUTION&sort=newest',{timeout:10000});latestId=latestData.audits&&latestData.audits[0]&&latestData.audits[0].audit_id;}catch(err){return;}if(!latestId||dashState.persistedAuditId===latestId)return;
         try {dashState.persistedRecord=await apiFetch('/api/audits/'+encodeURIComponent(latestId),{timeout:10000});dashState.persistedAuditId=latestId;if(dashState.latest&&dashState.latest.record==null&&dashState.latest.result){var p=dashState.latest.result.pipeline_result||dashState.latest.result;if(p.audit_id===latestId)dashState.latest.record=dashState.persistedRecord;}if(!dashState.latest){dashRenderEvidence();dashRenderGapAnalysis();dashRenderGovernance();dashRenderAttachmentOptions();}}catch(err){dashState.persistedRecord=null;}
       }
       function dashRenderMetrics() {
