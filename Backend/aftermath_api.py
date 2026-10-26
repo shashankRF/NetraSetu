@@ -1,7 +1,8 @@
-"""Auditable synthetic disaster-aftermath workflow integrated with NetraSetu engines."""
+"""Source-backed incident analysis and synthetic aftermath workflows using NetraSetu engines."""
 from __future__ import annotations
 
 from collections import Counter, defaultdict
+from datetime import date
 from enum import Enum
 from typing import Any
 
@@ -15,7 +16,7 @@ from Backend.risk_engine import (
     EvidenceAssessment, EvidenceQuality, EvidenceStatus, RiskEngine,
 )
 
-router = APIRouter(prefix="/api/aftermath", tags=["synthetic-aftermath-analysis"])
+router = APIRouter(prefix="/api/aftermath", tags=["post-disaster-aftermath-analysis"])
 
 ACTION_TRANSITIONS = {
     "PROPOSED": {"UNDER_REVIEW", "REJECTED"},
@@ -45,6 +46,17 @@ class ResetRequest(BaseModel):
     confirmation: str = Field(min_length=1, max_length=30)
 
 
+class IncidentAnalysisRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    location: str = Field(default="Dharali, Bhatwari Tehsil, Uttarkashi, Uttarakhand", min_length=3, max_length=180)
+    incident_start: date = date(2025, 8, 1)
+    incident_end: date = date(2025, 8, 30)
+    incident_details: str = Field(min_length=10, max_length=6000)
+    analysis_focus: str = Field(default="Assess source-supported damage, remaining evidence gaps, and safe rehabilitation review steps.", min_length=10, max_length=2000)
+    elevation_or_terrain_input: str = Field(default="Not supplied", max_length=1500)
+    facility_or_asset_ids: list[str] = Field(default_factory=lambda: ["DHARALI-SETTLEMENT", "KHEER-GAD-RUNOUT", "BHAGIRATHI-CONFLUENCE", "DHARALI-MUKHBA-ACCESS"], max_length=30)
+
+
 def _events(scenario_id: str) -> list[dict[str, Any]]:
     try:
         return [item for item in load_audit_records()
@@ -65,13 +77,14 @@ def _actor(request: Request) -> str:
 
 
 def _save_event(*, scenario_id: str, actor: str, event_type: str, summary: str,
-                payload: dict[str, Any], provenance: str = "SIMULATED_SCENARIO_REVIEW") -> str:
+                payload: dict[str, Any], provenance: str = "SIMULATED_SCENARIO_REVIEW",
+                domain: str = "Post-disaster aftermath simulation", jurisdiction: str = "SIMULATION_ONLY") -> str:
     record = create_audit_record(
         question=summary, event_type=event_type, execution_status="RECORDED",
         scenario_id=scenario_id, scenario_title=scenario_id,
         human_reviewer=actor, human_action=event_type,
         human_review_required=True, provenance=provenance,
-        domain="Post-disaster aftermath simulation", jurisdiction="SIMULATION_ONLY",
+        domain=domain, jurisdiction=jurisdiction,
     )
     record.update(payload)
     record.pop("audit_id", None)
@@ -235,6 +248,140 @@ def _request_states_without_events(events: list[dict[str, Any]]) -> dict[str, di
 def health() -> dict[str, Any]:
     return {"status": "available", "fixture_scenarios": len(list_scenarios()), "simulated_only": True,
             "network_engine": "Backend.telemetry_5g.combination_engine", "risk_engine": "Backend.risk_engine.RiskEngine"}
+
+
+@router.get("/incident-sources/dharali-2025")
+def dharali_sources() -> dict[str, Any]:
+    from Backend.dharali_evidence import TARGETS, source_catalog
+    return {
+        "incident_id": "DHARALI-FLASH-FLOOD-2025-08-05",
+        "incident_name": "Kheer Gad flash flood and debris flow, Dharali",
+        "location": "Dharali, Bhatwari Tehsil, Uttarkashi district, Uttarakhand, India",
+        "incident_date": "2025-08-05",
+        "analysis_window": {"start": "2025-08-01", "end": "2025-08-30"},
+        "source_observation_dates": ["2025-08-06 NRSC post-event map", "2025-08-07 ISRO/NRSC post-event imagery referenced on official ISRO page", "2024-06-13 NRSC pre-event image"],
+        "sources": source_catalog(),
+        "assessment_targets": TARGETS,
+        "elevation_status": "Absolute elevation raster/data not retrieved. GSI provides qualitative steep-gradient context and relative settlement position only.",
+        "facility_status": "Four mapped incident assessment targets; named facility-by-facility operational condition not retrieved.",
+    }
+
+
+@router.post("/incident-analysis")
+def analyze_incident(payload: IncidentAnalysisRequest, request: Request) -> dict[str, Any]:
+    """Run a query-time BM25 evidence search and send every input into governance."""
+    from Backend.dharali_evidence import SOURCES, TARGETS, search_incident_evidence
+
+    coverage_start, coverage_end = date(2025, 8, 1), date(2025, 8, 30)
+    if payload.incident_start < coverage_start or payload.incident_end > coverage_end or payload.incident_start > payload.incident_end:
+        raise HTTPException(status_code=422, detail="The ingested source pack only covers the requested Dharali event window 2025-08-01 through 2025-08-30. No analysis was run outside that window.")
+    if "dharali" not in payload.location.casefold() and "kheer gad" not in payload.location.casefold():
+        raise HTTPException(status_code=422, detail="This ingested incident source pack covers Dharali / Kheer Gad only; no other location was analyzed.")
+
+    query = " ".join([payload.location, payload.incident_details, payload.analysis_focus, payload.elevation_or_terrain_input, "Dharali Kheer Gad flash flood debris flow Bhagirathi river bridge road damage rehabilitation"])
+    passages = search_incident_evidence(query, top_k=6)
+    relevant = [row for row in passages if row["retrieval_score"] > 0]
+    sources_used = sorted({row["source_id"] for row in relevant})
+    targets = [item for item in TARGETS if item["target_id"] in payload.facility_or_asset_ids]
+    missing_target_ids = sorted(set(payload.facility_or_asset_ids) - {item["target_id"] for item in targets})
+    missing_evidence = [
+        "Current field inspection and geolocated damage status for each selected target.",
+        "Current road/bridge passability and engineering safety clearance.",
+        "Current river obstruction, water-level and downstream-hazard measurements.",
+        "Absolute elevation/DEM and current terrain survey; the sources provide only mapped/qualitative terrain context.",
+        "Rehabilitation cost, household needs, services-restoration progress and authorized recovery plan.",
+    ]
+    evidence_status = EvidenceStatus.INSUFFICIENT
+    evidence = EvidenceAssessment(
+        quality=EvidenceQuality.MODERATE if relevant else EvidenceQuality.INSUFFICIENT,
+        evidence_status=evidence_status,
+        supporting_count=len(relevant),
+        primary_source_count=len(sources_used),
+        official_source_count=len(sources_used),
+        source_diversity=len(sources_used),
+        missing_evidence=missing_evidence,
+    )
+    parameters = {
+        "incident_id": "DHARALI-FLASH-FLOOD-2025-08-05",
+        "incident_name": "Kheer Gad flash flood and debris flow, Dharali",
+        "location": payload.location,
+        "requested_incident_window": {"start": payload.incident_start.isoformat(), "end": payload.incident_end.isoformat()},
+        "source_coverage_window": {"start": coverage_start.isoformat(), "end": coverage_end.isoformat()},
+        "incident_details_user_supplied": payload.incident_details,
+        "analysis_focus_user_supplied": payload.analysis_focus,
+        "elevation_or_terrain_input": payload.elevation_or_terrain_input,
+        "source_observation_dates": ["2024-06-13 pre-event image", "2025-08-06 NRSC map observation", "2025-08-07 post-event imagery cited by ISRO"],
+        "retrieval_engine": "BM25 over PyMuPDF-extracted official GSI and NRSC/NDEM PDF page text",
+        "retrieved_passage_count": len(relevant),
+        "source_ids": sources_used,
+        "targets_in_scope": targets,
+        "unknown_target_ids": missing_target_ids,
+        "evidence_status": evidence_status.value,
+        "known_data_limitations": missing_evidence,
+        "absolute_elevation_m": None,
+        "facility_level_operational_status": "NOT_RETRIEVED",
+        "cause_of_event": "NOT_ESTABLISHED_BY_THIS_ANALYSIS",
+        "human_review_required": True,
+        "operational_action_authorized": False,
+    }
+    context = DecisionContext(
+        domain="Dharali post-disaster recovery assessment",
+        decision_impact=DecisionImpact.SAFETY,
+        consequence_score=85,
+        authority_requirement=AuthorityRequirement.SENIOR_AUTHORITY,
+        external_action=False,
+        affects_public_safety=True,
+        affects_critical_infrastructure=True,
+    )
+    governance_result = RiskEngine().assess(context, evidence, AIAnalysis(confidence=0.0, hallucination_risk=0.0, novel_situation=True))
+    governance = {
+        "risk_level": governance_result.risk_level.value,
+        "risk_score": governance_result.risk_score,
+        "escalation_level": governance_result.escalation_level.value,
+        "human_review_required": governance_result.human_review_required,
+        "mandatory_review": governance_result.mandatory_review,
+        "blocking_conditions": list(governance_result.blocking_conditions),
+        "reasons": list(governance_result.reasons),
+        "decision_authorized": False,
+        "next_recommended_step": "Keep rehabilitation and reopening decisions pending. Obtain current field, bridge/road-engineering, and river-safety verification, then submit the evidence package to the officially designated incident authority; the specific accountable office is NOT RETRIEVED from these sources.",
+        "authority_citation_status": "NOT_RETRIEVED: the two ingested assessment documents do not establish which authority approved a present rehabilitation decision.",
+        "analysis_parameters": parameters,
+    }
+    citations = []
+    for row in relevant:
+        source = SOURCES[row["source_id"]]
+        citations.append({
+            "source_id": row["source_id"], "document_title": row["title"], "issuing_authority": row["authority"],
+            "official_url": row["url"], "local_document_url": "/api/documents/raw/knowledge_base/Dharali%20Incident%202025/" + source["path"].name,
+            "page": row["page"], "extracted_line_range": row["extracted_line_range"], "retrieval_score": row["retrieval_score"],
+            "statement": row["excerpt"][:1600], "evidence_type": "OFFICIAL_DOCUMENT_PASSAGE",
+        })
+    if not citations:
+        citations = [{"statement": "Evidence not retrieved — no matching passage was found in the ingested official sources.", "source_id": None, "page": None}]
+
+    actions = [
+        {"step": 1, "recommendation": "Request geolocated field verification of the four assessment targets and attach dated photographs/inspection records.", "gate": "Human review; no damage state presumed beyond cited source observations."},
+        {"step": 2, "recommendation": "Obtain current road/bridge engineering clearance and river/channel assessment before restoring access or authorizing works.", "gate": "Officially designated decision authority: NOT RETRIEVED; confirm the responsible office before assignment."},
+        {"step": 3, "recommendation": "Build a rehabilitation plan only after verified household, utility, access, and terrain survey data are added to this analysis.", "gate": "Needs assessment and accountable authority not present in retrieved sources."},
+    ]
+    result_id = "AFTER-DHARALI-2025"
+    actor = _actor(request)
+    audit_id = _save_event(
+        scenario_id=result_id, actor=actor, event_type="AFTERMATH_INCIDENT_ANALYSIS",
+        summary=f"Source-backed aftermath evidence search for Dharali, {payload.incident_start} through {payload.incident_end}.",
+        provenance="OFFICIAL_GSI_NRSC_PDF_EVIDENCE_SEARCH",
+        domain="Post-disaster aftermath evidence and governance review", jurisdiction="India / Uttarakhand",
+        payload={"analysis_parameters": parameters, "governance": governance, "citations": citations,
+                 "recommended_steps": actions, "source_ids": sources_used, "retrieval_engine": parameters["retrieval_engine"],
+                 "operational_action_authorized": False},
+    )
+    return {"analysis_id": audit_id, "scenario_id": result_id, "incident_id": parameters["incident_id"],
+            "status": "COMPLETED" if relevant else "EVIDENCE_NOT_RETRIEVED", "evidence_status": evidence_status.value,
+            "summary": "Retrieved official source passages for the submitted Dharali incident details. Current facility condition, absolute elevation and rehabilitation progress remain unverified." if relevant else "Evidence not retrieved — no matching source passage was found.",
+            "targets": targets, "citations": citations, "missing_evidence": missing_evidence,
+            "recommended_steps": actions, "governance": governance, "analysis_parameters": parameters,
+            "retrieval_engine": parameters["retrieval_engine"], "audit_id": audit_id,
+            "live_telemetry_used": False, "operational_action_authorized": False}
 
 
 @router.get("/scenarios")

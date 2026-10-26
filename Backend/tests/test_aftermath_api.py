@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
@@ -83,3 +85,57 @@ def test_existing_multi_failure_engine_is_called_for_aftermath_and_persisted(mon
     assert data["real_network_measurements"] is False
     assert data["report"]["results"]
     assert any(row.get("event_type") == "AFTERMATH_NETWORK_ANALYSIS" for row in records)
+
+
+def test_dharali_source_catalog_identifies_incident_and_four_evidence_bounded_targets():
+    response = client.get("/api/aftermath/incident-sources/dharali-2025")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["incident_date"] == "2025-08-05"
+    assert data["analysis_window"] == {"start": "2025-08-01", "end": "2025-08-30"}
+    assert len(data["assessment_targets"]) == 4
+    assert data["assessment_targets"][3]["status"] == "NAMED_ON_SOURCE_MAP_CONDITION_NOT_RETRIEVED"
+    assert all(source["available"] for source in data["sources"])
+
+
+def test_dharali_search_returns_exact_source_locations_and_full_governance_parameters(monkeypatch):
+    records = _ledger(monkeypatch)
+    response = client.post("/api/aftermath/incident-analysis", json={
+        "location": "Dharali, Uttarkashi, Uttarakhand",
+        "incident_start": "2025-08-01",
+        "incident_end": "2025-08-30",
+        "incident_details": "Kheer Gad flash flood and debris flow at about 13:40 on 5 August 2025; assess damage and rehabilitation evidence.",
+        "analysis_focus": "Identify documented damage, current unknowns, and verification steps before recovery planning.",
+        "elevation_or_terrain_input": "GSI describes steep-gradient stream; no DEM supplied.",
+        "facility_or_asset_ids": ["DHARALI-SETTLEMENT", "KHEER-GAD-RUNOUT", "BHAGIRATHI-CONFLUENCE", "DHARALI-MUKHBA-ACCESS"],
+    })
+    assert response.status_code == 200, response.text
+    data = response.json()
+    assert data["status"] == "COMPLETED"
+    assert data["citations"]
+    assert all(row.get("document_title") and row.get("page") and row.get("extracted_line_range") for row in data["citations"])
+    assert data["governance"]["analysis_parameters"]["incident_details_user_supplied"].startswith("Kheer Gad")
+    assert data["governance"]["analysis_parameters"]["facility_level_operational_status"] == "NOT_RETRIEVED"
+    assert data["governance"]["decision_authorized"] is False
+    assert len(records) == 1
+    assert records[0]["event_type"] == "AFTERMATH_INCIDENT_ANALYSIS"
+    assert records[0]["analysis_parameters"] == data["analysis_parameters"]
+
+
+def test_dharali_analysis_rejects_out_of_coverage_dates_and_other_locations():
+    base = {"incident_details": "Assess documented Kheer Gad event impacts and post-event recovery needs."}
+    outside = client.post("/api/aftermath/incident-analysis", json={**base, "incident_start": "2025-07-31"})
+    assert outside.status_code == 422
+    other = client.post("/api/aftermath/incident-analysis", json={**base, "location": "Somewhere else"})
+    assert other.status_code == 422
+
+
+def test_frontend_incident_form_calls_registered_api_with_session_and_all_user_inputs():
+    frontend = (Path(__file__).resolve().parents[2] / "Frontend" / "index.html").read_text(encoding="utf-8")
+    assert "aftermathApi('/incident-analysis'" in frontend
+    assert "incident_start:$('aftermath-incident-start').value" in frontend
+    assert "incident_end:$('aftermath-incident-end').value" in frontend
+    assert "incident_details:$('aftermath-incident-details').value" in frontend
+    assert "analysis_focus:$('aftermath-analysis-focus').value" in frontend
+    assert "elevation_or_terrain_input:$('aftermath-terrain-input').value" in frontend
+    assert "options.credentials = 'include'" in frontend

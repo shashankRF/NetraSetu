@@ -75,8 +75,9 @@ test('demo markers are removed and remaining inline scripts parse', () => {
 
 test('aftermath system is integrated only into Uttarakhand map with backend API and controls wired', () => {
   assert.match(html, /data-dash-panel="disaster-map"[\s\S]*?id="aftermath-title"/);
-  assert.match(html, /if\(view==='disaster-map'\) \{ disasterMapLoad\(\); aftermathLoad\(\); \}/);
+  assert.match(html, /if\(view==='disaster-map'\)\s*\{\s*disasterMapLoad\(\);\s*aftermathLoadIncidentSources\(\);\s*\}/);
   assert.match(html, /aftermathBind\(\);dashLoadScenarios\(\)/);
+  assert.match(html, /if\(sandbox\.open\)aftermathLoad\(\)/);
   assert.match(html, /api\/aftermath/);
   for (const control of ['aftermath-scenario-select', 'aftermath-compare', 'aftermath-network-run', 'aftermath-reset', 'aftermath-asset-search', 'aftermath-asset-status', 'aftermath-asset-category', 'aftermath-asset-severity', 'aftermath-asset-area']) {
     assert.match(html, new RegExp('id="' + control + '"'));
