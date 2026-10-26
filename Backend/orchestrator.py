@@ -162,9 +162,9 @@ DEMO_CONFIG = {
     # Compact execution for live frontend scenarios (<40s target).
     "retrieval_k": 6,
     # Hybrid retrieval has already fused semantic and BM25 candidates. Rerank
-    # six fused candidates to keep clause-focused lexical matches while
+    # four fused candidates to keep clause-focused lexical matches while
     # bounding CPU cross-encoder time for an interactive scenario.
-    "rerank_candidate_limit": 6,
+    "rerank_candidate_limit": 4,
     "rerank_top_k": 3,
     "counter_retrieval_k": 3,
     "counter_rerank_candidate_limit": 8,
@@ -1410,6 +1410,7 @@ def run_pipeline(
     # GOVERNANCE
     # ========================================================
 
+    t_stage = time.perf_counter()
     governance = evaluate_governance(
         question=question,
         evidence_assessment=evidence_dict,
@@ -1419,6 +1420,7 @@ def run_pipeline(
         classification=evidence_classification,
         evidence_analysis=ranking_evidence_analysis,
     )
+    performance["governance_ms"] = round((time.perf_counter() - t_stage) * 1000, 2)
 
     # ========================================================
     # 8. CLAIM -> EVIDENCE MAPPINGS & CLAUSE VERIFICATION
@@ -1431,6 +1433,7 @@ def run_pipeline(
 
     from Backend.evidence_engine.clause_verifier import verify_claim_evidence
 
+    t_stage = time.perf_counter()
     mappings = []
     structured_claims = []
 
@@ -1498,6 +1501,7 @@ def run_pipeline(
         )
 
     final["claims"] = structured_claims
+    performance["claim_citation_verification_ms"] = round((time.perf_counter() - t_stage) * 1000, 2)
 
     # ========================================================
     # 9. AUDIT

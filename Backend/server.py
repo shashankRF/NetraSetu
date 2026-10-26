@@ -1,6 +1,8 @@
 import os
 os.environ["HF_HUB_OFFLINE"] = "1"
 os.environ["TRANSFORMERS_OFFLINE"] = "1"
+import re
+import time
 import uuid
 from typing import Optional, List, Dict, Any
 from pathlib import Path
@@ -21,7 +23,7 @@ load_dotenv(
 # FASTAPI
 # ============================================================
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -598,7 +600,11 @@ def scenario_detail(
 @app.post("/api/scenarios/run")
 def run_scenario(
     request: ScenarioRunRequest,
+    http_request: Request,
 ):
+    request_started = time.perf_counter()
+    supplied_trace_id = (http_request.headers.get("x-request-id") or "").strip()
+    exec_id = supplied_trace_id if re.fullmatch(r"[A-Za-z0-9._-]{1,80}", supplied_trace_id) else f"RUN-{uuid.uuid4().hex[:12]}"
 
     # --------------------------------------------------------
     # Validate jurisdiction
@@ -836,7 +842,7 @@ def run_scenario(
     # unnecessary CPU time on large reranking sets.
     # --------------------------------------------------------
 
-    exec_id = f"RUN-{uuid.uuid4().hex[:12]}"
+    scenario_validation_ms = round((time.perf_counter() - request_started) * 1000, 2)
     try:
 
         pipeline_result = run_pipeline(
@@ -866,11 +872,20 @@ def run_scenario(
             time_budget_seconds=38.0,
         )
 
+        route_elapsed_ms = round((time.perf_counter() - request_started) * 1000, 2)
+        pipeline_result.setdefault("performance", {})["scenario_validation_ms"] = scenario_validation_ms
+        pipeline_result["performance"]["scenario_route_total_ms"] = route_elapsed_ms
+        print(
+            f"[SCENARIO_RUN] trace_id={exec_id} status=COMPLETED "
+            f"elapsed_ms={route_elapsed_ms} stage_ms={pipeline_result.get('performance', {})}"
+        )
+
         # ----------------------------------------------------
         # Return scenario + pipeline result
         # ----------------------------------------------------
 
         return {
+            "trace_id": exec_id,
 
             "scenario": {
 
@@ -923,6 +938,7 @@ def run_scenario(
         }
 
     except ValueError as exc:
+        print(f"[SCENARIO_RUN] trace_id={exec_id} status=FAILED category=VALIDATION elapsed_ms={round((time.perf_counter() - request_started) * 1000, 2)} error={type(exc).__name__}")
         failure_rec = create_audit_record(
             question=question,
             execution_id=exec_id,
@@ -944,6 +960,7 @@ def run_scenario(
         )
 
     except Exception as exc:
+        print(f"[SCENARIO_RUN] trace_id={exec_id} status=FAILED category=ANALYSIS elapsed_ms={round((time.perf_counter() - request_started) * 1000, 2)} error={type(exc).__name__}")
         failure_rec = create_audit_record(
             question=question,
             execution_id=exec_id,

@@ -49,6 +49,12 @@ test('analysis requests allow the backend more than the former 40-second browser
   assert.match(html, /timeout:120000/);
   assert.match(html, /Request timed out after .*Backend completion was not confirmed/);
   assert.doesNotMatch(html, /Request reached 40s live demo deadline/);
+  assert.match(html, /'X-Request-ID':requestId/);
+  for (const status of ['RUNNING', 'COMPLETED', 'FAILED', 'TIMED_OUT']) assert.match(html, new RegExp(status));
+  assert.match(html, /Evidence status: Not returned/);
+  assert.match(html, /dash-latency-retrieval/);
+  assert.match(html, /claim_citation_verification_ms/);
+  assert.doesNotMatch(html, /Not separately instrumented in the current scenario response/);
 });
 
 test('dashboard builds its API origin from the served frontend origin and posts analysis to the registered scenario route', () => {
