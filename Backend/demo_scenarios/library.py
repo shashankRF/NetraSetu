@@ -1,6 +1,15 @@
 from .models import Scenario, ScenarioStep
 
 
+DASHBOARD_OVERVIEW_SCENARIO_IDS = (
+    "HG-5G-003",
+    "HG-TELECOM-004",
+    "HG-DISASTER-FLOOD-010",
+    "HG-DISASTER-LANDSLIDE-011",
+    "HG-DISASTER-EARTHQUAKE-012",
+)
+
+
 SCENARIOS = [
 
     # ============================================================
@@ -226,62 +235,6 @@ SCENARIOS = [
     ),
 
     # ============================================================
-    # RESEARCH
-    # ============================================================
-
-    Scenario(
-        scenario_id="HG-RESEARCH-005",
-        title="Conflicting O-RAN Security Research",
-        domain="Research",
-        jurisdiction="European Union",
-        description=(
-            "Simulated research-analysis scenario involving conflicting "
-            "technical findings concerning O-RAN security and network "
-            "efficiency."
-        ),
-        simulated=True,
-        steps=[
-            ScenarioStep(
-                step_id="RS1",
-                title="Research question",
-                event=(
-                    "A research team wants to determine whether an O-RAN "
-                    "security mechanism introduces measurable performance "
-                    "or energy overhead."
-                ),
-                evidence_prompt=(
-                    "What published standards and technical evidence "
-                    "address the relevant O-RAN security mechanisms?"
-                ),
-            ),
-            ScenarioStep(
-                step_id="RS2",
-                title="Conflicting findings",
-                event=(
-                    "Two groups report apparently different conclusions "
-                    "about security overhead."
-                ),
-                evidence_prompt=(
-                    "Identify supporting, contradicting, contextual, and "
-                    "insufficient evidence relevant to the research question."
-                ),
-            ),
-            ScenarioStep(
-                step_id="RS3",
-                title="Research gap",
-                event=(
-                    "The research team wants to determine whether a genuine "
-                    "research gap remains."
-                ),
-                evidence_prompt=(
-                    "Does the available evidence establish a research gap, "
-                    "or is the evidence insufficient to establish one?"
-                ),
-            ),
-        ],
-    ),
-
-    # ============================================================
     # EUROPEAN UNION
     # ============================================================
 
@@ -436,6 +389,103 @@ SCENARIOS = [
                 evidence_prompt=(
                     "Does Clause 12 of the CERT-In Directions dated 28 April 2022 establish the "
                     "mandatory 6-hour cyber incident reporting obligation, or is there a citation mismatch?"
+                ),
+            ),
+        ],
+    ),
+
+    # Focused disaster analysis scenarios used by Dashboard Overview.
+    Scenario(
+        scenario_id="HG-DISASTER-FLOOD-010",
+        title="Flood Disruption to Emergency Telecommunications",
+        domain="Disaster Management",
+        jurisdiction="India",
+        description="Detailed simulated flood and emergency-communications assessment. All incident conditions are hypothetical; the workflow must distinguish observed source records from assumptions and retrieve documentary authority before assigning responsibility.",
+        simulated=True,
+        steps=[
+            ScenarioStep("F1", "Verify flood incident and source scope", "Hypothetical flood reports are not confirmed observations. Check the date, location, issuing source, and whether each record is an alert, incident report, or historical risk document.", "For this hypothetical flood, identify the retrieved NDMA/SDMA or official incident evidence, its exact document and clause/page, what it confirms, and what remains unverified. If no statement is retrieved, say Evidence not retrieved."),
+            ScenarioStep("F2", "Trace emergency telecom dependencies", "Assess possible power, backhaul, access-network, and emergency-call disruptions only against supplied operator or official status records; no outage is presumed.", "Using retrieved DoT disaster-communications guidance, the National Disaster Management Plan, and relevant ITU emergency-telecommunications material where present, assess each stated dependency. Give exact source citation, separate mandatory rules from guidance, and list counter-evidence or missing outage records."),
+            ScenarioStep("F3", "Assign evidence-backed governance follow-up", "Prepare options for authorized review. This simulation does not dispatch agencies or authorize network changes.", "What next step is supported by the retrieved evidence? Name a ministry, department, or authority only when an exact cited passage assigns responsibility; otherwise report Not retrieved. State required human review, uncertainty, and a safe proposed follow-up."),
+        ],
+    ),
+    Scenario(
+        scenario_id="HG-DISASTER-LANDSLIDE-011",
+        title="Landslide Screening and Mountain Telecom Resilience",
+        domain="Disaster Management",
+        jurisdiction="India",
+        description="Detailed simulated Uttarakhand landslide and mountain-connectivity assessment. No landslide, infrastructure impact, or agency assignment is asserted without retrieved evidence.",
+        simulated=True,
+        steps=[
+            ScenarioStep("L1", "Verify landslide reports and uncertainty", "Hypothetical slope-change reports are screening leads only; they are not verified landslides or confirmed damage.", "What official incident records or retrieved NDMA/GSI evidence directly establish this landslide report? Quote exact source, clause/title, page, date, and location. Distinguish hazard susceptibility from an active incident; report Evidence not retrieved when absent."),
+            ScenarioStep("L2", "Assess telecom exposure without assuming damage", "Compare a reported location with supplied, verified telecom assets, access, power, and redundant paths; no exposure is established from proximity alone.", "Which supplied asset and service records support or contradict exposure? Use applicable DoT disaster communications guidance and retrieved ITU material only with exact citations; state unavailable coordinates, dependencies, and counter-evidence."),
+            ScenarioStep("L3", "Recommend accountable review and next steps", "Prepare a cautious review package for competent authorities; no field task, public warning, or network operation is triggered automatically.", "What documentary evidence identifies the responsible ministry/agency and its mandate? Cite exact clauses; if not retrieved, say Not retrieved. Recommend verification steps, senior review needs, uncertainty, and the next safe governance decision without claiming authority to execute it."),
+        ],
+    ),
+    Scenario(
+        scenario_id="HG-DISASTER-EARTHQUAKE-012",
+        title="Earthquake Impact and Emergency Network Continuity",
+        domain="Disaster Management",
+        jurisdiction="India",
+        description="Simulated earthquake response analysis of reported telecom dependencies and continuity measures; no live observations are connected.",
+        simulated=True,
+        steps=[
+            ScenarioStep("E1", "Verify incident and infrastructure reports", "Hypothetical reports describe possible damage or service degradation following an earthquake.", "Which authoritative incident, infrastructure, and service-status sources are available, and what can they actually confirm?"),
+            ScenarioStep("E2", "Analyze combined service failures", "The review considers possible concurrent power, transport, backhaul, and radio-access failures using stated assumptions.", "For each supplied or simulated failure, what dependencies and service consequences are supported, what is only modeled, and what evidence is missing?"),
+            ScenarioStep("E3", "Review continuity and recovery options", "Proposed communications-continuity measures are presented for authorized human and agency review.", "Which verified emergency-communications plans or standards inform the options, what uncertainty remains, and who must approve the next step?"),
+        ],
+    ),
+
+    # ============================================================
+    # ECR-5G INTEGRATED SCENARIO
+    # ============================================================
+
+    Scenario(
+        scenario_id="ECR5G-FLOOD-001",
+        title="Operation Mountain Shield — Evidence-Constrained 5G QoS Orchestration",
+        domain="Emergency Communications / 5G",
+        jurisdiction="India",
+        description=(
+            "Simulated Uttarakhand flash-flood emergency testing whether evidence completeness and "
+            "reliability influence network-slicing recommendations and emergency communication "
+            "recovery decisions under a 10 Mbps shared capacity bottleneck."
+        ),
+        simulated=True,
+        steps=[
+            ScenarioStep(
+                step_id="S1",
+                title="Bottleneck & Emergency Demand Influx",
+                event=(
+                    "Flash flood in Bhagirathi valley knocks out Site B grid power and causes backhaul intermittency. "
+                    "12 Mbps total traffic offered across hospital (4 Mbps), rescue (3 Mbps), relief (2 Mbps), "
+                    "and background (3 Mbps) flows on a 10 Mbps shared capacity bottleneck."
+                ),
+                evidence_prompt=(
+                    "What regulatory QoS standards, 3GPP network slicing rules, and NDMA disaster telecommunications "
+                    "SOPs govern emergency bandwidth allocation during backhaul failure?"
+                ),
+            ),
+            ScenarioStep(
+                step_id="S2",
+                title="Evidence Completeness & Conflict Gate",
+                event=(
+                    "Field teams submit route and site status reports. Incomplete verification and conflicting telemetry "
+                    "are evaluated before slice reconfiguration."
+                ),
+                evidence_prompt=(
+                    "How do evidence-completeness constraints and conflicting field reports affect automated "
+                    "QoS controller recommendations and human review requirements?"
+                ),
+            ),
+            ScenarioStep(
+                step_id="S3",
+                title="Adaptive Slice Orchestration & Recovery",
+                event=(
+                    "ECAC executes evidence-constrained slice prioritization, protecting hospital and rescue communication "
+                    "while enforcing the 10 Mbps capacity ceiling and dispatching inter-agency recovery tasks."
+                ),
+                evidence_prompt=(
+                    "Which verified emergency telecommunication recovery procedures and human oversight approvals "
+                    "are required to transition the 5G slice policy from degraded to restored status?"
                 ),
             ),
         ],
@@ -690,66 +740,6 @@ SCENARIO_VERIFIED_SOURCES = {
             }
         }
     },
-    "HG-RESEARCH-005": {
-        "scenario_source": {
-            "source_doc_id": "ITU-T-Y3172",
-            "source_title": "ITU-T Recommendation Y.3172: Architectural framework for machine learning in future networks",
-            "issuing_authority": "International Telecommunication Union (ITU-T)",
-            "document_identifier": "ITU-T Y.3172 (06/2019)",
-            "jurisdiction": "International",
-            "legal_status": "INTERNATIONAL_RECOMMENDATION",
-            "clause": "Section 6 - Machine Learning Pipeline Architecture",
-            "page": 9,
-            "source_url": "https://www.itu.int/rec/T-REC-Y.3172/en",
-            "local_viewer_url": "",
-            "supporting_text": "The machine learning pipeline comprises data collection, preprocessing, model training, policy engine, and ML sandbox.",
-            "surrounding_context": "International standard serving as voluntary architectural guidance. Differentiated from statutory obligations."
-        },
-        "steps": {
-            "RS1": {
-                "source_doc_id": "ITU-T-Y3172",
-                "source_title": "ITU-T Recommendation Y.3172",
-                "issuing_authority": "ITU-T",
-                "document_identifier": "ITU-T Y.3172",
-                "jurisdiction": "International",
-                "legal_status": "INTERNATIONAL_RECOMMENDATION",
-                "clause": "Section 6 - ML Pipeline Framework",
-                "page": 9,
-                "source_url": "https://www.itu.int/rec/T-REC-Y.3172/en",
-                "local_viewer_url": "",
-                "supporting_text": "Machine learning reference architecture for IMT-2020 and future networks.",
-                "surrounding_context": "Research baseline establishing voluntary pipeline terminology."
-            },
-            "RS2": {
-                "source_doc_id": "3GPP-TS-33501",
-                "source_title": "3GPP TS 33.501 Security Architecture",
-                "issuing_authority": "3GPP",
-                "document_identifier": "Release 18",
-                "jurisdiction": "International",
-                "legal_status": "NON_BINDING_TECHNICAL_STANDARD",
-                "clause": "Section 5 - SBA Zero Trust Principles",
-                "page": 15,
-                "source_url": "https://www.3gpp.org/ftp/Specs/archive/33_series/33.501/",
-                "local_viewer_url": "/api/documents/raw/knowledge_base/3gpp/ETSI 33.501 Rel 18.pdf#page=15",
-                "supporting_text": "Technical security specifications for service-based 5G core network functions.",
-                "surrounding_context": "Comparing 3GPP technical specification with ITU-T recommendation."
-            },
-            "RS3": {
-                "source_doc_id": "ITU-T-Y3172",
-                "source_title": "Comparative Gap Analysis & Governance",
-                "issuing_authority": "NetraSetu Multi-Jurisdiction Reasoning Layer",
-                "document_identifier": "HG-REG-CROSSWALK",
-                "jurisdiction": "Cross-Border",
-                "legal_status": "NON_BINDING_TECHNICAL_STANDARD",
-                "clause": "Advisory Gap Finding Protocol",
-                "page": 1,
-                "source_url": "https://www.itu.int/rec/T-REC-Y.3172/en",
-                "local_viewer_url": "",
-                "supporting_text": "Distinguishing differences in scope and technical recommendation from binding legal non-compliance.",
-                "surrounding_context": "Prevents misclassifying voluntary research baselines as national regulatory gaps."
-            }
-        }
-    },
     "HG-EU-006": {
         "scenario_source": {
             "source_doc_id": "EU-NIS2-DIRECTIVE-2022",
@@ -938,9 +928,18 @@ def get_scenarios():
     return [enrich_scenario_dict(scenario.to_dict()) for scenario in SCENARIOS]
 
 
+def _slugify(val: str) -> str:
+    import re
+    return re.sub(r'[^a-z0-9]+', '-', (val or '').lower()).strip('-')
+
+
 def get_scenario(scenario_id: str):
+    target = (scenario_id or '').strip()
+    target_slug = _slugify(target)
     for scenario in SCENARIOS:
-        if scenario.scenario_id == scenario_id:
+        if scenario.scenario_id == target or _slugify(scenario.scenario_id) == target_slug:
+            return enrich_scenario_dict(scenario.to_dict())
+        if _slugify(scenario.title) == target_slug:
             return enrich_scenario_dict(scenario.to_dict())
 
     return None

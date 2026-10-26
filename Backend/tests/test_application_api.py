@@ -4,7 +4,9 @@ from Backend.server import app
 
 
 client = TestClient(app)
-assert client.post("/api/auth/login", json={"username": "admin", "password": "admin123"}).status_code == 200
+login_response = client.post("/api/auth/login", json={"username": "admin", "password": "admin123"})
+assert login_response.status_code == 200
+client.headers.update({"X-CSRF-Token": login_response.json()["csrf_token"]})
 
 
 def csrf_headers():
@@ -118,3 +120,21 @@ def test_scenario_rejects_unknown_id():
     )
 
     assert response.status_code == 404
+
+
+def test_scenario_run_route_returns_pipeline_response(monkeypatch):
+    def fake_run_pipeline(question, **kwargs):
+        return {"question": question, "audit_id": "AUD-regression", "final_synthesis": "verified test response"}
+
+    monkeypatch.setattr("Backend.server.run_pipeline", fake_run_pipeline)
+    response = client.post(
+        "/api/scenarios/run",
+        json={"scenario_id": "HG-5G-003", "step_id": "T1", "jurisdiction": "India"},
+    )
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["scenario"]["scenario_id"] == "HG-5G-003"
+    assert payload["scenario_step"]["step_id"] == "T1"
+    assert payload["pipeline_result"]["audit_id"] == "AUD-regression"
+    assert payload["pipeline_result"]["final_synthesis"] == "verified test response"

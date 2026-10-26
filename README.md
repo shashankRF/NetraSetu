@@ -62,6 +62,11 @@ NetraSetu is evolving from a static compliance reasoning tool into an **evidence
 
 ## Current Architecture
 
+### Uttarakhand Disaster Map
+
+The signed-in dashboard includes an **Uttarakhand Disaster Map** with a MapLibre/OpenStreetMap road basemap, bundled state/district boundaries, layer toggles, district details, and links to the source report for each dated overlay. The map covers **2026-07-25 through 2026-10-25** and was reviewed on **2026-10-25**. The integrated Public Works Department SRMD snapshot is dated **2026-09-11**: 86 table rows list roads marked closed whose closure dates fall within the selected window. Cause and coordinates are not present in the extracted rows, so the choropleth means “PWD road-closure record count by district”; it is not a flood/landslide footprint or a live road status. The curated source rows, date filter, source pages and precision caveat are recorded in `Backend/disaster_map_data/pwd_road_closures_2026-09-11.json`.
+
+The map separately shows USDMA's **2026-09-26 heavy-rain red warning** (page published 2026-09-28) and two GSI Bhooskhalan portal-reported landslides (event dates **2026-08-19** and **2026-09-01**). Those notices identify districts/roads but provide no verified event coordinates or affected polygons, so the overlays outline named districts and state their precision. Flood extents, forest-fire observations, and lower-risk zones remain unavailable/unclassified because no public dated Uttarakhand geometry or supporting risk dataset was verified for this window. This absence does not mean no such incidents occurred. No private NDEM data, undocumented API, or simulated incident is used. OSM tiles are loaded only for the user's interactive viewport, with visible attribution; see the [OpenStreetMap tile usage policy](https://operations.osmfoundation.org/policies/tiles/). See `Backend/disaster_map_boundaries/metadata.json` for boundary provenance and licence.
 ```
 USER QUESTION / OPERATIONAL INCIDENT
                 ↓
@@ -264,7 +269,7 @@ The frontend console has been refreshed into a modern technical dashboard tailor
 
 1. **Overview Dashboard (`#/overview` / `#/dashboard`):** Real-time platform status (FastAPI Port 8000, FAISS vector corpus, BGE-M3 retriever, searchable 94-PDF knowledge base registry), core capability directory, test benchmarks, and quick action launchpads.
 2. **Evidence Intelligence & RAG Workspace (`#/intelligence`):** Interactive query terminal with sample scenario queries, multi-jurisdiction selection, 9-stage governance pipeline visualizer, profile switcher (General, Telecom, Defence, Maritime), and clickable source citation verification.
-3. **Scenario Lab (`#/scenarios`):** Production laboratory featuring all 8 pre-configured operational test scenarios (UAV Tactical Datalink, Maritime AIS, 5G Network Slicing, Telecom OSS/BSS, O-RAN Conflict, EU 5G Function, Enterprise Conflicting Evidence, and CERT-In 6-Hour Reporting) with live step execution on `/api/scenarios/run`.
+3. **Scenario Lab (`#/scenarios`):** Catalogue-driven simulated scenarios with step execution on `/api/scenarios/run`. The Uttarakhand dashboard overview includes two telecom and three disaster-management cases; the retired O-RAN research scenario is not listed.
 4. **Change-Impact Analysis (`#/change-impact`):** Interactive Feature A prototype workbench demonstrating source revision diffing, affected requirement dependency tracking, and selective re-evaluation execution.
 5. **5G Reliability Lab (`#/reliability-lab`):** Interactive Feature B design prototype workbench providing multi-dimensional impairment sliders, SLO target profiles, resilience strategy comparisons, and JSON failure vector generation.
 6. **Evaluation & Reports (`#/evaluations` / `#/audit`):** Consolidated forensic evaluation console featuring 95-test regression benchmarks, zero false-gap invariant metrics, live audit trail search, human review overrides, and single-click Excel export (`/api/audits/export/excel`).
@@ -393,3 +398,18 @@ Routes:
 The simulator models five configured conditions: latency spike, packet loss, congestion, handover disruption, and link failure. It requires 66–500 samples because the current simulator injects impairments in samples 30–65. Maxima are 64 scenarios and 5 trials. User thresholds are labeled `USER_DEFINED`. This feature does not retrieve regulatory evidence, establish standards compliance, contact a live network, or execute recovery actions. A policy threshold exceedance is advisory and recommends human review.
 
 Run locally with `python -m uvicorn Backend.server:app --reload`. Run tests with `python -m pytest -o pythonpath=. Backend/tests/` (the live Groq smoke test is opt-in via `NETRASETU_RUN_LIVE_API_TESTS=1` and requires `GROQ_API_KEY`).
+
+## Uttarakhand Disaster Map and Aftermath Workbench
+
+The authenticated dashboard's **Uttarakhand Disaster Map** tab combines the interactive district map and source-dated government reports with a deterministic aftermath-analysis workbench. The map layer is sourced separately from scenario fixtures: its currently supported dated reports and unavailable layers are identified in the tab's source/freshness captions. No area is marked lower-risk without supporting data.
+
+The aftermath workbench provides three reproducible synthetic scenarios (severe disruption, partial recovery, and conflicting reports), record-derived impact KPIs, an asset register, a transparent recovery-priority breakdown, review-gated action transitions, local-only inter-agency request states, gap/conflict review, a recovery timeline, and comparison/reset controls. Network analysis invokes the existing deterministic telemetry failure-combination engine; it does not measure a live network. Risk gates use the existing Risk & Governance Engine. Human decisions are appended to the existing audit ledger, and reset retains previous audit events. No external agency messages or field actions are sent.
+
+Aftermath routes are under `/api/aftermath/` and are protected by the same server session and CSRF middleware as the dashboard. In this checkout, the local dashboard runs at `http://127.0.0.1:8001/frontend/index.html#/dashboard`; the frontend derives the API origin from this `/frontend/` URL, so it uses the same host and port. Sign in with the configured local demo credentials (`admin` / `admin123`) unless the server environment has administrator credentials configured.
+
+Run the focused checks:
+
+```bash
+python -m pytest Backend/tests/test_aftermath_api.py -q
+node --test Frontend/tests/disaster_map.test.js
+```

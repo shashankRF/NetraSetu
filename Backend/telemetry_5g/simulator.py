@@ -2,6 +2,7 @@ from __future__ import annotations
 import math
 import random
 import time
+from datetime import datetime, timezone
 from typing import List, Dict, Optional, Any
 from .models import (
     NetworkProfileType,
@@ -13,6 +14,21 @@ from .models import (
 )
 from .slo_evaluator import SLOEvaluator
 from .anomaly_detector import NetworkAnomalyDetector
+
+
+def linear_percentile(values: List[float], percentile: float) -> Optional[float]:
+    """Return the linearly interpolated percentile (rank=(n-1)*p)."""
+    if not values:
+        return None
+    if not 0 <= percentile <= 100:
+        raise ValueError("percentile must be between 0 and 100")
+    ordered = sorted(float(value) for value in values)
+    rank = (len(ordered) - 1) * percentile / 100.0
+    lower = math.floor(rank)
+    upper = math.ceil(rank)
+    if lower == upper:
+        return ordered[lower]
+    return ordered[lower] + (ordered[upper] - ordered[lower]) * (rank - lower)
 
 
 class NetworkSimulator5G:
@@ -146,19 +162,67 @@ class NetworkSimulator5G:
         latencies = [s.latency_ms for s in samples]
         losses = [s.packet_loss_rate for s in samples]
 
-        # Percentile calculations
-        sorted_lat = sorted(latencies)
-        p95_idx = int(math.ceil(0.95 * len(sorted_lat))) - 1
-        p99_idx = int(math.ceil(0.99 * len(sorted_lat))) - 1
-        tail_p95 = sorted_lat[max(0, p95_idx)]
-        tail_p99 = sorted_lat[max(0, p99_idx)]
+        # Keep legacy metric fields consistent with the documented report method.
+        tail_p95 = linear_percentile(latencies, 95)
+        tail_p99 = linear_percentile(latencies, 99)
         avg_lat = sum(latencies) / len(latencies)
         max_lat = max(latencies)
+        sample_count = len(latencies)
+        jitter_values = [float(sample.jitter_ms) for sample in samples]
+        rtt_values = [float(sample.rtt_ms) for sample in samples]
+        sample_times = [float(sample.timestamp) for sample in samples]
+        intervals_ms = [max(0.0, (right - left) * 1000.0)
+                        for left, right in zip(sample_times, sample_times[1:])]
 
-        # Delivery success rate
+        def describe_distribution(values: List[float]) -> Dict[str, Any]:
+            mean = sum(values) / len(values) if values else None
+            stddev = (math.sqrt(sum((value - mean) ** 2 for value in values) / len(values))
+                      if values and mean is not None else None)
+            return {
+                "sample_count": len(values),
+                "p50": linear_percentile(values, 50),
+                "p90": linear_percentile(values, 90),
+                "p95": linear_percentile(values, 95),
+                "p99": linear_percentile(values, 99),
+                "minimum": min(values) if values else None,
+                "maximum": max(values) if values else None,
+                "mean": mean,
+                "population_standard_deviation": stddev,
+            }
+
         delivered_ratio = 1.0 - (sum(losses) / len(losses))
         delivery_success_pct = round(max(0.0, delivered_ratio * 100.0), 3)
         overall_loss_pct = round((sum(losses) / len(losses)) * 100.0, 3)
+        simulated_latency_report = {
+            "provenance": "SIMULATED",
+            "source": "SIMULATED_TESTBED_ENGINE",
+            "sample_count": sample_count,
+            "sample_support": "PROVISIONAL" if sample_count < 100 else "SIMULATION_SAMPLE_SET",
+            "sample_support_note": (
+                "Fewer than 100 generated samples; tail percentiles are provisional."
+                if sample_count < 100 else
+                "Percentiles describe this generated trace only; they are not field measurements."
+            ),
+            "measurement_window_start_utc": datetime.fromtimestamp(sample_times[0], timezone.utc).isoformat() if sample_times else None,
+            "measurement_window_end_utc": datetime.fromtimestamp(sample_times[-1], timezone.utc).isoformat() if sample_times else None,
+            "measurement_interval_ms_mean": sum(intervals_ms) / len(intervals_ms) if intervals_ms else None,
+            "percentile_method": "Linear interpolation, rank=(n-1)*p, zero-based order statistic.",
+            "latency_semantics": "Simulated latency_ms model output; directionality is not established as one-way field latency.",
+            "latency_unit": "ms",
+            "latency_ms": describe_distribution(latencies),
+            "rtt_ms": describe_distribution(rtt_values),
+            "rtt_semantics": "Separately generated model field; not an observed network round trip.",
+            "jitter_ms": describe_distribution(jitter_values),
+            "reliability": {
+                "packet_loss_rate_percent": round(overall_loss_pct, 3),
+                "samples_with_nonzero_loss": sum(1 for loss in losses if loss > 0),
+                "samples_without_loss": sum(1 for loss in losses if loss == 0),
+                "packet_counts": "UNAVAILABLE: simulator samples contain loss-rate values, not individual packet outcomes.",
+                "timeout_rate": "UNAVAILABLE: timeouts are not modeled as distinct events.",
+                "delivery_success_rate_percent": delivery_success_pct,
+                "delivery_success_method": "100% minus mean generated sample packet_loss_rate; sample-derived, not packet-count based.",
+            },
+        }
 
         # Evaluate each sample and detect anomalies
         total_anomalies = 0
@@ -226,4 +290,5 @@ class NetworkSimulator5G:
             slo_compliance_status=compliance,
             violations=all_violations,
             recommended_recovery=recovery_actions,
+            latency_report=simulated_latency_report,
         )

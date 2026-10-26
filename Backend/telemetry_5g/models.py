@@ -141,3 +141,4 @@ class SimulationResult:
         "engine": "NetraSetu Deterministic 5G Telemetry & Simulation Engine v1.0",
         "llm_in_decision_loop": False,
     })
+    latency_report: Dict[str, Any] = field(default_factory=dict)

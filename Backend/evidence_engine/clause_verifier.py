@@ -85,7 +85,42 @@ class StructuredEvidenceRecord:
     source_line_numbers: List[int] = field(default_factory=list)
 
     def to_dict(self) -> Dict[str, Any]:
-        return asdict(self)
+        payload = asdict(self)
+        verified_quote = self.verification_status in {
+            VerificationStatus.EXACT_MATCH_VERIFIED,
+            VerificationStatus.MATCH_VERIFIED_WITH_OCR,
+        } and bool(self.exact_source_quote)
+        unavailable = "Unavailable"
+        cited_clause = self.full_clause_hierarchy or self.clause
+        if not cited_clause or cited_clause.strip().casefold() in {"general provision", "unverified", "evidence not retrieved"}:
+            cited_clause = unavailable
+        verified_page = (self.viewer_page_number or self.page) if verified_quote else self.page
+        subclause_parts = [str(part) for part in (self.subrule_number, self.subclause_letter) if part]
+        subclause = "".join(part if part.startswith("(") else f"({part})" for part in subclause_parts)
+        payload["citation"] = {
+            "document_name": self.source_title or unavailable,
+            "related_subject": self.claim or unavailable,
+            "page_number": verified_page or unavailable,
+            "printed_page_label": self.printed_page_number or unavailable,
+            "document_id": self.document_identifier or self.source_doc_id or unavailable,
+            "clause": cited_clause,
+            "rule_identifier": self.rule_number or unavailable,
+            "rule_title": self.rule_title or unavailable,
+            "subclause": subclause or unavailable,
+            "published_version": self.version or self.publication_date or unavailable,
+            "issuing_organization": self.issuing_authority or unavailable,
+            "jurisdiction": self.jurisdiction or unavailable,
+            "legal_status": self.legal_status or unavailable,
+            "exact_statement": self.exact_source_quote if verified_quote else "Evidence not retrieved",
+            "source_url": self.source_url or self.local_viewer_url or unavailable,
+            "verification_status": self.verification_status,
+            "verification_detail": self.verification_explanation or unavailable,
+            "physical_pdf_page": verified_page or unavailable,
+            "zero_based_pdf_page_index": self.zero_based_pdf_page_index,
+            "source_line_numbers": list(self.source_line_numbers),
+            "bounding_boxes": list(self.bounding_boxes),
+        }
+        return payload
 
 
 def normalize_clause_key(clause_str: str) -> str:
@@ -180,6 +215,26 @@ class LegalClauseParser:
                 "page_index": page_index,
             })
 
+        # Technical standards commonly number operative clauses 5.15.1 or
+        # Annex K.2. Keep these as clauses; a bare numbered procedure step is
+        # not automatically a statutory "Rule".
+        technical_clause_pattern = re.compile(
+            r"(?:^|\n)\s*((?:\d+(?:\.\d+)+|[A-Z](?:\.\d+)+))\s+([A-Z][^\n]{1,160})"
+        )
+        for m in technical_clause_pattern.finditer(page_text):
+            title = m.group(2).strip()
+            if re.search(r"\.{4,}", title):
+                continue
+            rules_on_page.append({
+                "start": m.start(),
+                "number": f"Clause {m.group(1)}",
+                "raw_num": m.group(1),
+                "title": title,
+                "content_start": m.end(),
+                "page_index": page_index,
+                "provision_type": "technical_clause",
+            })
+
         # Gazette directions often label an operative provision as a
         # paragraph (for example, "(ii) MANDATORY ...:") rather than a rule.
         paragraph_pattern = re.compile(
@@ -210,9 +265,10 @@ class LegalClauseParser:
             preceding = [r for r in rules_on_page if r["start"] <= quote_pos]
             if preceding:
                 active_rule = preceding[-1]
-            elif page_index > 0:
-                # Quote appears BEFORE any rule header on this page
-                # Look at previous page to find the running rule!
+            elif page_index > 0 and quote_pos > max(120, int(len(page_text) * 0.1)):
+                # A page-level quote at the top cannot inherit an unrelated
+                # numbered heading from the preceding page. Only inspect the
+                # previous page for a plausible mid-page continuation.
                 prev_text = doc[page_index - 1].get_text()
                 prev_rules = []
                 for m in rule_pattern.finditer(prev_text):
@@ -228,7 +284,7 @@ class LegalClauseParser:
                     active_rule = prev_rules[-1]
         elif rules_on_page:
             active_rule = rules_on_page[0]
-        elif page_index > 0:
+        elif page_index > 0 and quote_pos > max(120, int(len(page_text) * 0.1)):
             prev_text = doc[page_index - 1].get_text()
             prev_rules = []
             for m in rule_pattern.finditer(prev_text):
@@ -369,7 +425,6 @@ class PDFSourceMatcher:
         doc = fitz.open(str(pdf_path))
         total_pages = len(doc)
         q_clean = candidate_quote.strip()
-        words = q_clean.split()
         norm_query = PDFSourceMatcher.normalize_text(q_clean)
         clean_query = re.sub(r"[^\w\s]", "", norm_query)
 
@@ -385,9 +440,6 @@ class PDFSourceMatcher:
         for idx in page_indices:
             page = doc[idx]
             rects = page.search_for(q_clean)
-            if not rects and len(words) >= 4:
-                sub_q = " ".join(words[:6])
-                rects = page.search_for(sub_q)
 
             if rects:
                 page_text = page.get_text()
@@ -436,7 +488,7 @@ class PDFSourceMatcher:
                 norm_page = PDFSourceMatcher.normalize_text(page_text)
                 if norm_query and norm_query in norm_page:
                     local_doc = fitz.open(str(pdf_path))
-                    hierarchy = LegalClauseParser.parse_clause_hierarchy(local_doc, idx, "")
+                    hierarchy = LegalClauseParser.parse_clause_hierarchy(local_doc, idx, q_clean)
                     local_doc.close()
                     return {
                         "matched": True,
@@ -695,9 +747,14 @@ def verify_claim_evidence(
             )
 
         if status == VerificationStatus.EXACT_MATCH_VERIFIED:
+            heading = hier.get("full_clause_hierarchy")
+            if heading and heading.strip().casefold() not in {"general provision", "unverified", "evidence not retrieved"}:
+                location_note = f"Source heading: {heading}."
+            else:
+                location_note = "No specific clause heading was identified at the verified source location; no clause is asserted."
             expl = (
-                f"VERIFIED EXACT MATCH: Verbatim sentence located in {doc_meta.title} on Page {v_page} "
-                f"(Printed Page {p_page}). Operative clause: {hier['full_clause_hierarchy']}."
+                f"VERIFIED EXACT MATCH: Verbatim source text located in {doc_meta.title} on Page {v_page} "
+                f"(Printed Page {p_page}). {location_note}"
             )
             conf = 0.98
         else:

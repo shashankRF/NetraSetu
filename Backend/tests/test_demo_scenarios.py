@@ -1,4 +1,8 @@
-from Backend.demo_scenarios.library import get_scenarios, get_scenario
+from Backend.demo_scenarios.library import (
+    DASHBOARD_OVERVIEW_SCENARIO_IDS,
+    get_scenarios,
+    get_scenario,
+)
 
 
 def test_scenario_library_has_required_domains():
@@ -11,8 +15,8 @@ def test_scenario_library_has_required_domains():
     assert "Defence" in domains
     assert "Maritime" in domains
     assert "Telecom/5G" in domains
-    assert "Research" in domains
     assert "Enterprise Incident" in domains
+    assert all("O-RAN" not in scenario["title"] for scenario in scenarios)
 
 
 def test_eu_scenario_exists():
@@ -43,6 +47,16 @@ def test_all_scenarios_have_steps():
         len(scenario["steps"]) >= 2
         for scenario in scenarios
     )
+
+
+def test_dashboard_overview_has_five_three_step_scenarios():
+    scenarios = {scenario["scenario_id"]: scenario for scenario in get_scenarios()}
+    overview = [scenarios[scenario_id] for scenario_id in DASHBOARD_OVERVIEW_SCENARIO_IDS]
+
+    assert len(overview) == 5
+    assert all(len(scenario["steps"]) == 3 for scenario in overview)
+    assert sum(scenario["domain"] == "Telecom/5G" for scenario in overview) == 2
+    assert sum(scenario["domain"] == "Disaster Management" for scenario in overview) == 3
 
 
 def test_lookup_scenario():

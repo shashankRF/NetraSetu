@@ -199,6 +199,7 @@ def run_combination_search(
                                                "engine_version": ENGINE_VERSION}})
                 continue
             metrics = {name: getattr(result, name) for name in METRICS}
+            metrics["simulated_post_impairment_interval_ms"] = metrics.get("recovery_time_ms")
             policy = evaluate_policy(metrics, thresholds)
             baseline_metrics = per_trial.get(())
             if not subset:
@@ -223,6 +224,7 @@ def run_combination_search(
                 "configuration": config,
                 "simulator_version": result.provenance.get("engine"),
                 "metrics": metrics,
+                "latency_report": result.latency_report,
                 "comparison_to_baseline": comparison,
                 "profile_evaluation": {
                     "status": result.slo_compliance_status,

@@ -1,4 +1,5 @@
 from __future__ import annotations
+import hashlib
 import os
 import re
 import json
@@ -67,14 +68,33 @@ def find_local_document_path(source_file_or_name: str) -> str:
     p3 = PROJECT_ROOT / "knowledge_base" / "Documents main" / clean
     if p3.is_file():
         return f"knowledge_base/Documents main/{clean}"
+
+    # Indexed chunks sometimes store a PDF basename without its suffix.
+    # Resolve that exact stem only when it maps to one local PDF.
+    if not Path(clean).suffix:
+        for base, prefix in ((PROJECT_ROOT, ""),
+                             (PROJECT_ROOT / "knowledge_base", "knowledge_base/"),
+                             (PROJECT_ROOT / "knowledge_base" / "Documents main", "knowledge_base/Documents main/")):
+            candidate = base / f"{clean}.pdf"
+            if candidate.is_file():
+                return prefix + f"{clean}.pdf"
         
     # 4. Search by filename across knowledge_base
     fname = Path(clean).name
     matches = list((PROJECT_ROOT / "knowledge_base").rglob(fname))
     if matches and matches[0].is_file():
         return str(matches[0].relative_to(PROJECT_ROOT)).replace("\\", "/")
-        
-    return clean
+
+    # Filename-only metadata can also omit both its parent directory and
+    # suffix. Search approved KB storage by exact stem; ambiguous names fail
+    # closed instead of selecting an arbitrary source.
+    if fname and not Path(fname).suffix:
+        stem_matches = [p for p in (PROJECT_ROOT / "knowledge_base").rglob("*.pdf")
+                        if p.stem.casefold() == fname.casefold()]
+        if len(stem_matches) == 1 and stem_matches[0].is_file():
+            return str(stem_matches[0].relative_to(PROJECT_ROOT)).replace("\\", "/")
+
+    return ""
 
 
 DOCUMENT_REGISTRY: Dict[str, SourceDocumentMetadata] = {
@@ -98,22 +118,14 @@ DOCUMENT_REGISTRY: Dict[str, SourceDocumentMetadata] = {
         source_status='Source Verified',
         rag_status='Present — Not Indexed',
         indexed_chunks=0,
-        clauses={
-            'sec_comm_resilience': ClauseMetadata(
-                clause_id='sec_comm_resilience',
-                clause_title='Chapter 7 - Emergency Communications & Warning Systems',
-                page=94,
-                text='In disaster situations, communication infrastructure is among the most vulnerable. Priority must be accorded to restoring telecom connectivity, establishing alternate wireless backup links, satellite terminals, and inter-agency coordination channels.',
-                surrounding_context='Mandatory inter-agency emergency operation procedures spanning Central Ministries, NDMA, State Disaster Management Authorities (SDMAs), and telecom service providers.'
-            )
-        }
+        clauses={},
     ),
 
     'ITU-DISASTER-GUIDELINES-2020': SourceDocumentMetadata(
         doc_id='ITU-DISASTER-GUIDELINES-2020',
-        title='Guidelines for National Emergency Telecommunication Plans (NETP) & Disaster Relief',
+        title='ITU Guidelines for National Emergency Telecommunication Plans (2020)',
         issuing_authority='International Telecommunication Union - Telecommunication Development Sector (ITU-D)',
-        document_identifier='ITU-D NETP Guidelines',
+        document_identifier='ITU publication, 2020 (no Gazette notification; publication title verified on PDF page 3)',
         version='Global Edition 2020',
         publication_date='2020-03-15',
         effective_date='2020-03-15',
@@ -126,15 +138,7 @@ DOCUMENT_REGISTRY: Dict[str, SourceDocumentMetadata] = {
         source_status='Source Verified',
         rag_status='Present — Not Indexed',
         indexed_chunks=0,
-        clauses={
-            'netp_sec_3': ClauseMetadata(
-                clause_id='netp_sec_3',
-                clause_title='Section 3 - Regulatory Framework & Emergency Spectrum Coordination',
-                page=22,
-                text='National regulatory authorities must establish clear SOPs for emergency spectrum allocation, cross-border deployment of satellite earth stations, and exemption from import duties during recognized disaster declarations.',
-                surrounding_context='Tampere Convention alignment and standardized emergency telecommunications procedures.'
-            )
-        }
+        clauses={},
     ),
 
     'ITU-T-L-SUP35': SourceDocumentMetadata(
@@ -154,15 +158,7 @@ DOCUMENT_REGISTRY: Dict[str, SourceDocumentMetadata] = {
         source_status='Source Verified',
         rag_status='Present — Not Indexed',
         indexed_chunks=0,
-        clauses={
-            'supp_sec_5': ClauseMetadata(
-                clause_id='supp_sec_5',
-                clause_title='Section 5 - Network Survivability and Power Resilience',
-                page=12,
-                text='Telecommunication central offices and cellular base stations must incorporate minimum 72-hour autonomous backup power, physical hardening against flood and seismic risks, and diversified fiber backhaul routes.',
-                surrounding_context='Engineering specifications for telecommunication plant disaster resilience.'
-            )
-        }
+        clauses={},
     ),
 
     'DOT-DISASTER-COMPENDIUM-2023': SourceDocumentMetadata(
@@ -182,15 +178,7 @@ DOCUMENT_REGISTRY: Dict[str, SourceDocumentMetadata] = {
         source_status='Source Verified',
         rag_status='Present — Not Indexed',
         indexed_chunks=0,
-        clauses={
-            'comp_sop_cell_broadcast': ClauseMetadata(
-                clause_id='comp_sop_cell_broadcast',
-                clause_title='Standard Operating Procedure - Cell Broadcast Alert System (CBAS)',
-                page=34,
-                text='Cell Broadcast Service (CBS) allows dissemination of geotargeted, real-time emergency disaster alerts to all active mobile devices within specific geographic hazard zones without network congestion.',
-                surrounding_context='Mandatory protocol for TSPs to support Common Alerting Protocol (CAP) integrations with NDMA server.'
-            )
-        }
+        clauses={},
     ),
 
     'INDIA-DM-ACT-2005': SourceDocumentMetadata(
@@ -210,53 +198,37 @@ DOCUMENT_REGISTRY: Dict[str, SourceDocumentMetadata] = {
         source_status='Source Verified',
         rag_status='Present — Not Indexed',
         indexed_chunks=0,
-        clauses={
-            'sec_36': ClauseMetadata(
-                clause_id='sec_36',
-                clause_title='Section 36 - Responsibilities of Ministries and Departments of Central Government',
-                page=18,
-                text='Every Ministry or Department of the Central Government shall allocate resources for disaster management and integrate emergency communication and preparedness measures into development plans.',
-                surrounding_context='Statutory obligations governing DoT, NDMA, and emergency communication services.'
-            )
-        }
+        clauses={},
     ),
 
     'DOT-GMDSS-RULES-2024': SourceDocumentMetadata(
         doc_id='DOT-GMDSS-RULES-2024',
-        title='Commercial Radio Operator Certificate of Proficiency to Operate Global Maritime Distress and Safety System Rules, 2024',
+        title='Draft Commercial Radio Operator Certificate of Proficiency to Operate Global Maritime Distress and Safety System Rules, 2024',
         issuing_authority='Department of Telecommunications (DoT), Wireless Planning & Coordination (WPC) Wing',
-        document_identifier='G.S.R. 412(E)',
-        version='Gazette Notification 2024',
-        publication_date='2024-06-15',
-        effective_date='2024-06-15',
+        document_identifier='G.S.R. 674(E), Gazette of India, 29 October 2024 (PDF first page)',
+        version='Draft Gazette notification dated 29 October 2024',
+        publication_date='2024-10-29',
+        effective_date='Not applicable — draft instrument; effective date not retrieved',
         jurisdiction='India',
-        document_type='Subordinate Legislation / WPC Rules',
-        legal_status='BINDING_STATUTORY',
+        document_type='Draft subordinate legislation / WPC rules',
+        legal_status='DRAFT_NOTIFICATION',
         official_url='https://dot.gov.in/circulars/gmdss-rules-2024',
         local_path='knowledge_base/Documents main/DoT_Rules/commercial-radio-operator-certificate-of-proficiency-to-operate-global-maritime-distress-and-safety-system-rules-2024.pdf',
         domain_category='Emergency Distress Communications & WPC Licensing',
         source_status='Source Verified',
         rag_status='Indexed',
         indexed_chunks=50,
-        clauses={
-            'gmdss_rule_4': ClauseMetadata(
-                clause_id='gmdss_rule_4',
-                clause_title='Rule 4 - Mandatory GMDSS Operator Certification and Distress Radio Frequencies',
-                page=3,
-                text='No person shall operate radio equipment on frequencies allocated for distress, safety, and calling under GMDSS unless possessing a valid Certificate of Proficiency issued by the Central Government.',
-                surrounding_context='Statutory requirements for emergency VHF/MF/HF distress frequencies, EPIRB, and SART operations.'
-            )
-        }
+        clauses={},
     ),
 
     'DOT-MARITIME-FLIGHT-CONNECTIVITY-2022': SourceDocumentMetadata(
         doc_id='DOT-MARITIME-FLIGHT-CONNECTIVITY-2022',
-        title='Flight and Maritime Connectivity (Amendment) Rules, 2022 & 2018',
+        title='Flight and Maritime Connectivity (Amendment) Rules, 2022',
         issuing_authority='Department of Telecommunications (DoT), Ministry of Communications',
-        document_identifier='G.S.R. 730(E)',
+        document_identifier='G.S.R. 154(E), Gazette of India, 23 February 2022 (PDF first page)',
         version='Rules Amendment 2022',
-        publication_date='2022-10-06',
-        effective_date='2022-10-06',
+        publication_date='2022-02-23',
+        effective_date='2022-02-23',
         jurisdiction='India',
         document_type='Subordinate Legislation / Statutory Rules',
         legal_status='BINDING_STATUTORY',
@@ -266,43 +238,27 @@ DOCUMENT_REGISTRY: Dict[str, SourceDocumentMetadata] = {
         source_status='Source Verified',
         rag_status='Indexed',
         indexed_chunks=7,
-        clauses={
-            'fmc_rule_3': ClauseMetadata(
-                clause_id='fmc_rule_3',
-                clause_title='Rule 3 - Provision of In-Flight and Maritime Satellite Communication Services',
-                page=2,
-                text='In-Flight and Maritime Connectivity service providers shall route traffic through satellite earth stations located within Indian territory to maintain lawful interception and emergency safety oversight.',
-                surrounding_context='Mandatory gateway location and security verification standards for mobile satellite terminals.'
-            )
-        }
+        clauses={},
     ),
 
     'DOT-IP1-INFRA-COMPENDIUM': SourceDocumentMetadata(
         doc_id='DOT-IP1-INFRA-COMPENDIUM',
-        title='Compendium on Infrastructure Providers (IP-1) under DoT Guidelines',
+        title='Compendium of DoT Circulars on Infrastructure Providers (IP-1)',
         issuing_authority='Department of Telecommunications (DoT)',
-        document_identifier='DoT IP-1 Compendium',
+        document_identifier='No Gazette identifier found in inspected PDF pages; publication title is supported by its editorial pages',
         version='Guideline Edition',
-        publication_date='2023-01-15',
-        effective_date='2023-01-15',
+        publication_date='',
+        effective_date='',
         jurisdiction='India',
         document_type='Government Guidelines',
-        legal_status='BINDING_DIRECTION',
+        legal_status='STATUS_NOT_VERIFIED',
         official_url='https://dot.gov.in/ip-1-guidelines',
         local_path='knowledge_base/DoT National Disaster/Compendium-on-Infrastructure-Providers-IP-1-under-DoT-guidelines.pdf',
         domain_category='Telecom Infrastructure Resilience',
         source_status='Source Verified',
         rag_status='Present — Not Indexed',
         indexed_chunks=0,
-        clauses={
-            'ip1_sec_2': ClauseMetadata(
-                clause_id='ip1_sec_2',
-                clause_title='Section 2 - Sharing of Passive Infrastructure during Emergencies',
-                page=14,
-                text='Infrastructure Providers Category-I (IP-I) must grant nondiscriminatory access to dark fibers, rights of way, tower structures, and duct space to restore critical communications during state or national emergencies.',
-                surrounding_context='Disaster resilience and passive telecom infrastructure sharing frameworks.'
-            )
-        }
+        clauses={},
     ),
 
     # =========================================================================
@@ -325,78 +281,27 @@ DOCUMENT_REGISTRY: Dict[str, SourceDocumentMetadata] = {
         source_status='Source Verified',
         rag_status='Indexed',
         indexed_chunks=85,
-        clauses={
-            'sec_19': ClauseMetadata(
-                clause_id='sec_19',
-                clause_title='Section 19 - Critical Telecommunication Infrastructure Protection',
-                page=12,
-                text='The Central Government may notify critical telecommunication infrastructure and provide standards, security practices and procedures for protection of such critical infrastructure.',
-                surrounding_context='Chapter VI: Cybersecurity and Network Integrity. Sections 19-22 govern protection of networks, security standards, and national security directives.'
-            ),
-            'sec_20': ClauseMetadata(
-                clause_id='sec_20',
-                clause_title='Section 20 - Measures for Public Safety and Emergency Response',
-                page=13,
-                text='On the occurrence of any public emergency, including disaster situations, the Central Government or State Government may take temporary possession of any telecommunication service or prioritize emergency communications.',
-                surrounding_context='Emergency powers, public safety directives, and network continuity mandates.'
-            )
-        }
+        clauses={},
     ),
 
     'DOT-CRITICAL-INFRA-2024': SourceDocumentMetadata(
         doc_id='DOT-CRITICAL-INFRA-2024',
-        title='Critical Telecommunication Infrastructure Rules, 2024',
+        title='Draft Critical Telecommunication Infrastructure Rules, 2024',
         issuing_authority='Department of Telecommunications (DoT), Ministry of Communications',
-        document_identifier='G.S.R. 518(E)',
-        version='Notification dated 2024',
-        publication_date='2024-07-01',
-        effective_date='2024-07-01',
+        document_identifier='G.S.R. 723(E), Gazette of India, 22 November 2024 (PDF first page OCR)',
+        version='Draft Gazette notification dated 22 November 2024',
+        publication_date='2024-11-22',
+        effective_date='Not applicable — draft instrument; effective date not retrieved',
         jurisdiction='India',
         document_type='Subordinate Legislation / Statutory Rules',
-        legal_status='BINDING_STATUTORY',
+        legal_status='DRAFT_NOTIFICATION',
         official_url='https://dot.gov.in/critical-telecom-infra-rules',
         local_path='knowledge_base/Documents main/DoT_Rules/Critical Telecommunication Infrastructure Rules, 2024_0.pdf',
         domain_category='Critical Infrastructure Security & Resilience',
         source_status='Source Verified',
         rag_status='Indexed',
         indexed_chunks=32,
-        clauses={
-            'rule_6_2_f': ClauseMetadata(
-                clause_id='rule_6_2_f',
-                clause_title='Rule 6(2)(f) - Chief Telecommunication Security Officer: Security Audit Reports',
-                page=8,
-                text='(f) security audit reports and audit compliance reports of Critical Telecommunication Infrastructure;',
-                surrounding_context='Rule 6(2) portal details: network architecture, authorized personnel, inventory, risk analysis, CCMP, security audit reports, SLAs, real-time logs, incident reporting.'
-            ),
-            'rule_7_1_a': ClauseMetadata(
-                clause_id='rule_7_1_a',
-                clause_title='Rule 7(1)(a) - Obligations related to CTI: Baseline Standards Compliance',
-                page=8,
-                text='(a) ensure security of Critical Telecommunication Infrastructure, including through compliance with the standards as provided under rule 4;',
-                surrounding_context='Rule 7(1) statutory obligations for every critical telecommunication infrastructure entity.'
-            ),
-            'rule_7_1_j': ClauseMetadata(
-                clause_id='rule_7_1_j',
-                clause_title='Rule 7(1)(j) - Mandatory 6-Hour Security Incident Intimation',
-                page=8,
-                text='(j) intimate any security incident in Critical Telecommunication Infrastructure to the Central Government or such agency authorized by the Central Government, within six hours of becoming aware of such incident;',
-                surrounding_context='Rule 7(1)(j) rapid reporting requirements for critical telecom security incidents.'
-            ),
-            'rule_4': ClauseMetadata(
-                clause_id='rule_4',
-                clause_title='Rule 4 - Compliance Requirements',
-                page=7,
-                text='Every critical telecommunication infrastructure entity shall comply with the standards specified by the National Cyber Security Coordinator and standards issued by Telecommunication Engineering Centre.',
-                surrounding_context='Rule 4 technical compliance standards and cybersecurity directives.'
-            ),
-            'rule_3': ClauseMetadata(
-                clause_id='rule_3',
-                clause_title='Rule 3 - Application',
-                page=7,
-                text='These rules shall apply to such critical telecommunication infrastructure as notified by the Central Government under sub-section (3) of section 22 of the Act.',
-                surrounding_context='Rule 3 statutory applicability and scope.'
-            )
-        }
+        clauses={},
     ),
 
     'CERTIN-DIR-2022': SourceDocumentMetadata(
@@ -417,16 +322,7 @@ DOCUMENT_REGISTRY: Dict[str, SourceDocumentMetadata] = {
         source_status='Source Verified',
         rag_status='Present — Not Indexed',
         indexed_chunks=0,
-        clauses={
-            'para_2_ii': ClauseMetadata(
-                clause_id='para_2_ii',
-                clause_title='Paragraph (ii) - Mandatory 6-Hour Cyber Incident Reporting',
-                page=2,
-                text='Any service provider, intermediary, data centre, body corporate and Government organisation shall report cyber incidents as mentioned in Annexure I to CERT-In within 6 (six) hours of noticing such incidents.',
-                surrounding_context='(i) NTP Clock synchronisation to NPL/NIC... (ii) Mandatory cyber incident reporting within 6 hours to CERT-In... (iv) Mandatory logging enabled and securely maintained for rolling 180 days.',
-                faq_clarification='Official FAQ Clarification (FAQ Q14, 18 May 2022): Initial available information may be reported within 6 hours; additional details provided later within reasonable time.'
-            )
-        }
+        clauses={},
     ),
 
     'MEITY-DPDP-2023': SourceDocumentMetadata(
@@ -446,15 +342,7 @@ DOCUMENT_REGISTRY: Dict[str, SourceDocumentMetadata] = {
         source_status='Source Verified',
         rag_status='Indexed',
         indexed_chunks=146,
-        clauses={
-            'sec_8_6': ClauseMetadata(
-                clause_id='sec_8_6',
-                clause_title='Section 8(6) - Personal Data Breach Notification',
-                page=7,
-                text='In the event of a personal data breach, the Data Fiduciary shall give the Data Protection Board of India and each affected Data Principal intimation of such breach in such form and manner as may be prescribed.',
-                surrounding_context='Obligations of Data Fiduciary to protect personal data by taking reasonable security safeguards.'
-            )
-        }
+        clauses={},
     ),
 
     'MEITY-IT-ACT-2000': SourceDocumentMetadata(
@@ -474,22 +362,14 @@ DOCUMENT_REGISTRY: Dict[str, SourceDocumentMetadata] = {
         source_status='Source Verified',
         rag_status='Indexed',
         indexed_chunks=186,
-        clauses={
-            'sec_70b': ClauseMetadata(
-                clause_id='sec_70b',
-                clause_title='Section 70B - CERT-In Incident Response Mandate',
-                page=28,
-                text='CERT-In shall serve as the national agency for performing cybersecurity functions, including collection, analysis and dissemination of information on cyber incidents, and issuing directions.',
-                surrounding_context='Sub-section (6) provides that any entity failing to comply with directions shall be liable to punishment.'
-            )
-        }
+        clauses={},
     ),
 
     'MEITY-IT-ACT-RULES-2000': SourceDocumentMetadata(
         doc_id='MEITY-IT-ACT-RULES-2000',
-        title='Information Technology (Certifying Authorities) Rules, 2000 & Statutory Notifications',
+        title='Information Technology Act Rules and Gazette Notifications (PDF bundle)',
         issuing_authority='Ministry of Information Technology (MeitY), Government of India',
-        document_identifier='G.S.R. 788(E) / G.S.R. 789(E)',
+        document_identifier='Includes G.S.R. 788(E), Gazette notification dated 17 October 2000 (PDF first page); other bundled notifications require passage-level verification)',
         version='Rules 2000 (G.S.R. 788(E))',
         publication_date='2000-10-17',
         effective_date='2000-10-17',
@@ -502,43 +382,27 @@ DOCUMENT_REGISTRY: Dict[str, SourceDocumentMetadata] = {
         source_status='Source Verified',
         rag_status='Indexed',
         indexed_chunks=312,
-        clauses={
-            'rule_2': ClauseMetadata(
-                clause_id='rule_2',
-                clause_title='Rule 2 - Definitions and Public Key Standards',
-                page=2,
-                text='In these Rules, unless the context otherwise requires, definitions and operational guidelines for electronic authentication, cryptographic keys, and certifying authority audit regimes are established.',
-                surrounding_context='Statutory standards for digital signature verification and cryptographic safeguards.'
-            )
-        }
+        clauses={},
     ),
 
     'DOT-MTCTE-2023': SourceDocumentMetadata(
         doc_id='DOT-MTCTE-2023',
-        title='Mandatory Testing and Certification of Telecom Equipment (MTCTE) Regulations',
+        title='TEC 93009:2024 — Procedure for Mandatory Testing & Certification of Telecommunication Equipment, Version 3.0, with 2024–2025 amendments',
         issuing_authority='Telecommunication Engineering Centre (TEC), Department of Telecommunications (DoT)',
-        document_identifier='TEC MTCTE Procedure',
-        version='Gazette Notification 2017 as updated 2023/2024',
-        publication_date='2017-09-05',
-        effective_date='2019-10-01',
+        document_identifier='TEC 93009:2024; PDF contains amendments dated 19 September 2024 and 1 January 2025 (pages 2–4)',
+        version='TEC 93009:2024 Version 3.0; PDF includes amendments dated 19 September 2024 and 1 January 2025',
+        publication_date='',
+        effective_date='',
         jurisdiction='India',
         document_type='Technical Regulation',
-        legal_status='BINDING_STATUTORY',
+        legal_status='OFFICIAL_TECHNICAL_PROCEDURE',
         official_url='https://mtcte.tec.gov.in/',
         local_path='knowledge_base/Documents main/MTCTE Regulations/Testing and Certification MTCTE.pdf',
         domain_category='Mandatory Equipment Certification & Standards',
         source_status='Source Verified',
         rag_status='Indexed',
         indexed_chunks=135,
-        clauses={
-            'proc_sec_4': ClauseMetadata(
-                clause_id='proc_sec_4',
-                clause_title='Section 4 - Mandatory Security and Conformance Testing',
-                page=8,
-                text='Telecom equipment must be tested by designated Conformance Assessment Bodies (CABs) for EMI/EMC, Technical Requirements (ERs), and Telecom Security Requirements (ITSARs) before sale or deployment in India.',
-                surrounding_context='Mandatory certification under Indian Telegraph Rules prior to network deployment.'
-            )
-        }
+        clauses={},
     ),
 
     # =========================================================================
@@ -561,15 +425,7 @@ DOCUMENT_REGISTRY: Dict[str, SourceDocumentMetadata] = {
         source_status='Source Verified',
         rag_status='Indexed',
         indexed_chunks=1588,
-        clauses={
-            'sec_5': ClauseMetadata(
-                clause_id='sec_5',
-                clause_title='Section 5 - 5G Security Principles and Architecture',
-                page=15,
-                text='Network access security provides users with secure access to 5G services, protecting against radio interface attacks. Network domain security protects signaling and user plane data across SBA interfaces.',
-                surrounding_context='Technical specifications defined by 3GPP. Adopted in India through TSDSI national transposed standards.'
-            )
-        }
+        clauses={},
     ),
 
     '3GPP-TS-23501': SourceDocumentMetadata(
@@ -589,22 +445,14 @@ DOCUMENT_REGISTRY: Dict[str, SourceDocumentMetadata] = {
         source_status='Source Verified',
         rag_status='Indexed',
         indexed_chunks=3984,
-        clauses={
-            'sec_5_15': ClauseMetadata(
-                clause_id='sec_5_15',
-                clause_title='Section 5.15 - Network Slicing Principles',
-                page=182,
-                text='A Network Slice is defined within a PLMN and includes Core Network Control Plane and User Plane Network Functions. Network slicing enables differentiation of services with dedicated QoS, isolation, and SLA guarantees.',
-                surrounding_context='Fundamental architectural specifications for mission-critical and public safety 5G communications.'
-            )
-        }
+        clauses={},
     ),
 
     'ITU-T-Y3172': SourceDocumentMetadata(
         doc_id='ITU-T-Y3172',
-        title='ITU-T Recommendation Y.3172: Architectural framework for machine learning in future networks including IMT-2020',
+        title='ITU-T Y.3172 — source PDF not found in the configured knowledge base',
         issuing_authority='International Telecommunication Union - Telecommunication Standardization Sector (ITU-T)',
-        document_identifier='ITU-T Y.3172 (06/2019)',
+        document_identifier='Not retrieved: no local source PDF was found to verify publication details',
         version='Edition 1.0 (2019)',
         publication_date='2019-06-13',
         effective_date='2019-06-13',
@@ -617,15 +465,7 @@ DOCUMENT_REGISTRY: Dict[str, SourceDocumentMetadata] = {
         source_status='Official Source URL',
         rag_status='Reference Standard',
         indexed_chunks=0,
-        clauses={
-            'sec_6': ClauseMetadata(
-                clause_id='sec_6',
-                clause_title='Section 6 - Machine Learning Pipeline Architecture',
-                page=9,
-                text='The machine learning pipeline in future networks comprises data collection (src), preprocessing (prep), model training and execution (model), policy engine, and ML sandbox.',
-                surrounding_context='ITU-T Recommendations serve as voluntary international technical reference architectures.'
-            )
-        }
+        clauses={},
     ),
 
     # =========================================================================
@@ -633,9 +473,9 @@ DOCUMENT_REGISTRY: Dict[str, SourceDocumentMetadata] = {
     # =========================================================================
     'DGCA-DRONE-RULES-2021': SourceDocumentMetadata(
         doc_id='DGCA-DRONE-RULES-2021',
-        title='Drone Rules, 2021 (as amended) [Historical Reference]',
+        title='Drone Rules, 2021 — source PDF not found in the configured knowledge base',
         issuing_authority='Ministry of Civil Aviation / Directorate General of Civil Aviation (DGCA)',
-        document_identifier='G.S.R. 589(E)',
+        document_identifier='Not retrieved: no local source PDF was found to verify Gazette details',
         version='Gazette Notification 2021 (Domain Retired)',
         publication_date='2021-08-25',
         effective_date='2021-08-25',
@@ -648,15 +488,7 @@ DOCUMENT_REGISTRY: Dict[str, SourceDocumentMetadata] = {
         source_status='Missing Source (Domain Removed)',
         rag_status='Not Indexed (Domain Retired)',
         indexed_chunks=0,
-        clauses={
-            'rule_11': ClauseMetadata(
-                clause_id='rule_11',
-                clause_title='Rule 11 - Type Certificate and Mandatory Equipment (Historical)',
-                page=5,
-                text='Historical reference to UAV airspace and communication regulations from early project iterations before defense/maritime domain decommissioning.',
-                surrounding_context='Retained in legacy registry for provenance and citation reproducibility.'
-            )
-        }
+        clauses={},
     )
 }
 
@@ -755,8 +587,9 @@ def resolve_document_from_evidence(evidence_record: Dict[str, Any]) -> SourceDoc
     sf = meta.get('source_file') or ''
     resolved_disk_path = find_local_document_path(sf) if sf else ''
     
+    stable_id = hashlib.sha256(str(title_str).casefold().encode("utf-8")).hexdigest()[:16].upper()
     return SourceDocumentMetadata(
-        doc_id=f'GEN-{abs(hash(title_str)) % 100000:05d}',
+        doc_id=f'KB-{stable_id}',
         title=title_str,
         issuing_authority=meta.get('publisher') or ('Authorized Regulatory Body' if jur == 'India' else 'Standards Organization'),
         document_identifier=meta.get('version') or 'Indexed Source Document',

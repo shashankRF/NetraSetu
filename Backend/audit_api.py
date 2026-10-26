@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import io
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from typing import Any, Dict, List, Optional
-from fastapi import APIRouter, HTTPException, Query, Response
+from fastapi import APIRouter, HTTPException, Query, Response, Request
 from pydantic import BaseModel, Field
 
 import openpyxl
@@ -20,6 +20,7 @@ from .audit.recorder import (
     load_audit_records,
 )
 from .demo_scenarios.library import get_scenarios
+from .authentication import request_session
 
 
 router = APIRouter(
@@ -33,6 +34,7 @@ class ReviewActionRequest(BaseModel):
     modification: Optional[str] = Field(None, description="Mandatory qualification text for MODIFIED")
     reason: Optional[str] = Field(None, description="Mandatory explanation text for REJECTED")
     reviewer: Optional[str] = Field("Human reviewer", description="Reviewer label")
+    accountable_authority: Optional[str] = Field(None, max_length=200, description="Reviewer-designated accountable government ministry or agency")
 
 
 def _build_scenario_map() -> Dict[str, Dict[str, Any]]:
@@ -143,6 +145,13 @@ def enrich_audit_record(
 
     # Effective overlay
     overlaid = apply_review_overlay(r, review_event)
+    review_status = str(overlaid.get("human_review_status") or "PENDING").upper()
+    required_action = {
+        "PENDING": "Awaiting authorized review",
+        "APPROVED": "Proceed to the next human-reviewed workflow step",
+        "MODIFIED": "Reassess the qualified result before continuing",
+        "REJECTED": "Hold this workflow and request senior-authority review",
+    }.get(review_status, "Review the recorded decision and follow-up")
 
     # Resolve scenario structure
     scenario_info = sc
@@ -174,12 +183,20 @@ def enrich_audit_record(
         "evidence_status": evidence_status,
         "human_review_required": human_review,
         "human_review_status": overlaid.get("human_review_status", "PENDING"),
+        "scenario_decision_status": "Pending decision" if review_status == "PENDING" else "Decision recorded",
+        "analysis_status": "Completed" if execution_status == "COMPLETED" else execution_status.title(),
+        "human_decision": "Not recorded" if review_status == "PENDING" else review_status.title(),
+        "required_action": required_action,
+        "audit_status": "Decision unresolved" if review_status == "PENDING" else "Decision recorded",
+        "reviewer": overlaid.get("reviewer") or overlaid.get("human_reviewer", ""),
+        "undo_expires_at": overlaid.get("undo_expires_at"),
         "human_action": overlaid.get("human_action", ""),
         "final_decision": overlaid.get("final_decision", "PENDING_HUMAN_REVIEW"),
         "review_timestamp": overlaid.get("review_timestamp"),
         "reviewer_modifications": overlaid.get("reviewer_modifications"),
         "reviewer_reason": overlaid.get("reviewer_reason"),
         "reviewer": overlaid.get("reviewer") or overlaid.get("human_reviewer", ""),
+        "accountable_authority": overlaid.get("accountable_authority", ""),
         "evidence_count": len(r.get("retrieved_evidence") or []),
         "claims_count": len(synth.get("claims") or r.get("claim_evidence_mappings") or []),
         "assessment_excerpt": str(assessment)[:180],
@@ -533,6 +550,8 @@ def get_audit_detail(audit_id: str):
     full_payload["error_details"] = enriched_summary.get("error_details")
     full_payload["workflow_stages"] = enriched_summary.get("workflow_stages")
     full_payload["provenance"] = enriched_summary.get("provenance")
+    for summary_key in ("scenario_decision_status", "analysis_status", "human_decision", "required_action", "audit_status", "reviewer", "undo_expires_at"):
+        full_payload[summary_key] = enriched_summary.get(summary_key)
 
     # Find related events sharing the same execution_id
     related_events = []
@@ -555,6 +574,7 @@ def get_audit_detail(audit_id: str):
 def review_audit(
     audit_id: str,
     request: ReviewActionRequest,
+    http_request: Request,
 ):
     raw_records = load_audit_records()
     target_record = None
@@ -569,12 +589,37 @@ def review_audit(
             detail=f"Audit record '{audit_id}' not found.",
         )
 
+    _, session = request_session(http_request)
+    if not session:
+        raise HTTPException(status_code=401, detail="Authenticated reviewer session required.")
+
+    previous_review = get_latest_review_event(audit_id)
+    if previous_review:
+        try:
+            expires = datetime.fromisoformat(previous_review.get("undo_expires_at") or "")
+            if expires.tzinfo is None:
+                expires = expires.replace(tzinfo=timezone.utc)
+        except (TypeError, ValueError):
+            try:
+                expires = datetime.fromisoformat(previous_review["timestamp"].replace("Z", "+00:00"))
+                if expires.tzinfo is None:
+                    expires = expires.replace(tzinfo=timezone.utc)
+                expires += timedelta(minutes=10)
+            except (KeyError, TypeError, ValueError):
+                expires = datetime.min.replace(tzinfo=timezone.utc)
+        if datetime.now(timezone.utc) > expires:
+            raise HTTPException(status_code=409, detail="The 10-minute decision update window has expired.")
+
     action = (request.action or "").strip().upper()
     if action not in ("APPROVED", "MODIFIED", "REJECTED", "ESCALATED", "DEFERRED", "INVESTIGATE"):
         raise HTTPException(
             status_code=422,
             detail=f"Invalid action '{request.action}'. Action must be one of: APPROVED, MODIFIED, REJECTED, ESCALATED, DEFERRED, INVESTIGATE.",
         )
+
+    if (target_record.get("event_type") == "FAILURE_COMBINATION_SIMULATION"
+            and action in ("APPROVED", "MODIFIED")):
+        raise HTTPException(status_code=409, detail="This simulation has insufficient, non-applicability-assessed evidence. Approval and modification are blocked until an authorized workflow establishes applicable evidence.")
 
     modification_text = None
     reason_text = None
@@ -595,8 +640,9 @@ def review_audit(
             )
         reason_text = request.reason.strip() if request.reason else None
 
-    reviewer_label = (request.reviewer or "").strip() or "Human reviewer"
+    reviewer_label = str(session.get("display_name") or session.get("username") or "Authenticated reviewer")
     timestamp = datetime.now(timezone.utc).isoformat()
+    undo_expires_at = (expires.isoformat() if previous_review else (datetime.now(timezone.utc) + timedelta(minutes=10)).isoformat())
     exec_id = target_record.get("execution_id")
 
     review_event = {
@@ -608,6 +654,9 @@ def review_audit(
         "reviewer": reviewer_label,
         "reviewer_modifications": modification_text,
         "reviewer_reason": reason_text,
+        "accountable_authority": request.accountable_authority.strip() if request.accountable_authority else None,
+        "undo_expires_at": undo_expires_at,
+        "revision_of": previous_review.get("timestamp") if previous_review else None,
     }
     append_review_event(review_event)
 
@@ -621,6 +670,7 @@ def review_audit(
         human_review_required=False,
         human_reviewer=reviewer_label,
         human_action=action,
+        accountable_authority=request.accountable_authority.strip() if request.accountable_authority else "",
         final_decision=action,
         reviewer_modifications=modification_text or "",
         workflow_stages=["Human Review Console", "Audit Trail Ledger"],
@@ -642,5 +692,8 @@ def review_audit(
         "review_timestamp": effective_state["review_timestamp"],
         "reviewer_modifications": effective_state["reviewer_modifications"],
         "reviewer_reason": effective_state["reviewer_reason"],
+        "accountable_authority": review_event["accountable_authority"],
+        "reviewer": reviewer_label,
+        "undo_expires_at": undo_expires_at,
         "governance_audit_id": gov_record.get("audit_id"),
     }
